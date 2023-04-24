@@ -14,7 +14,7 @@
 
 (define (evaluate-dfa dfa-to-evaluate strng)
   " This function will verify if a string is acceptable by a DFA "
-  (let loop
+  (trace-let loop
     ; Convert the string into a list of characters
     ([chars (string->list strng)];Lista con los caracteres de la expresion
      ; Get the initial state of the DFA
@@ -24,10 +24,13 @@
      [tokens '()]);Lista que guarda el token y el char
     (cond
       ; When the list of chars if over, check if the final state is acceptable
-      [(empty? chars)
+       [(empty? chars)
        (if (member state (dfa-accept dfa-to-evaluate))
+         ; check if space
+            (if (eq? 'spa state) (reverse tokens)
+
          ; Add the last pending state to the list, and reverse it
-         (reverse (cons (list (list->string (reverse caracter)) state) tokens))
+            (reverse (cons (list (list->string (reverse caracter)) state) tokens)))
          #f)]
       [else
         (let-values
@@ -36,11 +39,12 @@
           (loop (cdr chars)
                 new-state
                 ; The new list of pairs
-                ;(if (eq? (car chars) #\space) (cdr chars) chars)
-                (if found (if (eq? #\space (car chars))'()(list (car chars))) (cons (car chars) caracter))
+                ;(if found (list (car chars)) (cons (car chars) caracter))
+                (if (eq? #\space (car chars)) '() (if found (list (car chars)) (cons (car chars) caracter)));Funcion original incompleta pero se come el primer caracter
+                ;(if found (if (eq? #\space (car chars))'() (list (car chars))) (cons (car chars) caracter));Funcion original 2.0 pero sin espacio (Mas cerca)
                 (if found (cons (list (list->string (reverse caracter)) found) tokens) tokens)))])))
                 
-                
+             
                 
                 
 
@@ -62,6 +66,7 @@
        [(or (eq? char #\+) (eq? char #\-)) (values 'sign #f)] ;If the char is + or - , the next state will be sign but we are not sure about the actual state.
        [(or (char-alphabetic? char)(eq? char #\_)) (values 'var #f)] ;If the char is an _ or a letter  , the next state will be variable but we are not sure about the actual state.
        [(eq? char #\() (values 'left_par #f)] ;If the char is an ( , the next state will be left_par but we are not sure about the actual state.
+       [(eq? char #\space) (values 'op_spa #f)]
        [else (values 'inv #f)])]
     ['sign (cond 
        [(char-numeric? char) (values 'int #f)] ;If the char is an int , the next state will be int but we are not sure about the actual state.
@@ -71,12 +76,12 @@
        [(char-numeric? char) (values 'int 'left_par)] ;If the char is an int , the next state will be int but we are not sure about the actual state.
        [(or (eq? char #\+) (eq? char #\-)) (values 'sign 'left_par)] ;If the char is an + or - , the next state will be sign but we are not sure about the actual state.
        [(or (eq? char-alphabetic? char)(eq? char #\_))(values 'var 'left_par)] ;If the char is an _ or letter , the next state will be var but we are not sure about the actual state.
-       [(eq? char #\space)(values 'op_space 'left_par)] ;If the char is an space , the next state will be op space but we are not sure about the actual state.
+       [(eq? char #\space)(values 'op_spa 'left_par)] ;If the char is an space , the next state will be op space but we are not sure about the actual state.
        [else (values 'inv #f)])]
      ['right_par (cond ;Accept State/Token
        [(eq? char #\))(values 'right_par 'right_par)]
        [(char-operator? char)(values 'op 'right_par)]
-       [(eq? char #\space)(values 'space 'right_par)] ;If the char is a space , the next state will be space and the actual state is right par.
+       [(eq? char #\space)(values 'spa 'right_par)] ;If the char is a space , the next state will be space and the actual state is right par.
        [else (values 'inv #f)])]
     ['int (cond ;Accept Space/Token
        [(char-numeric? char) (values 'int #f)] ;If the char is an int , the next state will be int but we are not sure about the actual state.
@@ -126,6 +131,7 @@
      ['spa (cond  ;Accept State
        [(char-operator? char) (values 'op #f)] 
        [(eq? char #\space) (values 'spa #f)]
+        [(eq? char #\)) (values 'right_par #f)]
        [else (values 'inv #f)])]
     ['op_spa (cond 
        [(char-numeric? char) (values 'int #f)]
