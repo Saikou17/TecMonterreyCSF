@@ -2,7 +2,23 @@
 
 ## Descripción del programa
 
-Para este DFA hicimos una función que analiza strings que contengan expresiones aritméticas y comentarios, para luego retornar una lista con cada uno de los tokens encontrados e indicando de qué tipo son. 
+Un dfa es un automata finito determinista es decir, para cada estado en que se encuentre el autómata, y con cualquier símbolo del alfabeto leído, existe siempre no más de una transición posible desde ese estado y con ese símbolo
+
+Creamos un diagrama que nos permitiera definir las reglas de nuestro lenguaje, asi como los diferentes estados de aceptacion que validen las transiciones de nuestro automata.
+
+<img src="./Diagrama.jpeg">
+
+Para este DFA hicimos una función que analiza strings que contengan expresiones aritméticas, para luego retornar una lista con cada uno de los tokens encontrados e indicando de qué tipo son. 
+
+Los tokens que identifica el automata son:
+
+1. Variables
+2. Operadores 
+3. Numeros Enteros
+4. Numero Flotantes
+5. Numeros Exponeneciales
+6. Parentesis
+
 
 ## Instalación
 
@@ -14,7 +30,7 @@ Para instalar el programa, sigue los siguientes pasos:
 
 ## Uso
 
-Para hacer las preubas del programa, sigue los siguientes pasos:
+Para hacer las pruebas del programa, sigue los siguientes pasos:
 
 1. Abre tu compilador de Racket.
 2. Abre ambos documentos 
@@ -26,9 +42,13 @@ Para hacer las preubas del programa, sigue los siguientes pasos:
 Esto es lo que debes de escribir en la terminal para poder compilar el archivo para correr las preubas.
 
 
-<img src="../Actividad_3.2/Ejemplo-DFA-1.jpeg">
+<img src="./Ejemplo-DFA-1.jpeg">
 
-Al terminar de hacer todas las pruebas deben de salir lo siguiente en la terminal
+Algunos de las pruebas con sus resultados son:
 
-<img src="../Actividad_3.2/Ejemplo-DFA-2.jpeg">
+<img src="./Ejemplo-DFA-3.jpeg">
+<img src="./Ejemplo-DFA-4.jpeg">
+<img src="./Ejemplo-DFA-5.jpeg">
+
+
 
