@@ -2,7 +2,7 @@
 
 ## Integrantes:
 - Juan Pablo Cruz Rodriguez A01783208   
-- Juan Pablo Moreno  
+- Juan Pablo Moreno 
 
 ## Situacion Problema:
 
