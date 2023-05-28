@@ -32,3 +32,7 @@
                         | "and" | "or"
                         | "in" | "not in"
                         | "is" | "is not"
+        OPERADOR_UNARIO ::= "-" | "NOT"
+        IDENTIFICADOR ::= LETRA {(LETRA | DIGITO | "_")}
+        LETRA ::= {(A-Z | a-z)}
+        DIGITO ::= {0-9}
