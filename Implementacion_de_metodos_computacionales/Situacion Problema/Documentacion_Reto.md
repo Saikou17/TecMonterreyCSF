@@ -139,6 +139,7 @@ El siguiente paso es analizar e identificar el sintaxis, al igual que el lexico 
    1.espacios
    2.parentesis
    3.comentarios
+   4.variables
    ~~~
 
 ## Maquina de estados y expresiones regulares (Python)
@@ -190,3 +191,26 @@ Ambas formaas nos ayudan a identificar el sintaxis, lexico y semantica de un len
 6. operadores logicos:
 
          \b(and|or|not)\b
+
+7. datos numericos:
+   
+         \b(\d.(\d)*|\d)\b
+
+8. datos booleanos:
+
+         \b(True|False|None)\b
+
+9. datos de cadenas:
+
+         \".* 
+      
+10. datos de estructura
+    
+         (\[.*\]|\(.*\)|\{.*\})
+
+11. datos extra
+
+         (\#.*|\s|[a-zA-Z]+(\_|\d)*)
+
+   
+
