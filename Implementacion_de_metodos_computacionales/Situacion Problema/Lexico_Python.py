@@ -149,12 +149,20 @@ print("AND:", and_result)
 print("OR:", or_result)
 print("NOT:", not_result)
 
-# Ejemplo de literales
+# Ejemplo de datos numericos
+
 entero = 10
 flotante = 3.14
-cadena = "Hola, mundo!"
-booleano = True
-nulo = None
+
+# Ejemplo de datos booleanos
+
+despierto = True
+jugando = False
+cuenta = None
+
+# Ejemplos de cadena
+
+cadena1 = "Holi UwU"
 
 # Ejemplo de separadores
 lista = [1, 2, 3]
