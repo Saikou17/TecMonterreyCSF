@@ -14,7 +14,7 @@ Para nuestra solucion o creacion de un resaltador de sitaxis, decidimos elegir e
 
 El siguiente paso es analizar e identificar el sintaxis, al igual que el lexico del lenguaje. Clasificando cada uno de los tipo de tokens por categorias, para un mejor entendimiento de la semantica del lenguaje, lo cual nos permitira desarrollar un diagrama o maquina de estados para representar los diferentes resultados.
 
-###### Sintaxis:
+## Sintaxis:
 
 1. Palabras Reservadas: 
 
@@ -114,7 +114,7 @@ El siguiente paso es analizar e identificar el sintaxis, al igual que el lexico 
 3.Tipos de Datos:
    1. Numeros
    ~~~
-   1.int
+   1.int 
    2.float
    ~~~
    2. Booleano
@@ -139,9 +139,10 @@ El siguiente paso es analizar e identificar el sintaxis, al igual que el lexico 
    1.espacios
    2.parentesis
    3.comentarios
+   4.variables
    ~~~
 
-###### Maquina de estados y expresiones regulares (Python)
+## Maquina de estados y expresiones regulares (Python)
 
 Una máquina de estados, también conocida como máquina de estados finitos o autómata finito, es un modelo matemático y conceptual utilizado para representar y controlar el comportamiento de un sistema que puede estar en diferentes estados en diferentes momentos.
 
@@ -190,3 +191,26 @@ Ambas formaas nos ayudan a identificar el sintaxis, lexico y semantica de un len
 6. operadores logicos:
 
          \b(and|or|not)\b
+
+7. datos numericos:
+   
+         \b(\d.(\d)*|\d)\b
+
+8. datos booleanos:
+
+         \b(True|False|None)\b
+
+9. datos de cadenas:
+
+         \".* 
+      
+10. datos de estructura
+    
+         (\[.*\]|\(.*\)|\{.*\})
+
+11. datos extra
+
+         (\#.*|\s|[a-zA-Z]+(\_|\d)*)
+
+   
+

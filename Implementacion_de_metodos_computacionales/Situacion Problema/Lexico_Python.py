@@ -149,19 +149,30 @@ print("AND:", and_result)
 print("OR:", or_result)
 print("NOT:", not_result)
 
-# Ejemplo de literales
+# Ejemplo de datos numericos
+
 entero = 10
 flotante = 3.14
-cadena = "Hola, mundo!"
-booleano = True
-nulo = None
 
-# Ejemplo de separadores
+# Ejemplo de datos booleanos
+
+despierto = True
+jugando = False
+cuenta = None
+
+# Ejemplos de cadena
+
+cadena1 = "Holi UwU"
+
+# Ejemplo de Estructuras
 lista = [1, 2, 3]
+tuplas = (1, 2, 3)
+conjunto = {1, 2, 3}
 diccionario = {"clave": "valor"}
 
 # Ejemplo de comentarios
-# Este es un comentario de una sola línea
+comentario = "Comentario esta al lado mio" # Esto es un comentario de una sola línea
+parentesis = (1, 2, 3) 
 
 '''
 Este es un comentario
