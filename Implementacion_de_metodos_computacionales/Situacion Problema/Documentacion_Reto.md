@@ -202,7 +202,7 @@ Ambas formaas nos ayudan a identificar el sintaxis, lexico y semantica de un len
 
 9. datos de cadenas:
 
-         \".* 
+         \".*| \'.*  
       
 10. datos de estructura
     
