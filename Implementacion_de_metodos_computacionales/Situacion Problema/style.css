@@ -1,0 +1,11 @@
+
+.string { color: green; }
+.comment { color: gray; }
+.keyword { color: blue; }
+.number { color: purple; }
+.operator { color: red; }
+.boolean { color: orange; }
+.function { color: brown; }
+.parenthesis { color: brown; }
+.method { color: brown; }
+.decorator { color: grey; }
