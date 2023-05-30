@@ -174,19 +174,19 @@ Ambas formaas nos ayudan a identificar el sintaxis, lexico y semantica de un len
 
 2. operadores aritmeticos:
 
-         (\+|\-|\*+|\/+|\%)
+         \B\+|\-|\*{1,2}|\/{1,2}|\%\B
 
 3. operadores relacionales:
 
-         (\>(=?)|\<(=?)|\=+|\!=)
+         \B\>=?|\<=?|\={1,2}|\!=\B
 
 4. operadores bit a bit:
    
-         (\&|\||\^|\<+|>+|\~)
+         \&|\||\^|\<+|>+|\~
 
 5. operadores asignacion:
 
-         ((\+|\-|\*|\/+|\%|\*+|\<+|\>+|\&|\||\^)*\=)
+         (\+|\-|\*|\/+|\%|\*{1,2}|\<{1,2}|\>{1,2}|\&|\||\^)?\=
 
 6. operadores logicos:
 
