@@ -178,7 +178,7 @@ Ambas formaas nos ayudan a identificar el sintaxis, lexico y semantica de un len
 
 3. operadores relacionales:
 
-         (\>(=*)|\<(=*)|\=+|\!=)
+         (\>(=?)|\<(=?)|\=+|\!=)
 
 4. operadores bit a bit:
    
