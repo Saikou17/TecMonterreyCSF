@@ -1,11 +1,41 @@
 
-.string { color: green; }
-.comment { color: gray; }
-.keyword { color: blue; }
-.number { color: purple; }
-.operator { color: red; }
-.boolean { color: orange; }
-.function { color: brown; }
-.parenthesis { color: brown; }
-.method { color: brown; }
-.decorator { color: grey; }
+.resrvadas {
+    color: #0000ff;
+}
+.aritmeticos {
+    color: #ff0000;
+}
+.relacionales {
+    color: #ff00ff;
+}
+.bitabit {
+    color: #00ff00;
+}
+.asignacion {
+    color: #000000;
+}
+.logicos {
+    color: #ffff00;
+}
+.numeros {
+    color: #00ffff;
+}
+.booleanos {
+    color: #ff8000;
+}
+.strings {
+    color: #ff0080;
+}
+.estructuras {
+    color: #8000ff;
+}
+.identificadores {
+    color: #0080ff;
+}
+.comentarios {
+    color: #808080;
+}
+.espacios {
+    color: #ffffff;
+}
+
