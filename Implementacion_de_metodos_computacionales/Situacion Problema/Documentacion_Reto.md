@@ -208,9 +208,11 @@ Ambas formaas nos ayudan a identificar el sintaxis, lexico y semantica de un len
     
          (\[.*\]|\(.*\)|\{.*\})
 
-11. datos extra
+11. variables:
 
-         (\#.*|\s|[a-zA-Z]+(\_|\d)*)
+         ([a-zA-Z]+(\_|\d)*)
 
-   
+12. datos extra
+
+         (\#.*|\s|\:)
 

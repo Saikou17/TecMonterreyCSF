@@ -4,12 +4,16 @@ defmodule Syntax_Highlighter do
   Identificamos los tokens para las expresiones regulares.
   """
   p_reservadas = ~r/\b(import|def|if|len|sys|argv|with|open|as|file|read|print|elif|except|as|else|and|assert|break|class|contine|del|exec|finally|for|from|global|in|is|lambda|not|or|pass|raise|return|try|while|yield|open)\b/
+  op_aritmeticos = ~r/\B(\+|\-|\*{1,2}|\/{1,2}|\%)\B/
+  op_relacionales = ~r/\B(\>=?|\<=?|\={1,2}|\!=)\B/
+  op_bit_a_bit = ~r/\&|\||\^|\<{1,2}|>{1,2}|\~/
+  op_asignacion = ~r(\+|\-|\|\/+|\%|\{1,2}|\<{1,2}|\>{1,2}|\&|\||\^|\?|\=)
+  op_logicos = ~r/\b(and|or|not)\b/
+  numeros = ~r/\b(\d.(\d)*|\d)\b/
+  booleanos = ~r/\b(True|False|None)\b/
   strings = ~r/\".*\"/
-  numeros = ~r/[0-9]+/
-  op_aritmeticos = ~r \B(\+|\-|\*{1,2}|\/{1,2}|\%)\B
-  op_relacionales = ~r \B(\>=?|\<=?|\={1,2}|\!=)\B
-  op_bit_a_bit = ~r \&|\||\^|\<{1,2}|>{1,2}|\~
-  identificadores = ~r/[a-zA-Z][a-zA-Z0-9_]*/
+  estructuras = ~r/(\[.*\]|\(.*\)|\{.*\})/
+  identificadores = ~r/([a-zA-Z]+(\_|\d)*)/
   comentarios = ~r/\/\/.*$|\/\*.*\*\//
   espacios = ~r/\s+/
   asignacion = ~r(\+|\-|\|\/+|\%|\{1,2}|\<{1,2}|\>{1,2}|\&|\||\^|\?|\=)
@@ -25,7 +29,7 @@ defmodule Syntax_Highlighter do
   end
 
 
-  def tokens_regular_expresions(line) do: do_tokens(line, []) # Funcion para obtener los tokens de una linea
+  def tokens_regular_expresions(line), do: do_tokens(_line,Regex.scan(tokens,line),"") # Funcion para obtener los tokens de una line
 
   def do_tokens(line, ""), do
     cond do
@@ -68,12 +72,4 @@ defmodule Syntax_Highlighter do
 
   # defp do_tokens("", tokens), do:
 
-  #   cond do
-  #     Regex.match?(p_reservadas, tokens) ->
-  #       current = Regex.replace(p_reservadas, tokens, "<span style=\"color:blue\">\\1</span>")
-  #       do_tokens(current, [])
-  #     Regex.match?(strings, tokens) ->
-  #       current = Regex.replace(strings, tokens, "<span style=\"color:green\">\\1</span>")
-  #       do_tokens(current, [])
-  end
 end
