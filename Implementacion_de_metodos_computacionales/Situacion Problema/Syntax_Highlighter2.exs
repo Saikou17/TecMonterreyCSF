@@ -16,7 +16,7 @@ defmodule Syntax_Highlighter do
    @identificadores  ~r/^([a-zA-Z]+(\_|\d)*)/
    @comentarios  ~r/^(\#.*|\"{3}.*|\'{3}.*)/
    @espacios  ~r/^\s+/
-   @inicio_html "<html>\n<head>\n<title>Python Syntax Highlighter</title>\n<link = 'stylesheet' href= './style.css'>\n</head>\n<body>\n<pre>\n"
+   @inicio_html "<html>\n<head>\n<title>Python Syntax Highlighter</title>\n<link rel = 'stylesheet' href= './style.css'>\n</head>\n<body>\n<pre>\n"
    @final_html "</pre>\n</body>\n</html>"
   # Funcions para leer un archivo y obtener los tokens
   def read_file(in_python_file, out_python_file) do
