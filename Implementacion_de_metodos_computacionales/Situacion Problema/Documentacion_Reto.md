@@ -216,17 +216,19 @@ Ambas formaas nos ayudan a identificar el sintaxis, lexico y semantica de un len
 
          (\#.*|\s|\:)
 
-## Reflexión
-
-El código presentado implementa un syntax highlighter en Elixir para resaltar la sintaxis de un archivo de código Python. Utiliza expresiones regulares para identificar y clasificar los diferentes tokens en el archivo, como palabras reservadas, operadores, números, etc. La solución planteada es funcional y cumple con su propósito de resaltar la sintaxis de Python en un archivo HTML.
-
-En cuanto a los algoritmos implementados, se utilizan expresiones regulares para buscar y reemplazar tokens en cada línea del archivo. Estas operaciones son comunes en el procesamiento de texto y son eficientes para buscar patrones específicos. Sin embargo, el uso repetido de las mismas expresiones regulares en cada línea puede afectar el rendimiento, especialmente en archivos grandes.
+## Analisis de Algoritmo
 
 El tiempo de ejecución de los algoritmos depende del tamaño del archivo de entrada y del número de líneas en el archivo. En el análisis de complejidad previo, se estimó una complejidad de O(n + m + k + p), donde n es el tamaño del archivo, m es el número de líneas, k es la longitud total de los tokens generados y p es el tamaño de una línea promedio. Esta estimación se basa en la suposición de que las operaciones en cada línea tienen una complejidad de tiempo similar.
 
 Para calcular la complejidad del algoritmo basada en el número de iteraciones, debemos considerar cuántas veces se ejecuta la función `do_tokens` en función del tamaño del archivo y el número de líneas. Dado que la función `do_tokens` se llama recursivamente para cada línea y en cada llamada se realizan múltiples operaciones, la complejidad de iteraciones podría ser aproximadamente O(m * t), donde m es el número de líneas y t es el número promedio de iteraciones en cada línea.
 
 Al contrastar la complejidad de iteraciones con el tiempo estimado en el punto anterior, podemos observar que el tiempo de ejecución real puede variar según varios factores, como la eficiencia de las operaciones de expresiones regulares y la implementación específica del lenguaje. En algunos casos, el tiempo de ejecución real puede ser mayor o menor que el tiempo estimado. Es importante realizar pruebas y análisis de rendimiento en casos reales para obtener una idea más precisa del tiempo de ejecución en situaciones específicas.
+
+## Reflexión
+
+El código presentado implementa un syntax highlighter en Elixir para resaltar la sintaxis de un archivo de código Python. Utiliza expresiones regulares para identificar y clasificar los diferentes tokens en el archivo, como palabras reservadas, operadores, números, etc. La solución planteada es funcional y cumple con su propósito de resaltar la sintaxis de Python en un archivo HTML.
+
+En cuanto a los algoritmos implementados, se utilizan expresiones regulares para buscar y reemplazar tokens en cada línea del archivo. Estas operaciones son comunes en el procesamiento de texto y son eficientes para buscar patrones específicos. Sin embargo, el uso repetido de las mismas expresiones regulares en cada línea puede afectar el rendimiento, especialmente en archivos grandes.
 
 En términos más generales, el desarrollo y uso de tecnologías como los syntax highlighters plantea preguntas éticas relacionadas con la dependencia en herramientas automatizadas y el impacto en la comprensión y toma de decisiones humanas. Se debe promover un uso equilibrado de estas herramientas, donde se fomente la comprensión profunda y conceptual del código en lugar de una dependencia excesiva en la resaltación visual.
 
