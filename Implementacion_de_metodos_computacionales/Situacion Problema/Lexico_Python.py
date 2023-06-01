@@ -1,4 +1,4 @@
-# Archivo de preuba de python
+ # Archivo de preuba de python
 #0. Ejemplo librerias
 import math
 #1.Ejemplo Funciones
@@ -140,6 +140,8 @@ multilinea
 Este también es un comentario
 multilinea
 """
+'''
+'''
 
 
 
