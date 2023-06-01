@@ -12,7 +12,7 @@ defmodule Syntax_Highlighter do
    @numeros  ~r/\b^(\d.(\d)*|\d)\b/
    @booleanos  ~r/\b^(True|False|None)\b/
    @strings  ~r/^(\".*\")/
-   @estructuras  ~r/^(\[.\]|\(.\)|\{.*\})/
+   @estructuras  ~r/^(\[.*\]|\(.*\)|\{.*\})/
    @identificadores  ~r/^([a-zA-Z]+(\_|\d)*)/
    @comentarios  ~r/^(\#.*|\"{3}.*|\'{3}.*)/
    @espacios  ~r/^\s+/
