@@ -42,8 +42,8 @@ Los archivos que son de importancia son:
 
     5.Una vez adentro del archivo y de elixir, utiliza el siguiente comando para correr el programa: Syntax_Highlighter2.read_file("ArchivoPython.py","ArchivoHtml.html)
 
-    6. ArchivoPython.py es cualquier archivo de python que quieras convertir a cualquier archivo html.
+    6. ArchivoPython.py es cualquier archivo de python que quieras convertir a archivo html.
 
-    7.Verifica que el archivo de python se que quieras analizar se encuentre en la carpeta de Situacion Problema.
+    7.Verifica que el archivo de python que quieras analizar se encuentre en la carpeta de Situacion Problema.
 
     8.Si todo salio correcto, debera de aparecer un archivo html dentro de la carpeta con el syntax de python identificado y resaltado.
