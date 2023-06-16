@@ -33,9 +33,9 @@ defmodule Syntax_Highlighter do
 
   def read_file({in_python_file, out_python_file}) do
         data = in_python_file
-        |> File.stream!()
-        |> Enum.map(&tokens_regular_expresions(&1))
-        |> Enum.join("")
+        |> File.stream!() # Abrimos el archivo
+        |> Enum.map(&tokens_regular_expresions(&1))# Obtenemos los tokens de cada linea
+        |> Enum.join("") # Unimos los tokens
 
       File.write(out_python_file, Enum.join([@inicio_html, data, @final_html]))
   end
