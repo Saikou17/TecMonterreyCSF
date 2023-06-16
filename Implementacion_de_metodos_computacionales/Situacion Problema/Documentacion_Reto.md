@@ -215,8 +215,13 @@ Ambas formaas nos ayudan a identificar el sintaxis, lexico y semantica de un len
 12. datos extra
 
          (\#.*|\s|\:)
+<hr>
 
 ## Analisis de Algoritmo
+
+### Primera parte: 
+
+<i>Análisis de complejidad</i>
 
 El tiempo de ejecución de los algoritmos depende del tamaño del archivo de entrada y del número de líneas en el archivo. En el análisis de complejidad previo, se estimó una complejidad de O(n + m + k + p), donde n es el tamaño del archivo, m es el número de líneas, k es la longitud total de los tokens generados y p es el tamaño de una línea promedio. Esta estimación se basa en la suposición de que las operaciones en cada línea tienen una complejidad de tiempo similar.
 
@@ -224,12 +229,40 @@ Para calcular la complejidad del algoritmo basada en el número de iteraciones, 
 
 Al contrastar la complejidad de iteraciones con el tiempo estimado en el punto anterior, podemos observar que el tiempo de ejecución real puede variar según varios factores, como la eficiencia de las operaciones de expresiones regulares y la implementación específica del lenguaje. En algunos casos, el tiempo de ejecución real puede ser mayor o menor que el tiempo estimado. Es importante realizar pruebas y análisis de rendimiento en casos reales para obtener una idea más precisa del tiempo de ejecución en situaciones específicas.
 
+<i>Pruebas de tiempo </i>
+Imagen Resaltado de sintaxis:
+
+![Resultado de Tiempo](./img/Prueba_Resaltador1.png)
+
+Como veremos en la imagen de arriba se muestra el tiempo de ejecucion de los algoritmos en diferentes archivos de texto, donde se puede observar que el tiempo de ejecucion es muy similar en cada uno de los archivos, por lo que se puede decir que el tiempo de ejecucion es constante. 
+
+Pero además se puede observar que el tiempo de ejecucion es muy similar al tiempo de ejecucion estimado en el analisis de complejidad, por lo que se puede decir que el tiempo de ejecucion es lineal. Cada uno de nuestros resultados no pasa más alla de 30000 micro segundos, y como le mencionamos antes esto prueba que nuestra complejidad es constante. Finalmente sumamos estos valores que nos da en total 68,914 microsegundo este número lo compararemos con el tiempo de ejecucion de la segunda parte. Que esta utilizando un alogoritmo en paralelo. 
+### Segunda parte: 
+
+<i>Análisis de complejidad</i>
+
+El programa proporcionado consiste en un resaltador de sintaxis para código Python. Analizando su estructura y operaciones, podemos determinar su complejidad en notación big-O. El programa consta de tres funciones principales: `concur_file`, `read_file` y `do_tokens`.
+
+La función `concur_file` recibe una lista de archivos y realiza operaciones en cada uno de ellos. Su complejidad está determinada por la cantidad de archivos en la lista, por lo que podemos decir que su complejidad es lineal, es decir, O(n), donde n es la cantidad de archivos.
+
+La función `read_file` lee un archivo y realiza varias operaciones en él. Su complejidad depende principalmente del número de líneas en el archivo, por lo que podemos considerarla lineal, O(m), donde m es el número de líneas.
+
+La función `do_tokens` procesa una línea de texto y realiza operaciones basadas en expresiones regulares. Su complejidad depende del número de expresiones regulares y del tamaño de la línea de texto, lo que nos lleva a una complejidad de O(k * p), donde k es el número de expresiones regulares y p es el tamaño de la línea.
+
+En resumen, la complejidad total del programa está determinada por la función `concur_file`, que tiene una complejidad lineal O(n) en función de la cantidad de archivos. Aunque existen funciones internas con complejidad lineal y basada en expresiones regulares, su impacto en la complejidad total es menor en comparación con la función principal.
+
+<i>Pruebas de tiempo </i>
+
+![Resultado de Tiempo](./img/Prueba_Resaltador2.png)
+
+Como veremos en la imagen de arriba se muestra el tiempo de ejecucion de los algoritmos en diferentes archivos de texto de manera paralela. Podemos observar que el tiempo de ejecucion es de 41,062 microsegundos y como mencionamos antes el tiempo de ejecucion de la primera parte es de 68,914 microsegundos. Por lo que podemos decir que el tiempo de ejecucion de la segunda parte es menor que el tiempo de ejecucion de la primera parte.  
+
 ## Reflexión
 
-El código presentado implementa un syntax highlighter en Elixir para resaltar la sintaxis de un archivo de código Python. Utiliza expresiones regulares para identificar y clasificar los diferentes tokens en el archivo, como palabras reservadas, operadores, números, etc. La solución planteada es funcional y cumple con su propósito de resaltar la sintaxis de Python en un archivo HTML.
+Con la infromación que hemos desarrollados se puede observar una comparación entre los tiempos de ejecución de dos partes de un programa. En el primer parte, se menciona que el tiempo de ejecución de la primera parte es constante y lineal, ya que los resultados obtenidos no superan los 30000 microsegundos. Se suma un total de 68,914 microsegundos.
 
-En cuanto a los algoritmos implementados, se utilizan expresiones regulares para buscar y reemplazar tokens en cada línea del archivo. Estas operaciones son comunes en el procesamiento de texto y son eficientes para buscar patrones específicos. Sin embargo, el uso repetido de las mismas expresiones regulares en cada línea puede afectar el rendimiento, especialmente en archivos grandes.
+En la segundo parte, se muestra el tiempo de ejecución que es de 41,062 microsegundos. La conclusión que se puede extraer de estos datos es que el tiempo de ejecución de la segunda parte es menor que el de la primera parte, lo que sugiere una mejora en la eficiencia del algoritmo o el uso de técnicas de paralelización que permiten realizar tareas simultáneamente.
 
-En términos más generales, el desarrollo y uso de tecnologías como los syntax highlighters plantea preguntas éticas relacionadas con la dependencia en herramientas automatizadas y el impacto en la comprensión y toma de decisiones humanas. Se debe promover un uso equilibrado de estas herramientas, donde se fomente la comprensión profunda y conceptual del código en lugar de una dependencia excesiva en la resaltación visual.
+Esta diferencia en los tiempos de ejecución puede ser significativa, ya que indica que la segunda parte se ejecuta más rápidamente en comparación con la primera parte. Esto puede deberse a diversos factores, como la optimización del código, el uso de recursos paralelos o la mejora en la implementación de los algoritmos.
 
-En resumen, el código implementa un syntax highlighter funcional en Elixir utilizando expresiones regulares. Los algoritmos implementados basados en expresiones regulares son eficientes para buscar y clasificar tokens en el código Python. Sin embargo, el rendimiento puede verse afectado por el tamaño del archivo y el número de líneas. Se recomienda realizar pruebas de rendimiento en casos reales para evaluar el tiempo de ejecución y optimizar el código si es necesario.
+En general, esta comparación de tiempos de ejecución resalta la importancia de evaluar y optimizar el rendimiento de los programas. Al reducir los tiempos de ejecución, se puede mejorar la eficiencia y la experiencia del usuario al interactuar con los programas, especialmente en aplicaciones que manejan grandes volúmenes de datos o requieren cálculos complejos.
