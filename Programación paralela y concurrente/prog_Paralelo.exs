@@ -30,6 +30,7 @@ defmodule Hw.Primes do
     end)
 
     IO.puts("Execution time: #{time} microseconds")
+    IO.puts("Result: #{result}")
   end
 
   # Calculate the sum of prime numbers in parallel

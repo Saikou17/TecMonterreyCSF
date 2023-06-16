@@ -19,18 +19,25 @@ defmodule Syntax_Highlighter do
    @inicio_html "<html>\n<head>\n<title>Python Syntax Highlighter</title>\n<link rel = 'stylesheet' href= './style.css'>\n</head>\n<body>\n<pre>\n"
    @final_html "</pre>\n</body>\n</html>"
   # Funcions para leer un archivo y obtener los tokens
-  def read_file(in_python_file, out_python_file) do
-    {time, _result} = :timer.tc(fn ->
-      data =
-        in_python_file
+  def concur_file(lst) do
+    {time, result} = :timer.tc(fn ->
+      tasks = Enum.map(lst, fn file -> Task.async(fn -> read_file(file) end) end)
+      Enum.map(tasks, &Task.await(&1, :infinity))
+    end)
+
+    IO.puts("Execution time: #{time} microseconds")
+
+    Enum.each(result, &IO.puts/1)
+  end
+
+
+  def read_file({in_python_file, out_python_file}) do
+        data = in_python_file
         |> File.stream!()
         |> Enum.map(&tokens_regular_expresions(&1))
         |> Enum.join("")
 
       File.write(out_python_file, Enum.join([@inicio_html, data, @final_html]))
-    end)
-
-    IO.puts "Tiempo de ejecucion: #{time} microsegundos"
   end
 
   def tokens_regular_expresions(line), do: do_tokens(line,"") # Funcion para obtener los tokens de una line
