@@ -230,32 +230,39 @@ Para calcular la complejidad del algoritmo basada en el número de iteraciones, 
 Al contrastar la complejidad de iteraciones con el tiempo estimado en el punto anterior, podemos observar que el tiempo de ejecución real puede variar según varios factores, como la eficiencia de las operaciones de expresiones regulares y la implementación específica del lenguaje. En algunos casos, el tiempo de ejecución real puede ser mayor o menor que el tiempo estimado. Es importante realizar pruebas y análisis de rendimiento en casos reales para obtener una idea más precisa del tiempo de ejecución en situaciones específicas.
 
 <i>Pruebas de tiempo </i>
-Imagen Resaltado de sintaxis:
 
-![Resultado de Tiempo](./img/Prueba_Resaltador1.png)
+      iex(1)> Syntax_Highlighter.read_file("Lexico_Python.py", "prueba1.html")  
+      Execution time: 29491 microseconds
+      :ok
+      iex(2)> Syntax_Highlighter.read_file("Lexico_Python2.py", "prueba2.html")
+      Execution time: 19865 microseconds
+      :ok
+      iex(3)> Syntax_Highlighter.read_file("Lexico_Python3.py", "prueba3.html") 
+      Execution time: 19558 microseconds
+      :ok
 
-Como veremos en la imagen de arriba se muestra el tiempo de ejecucion de los algoritmos en diferentes archivos de texto, donde se puede observar que el tiempo de ejecucion es muy similar en cada uno de los archivos, por lo que se puede decir que el tiempo de ejecucion es constante. 
+
+Como podemos ver en la ejecución de arriba se muestra el tiempo de ejecucion de los algoritmos en diferentes archivos de texto, donde se puede observar que el tiempo de ejecucion es muy similar en cada uno de los archivos, por lo que se puede decir que el tiempo de ejecucion es constante. 
 
 Pero además se puede observar que el tiempo de ejecucion es muy similar al tiempo de ejecucion estimado en el analisis de complejidad, por lo que se puede decir que el tiempo de ejecucion es lineal. Cada uno de nuestros resultados no pasa más alla de 30000 micro segundos, y como le mencionamos antes esto prueba que nuestra complejidad es constante. Finalmente sumamos estos valores que nos da en total 68,914 microsegundo este número lo compararemos con el tiempo de ejecucion de la segunda parte. Que esta utilizando un alogoritmo en paralelo. 
 ### Segunda parte: 
 
 <i>Análisis de complejidad</i>
 
-El programa proporcionado consiste en un resaltador de sintaxis para código Python. Analizando su estructura y operaciones, podemos determinar su complejidad en notación big-O. El programa consta de tres funciones principales: `concur_file`, `read_file` y `do_tokens`.
+Para poder realizar el análisis de complejidad de la segunda parte, debemos considerar las funciones principales del programa, que son`concur_file`, `read_file` y `do_tokens`.La función `concur_file` recibe una lista de archivos y realiza operaciones en cada uno de ellos. Su complejidad está determinada por la cantidad de archivos en la lista, por lo que podemos decir que su complejidad es lineal, es decir, O(n), donde n es la cantidad de archivos.La función `read_file` lee un archivo y realiza varias operaciones en él. Su complejidad depende principalmente del número de líneas en el archivo, por lo que podemos considerarla lineal, O(m), donde m es el número de líneas.
 
-La función `concur_file` recibe una lista de archivos y realiza operaciones en cada uno de ellos. Su complejidad está determinada por la cantidad de archivos en la lista, por lo que podemos decir que su complejidad es lineal, es decir, O(n), donde n es la cantidad de archivos.
-
-La función `read_file` lee un archivo y realiza varias operaciones en él. Su complejidad depende principalmente del número de líneas en el archivo, por lo que podemos considerarla lineal, O(m), donde m es el número de líneas.
-
-La función `do_tokens` procesa una línea de texto y realiza operaciones basadas en expresiones regulares. Su complejidad depende del número de expresiones regulares y del tamaño de la línea de texto, lo que nos lleva a una complejidad de O(k * p), donde k es el número de expresiones regulares y p es el tamaño de la línea.
-
-En resumen, la complejidad total del programa está determinada por la función `concur_file`, que tiene una complejidad lineal O(n) en función de la cantidad de archivos. Aunque existen funciones internas con complejidad lineal y basada en expresiones regulares, su impacto en la complejidad total es menor en comparación con la función principal.
+La función `do_tokens` procesa una línea de texto y realiza operaciones basadas en expresiones regulares. Su complejidad depende del número de expresiones regulares y del tamaño de la línea de texto, lo que nos lleva a una complejidad de O(k * p), donde k es el número de expresiones regulares y p es el tamaño de la línea. En resumen, la complejidad total del programa está determinada por la función `concur_file`, que tiene una complejidad lineal O(n) en función de la cantidad de archivos. Aunque existen funciones internas con complejidad lineal y basada en expresiones regulares, su impacto en la complejidad total es menor en comparación con la función principal.
 
 <i>Pruebas de tiempo </i>
 
-![Resultado de Tiempo](./img/Prueba_Resaltador2.png)
+      iex(1)> Syntax_Highlighter.concur_file([{"Lexico_Python.py","Prueba.html"}, {"Lexico_Python2.py","Prueba2.html"}, {"Lexico_Python3.py","Prueba3.html"}]) 
+      Execution time: 41062 microseconds
+      ok
+      ok
+      ok
+      :ok
 
-Como veremos en la imagen de arriba se muestra el tiempo de ejecucion de los algoritmos en diferentes archivos de texto de manera paralela. Podemos observar que el tiempo de ejecucion es de 41,062 microsegundos y como mencionamos antes el tiempo de ejecucion de la primera parte es de 68,914 microsegundos. Por lo que podemos decir que el tiempo de ejecucion de la segunda parte es menor que el tiempo de ejecucion de la primera parte.  
+Como podemos observar en la ejución de arriba se muestra el tiempo de ejecucion de los algoritmos en diferentes archivos de texto de manera paralela. Podemos observar que el tiempo de ejecucion es de 41,062 microsegundos y como mencionamos antes el tiempo de ejecucion de la primera parte es de 68,914 microsegundos. Por lo que podemos decir que el tiempo de ejecucion de la segunda parte es menor que el tiempo de ejecucion de la primera parte.  
 
 ## Reflexión
 
