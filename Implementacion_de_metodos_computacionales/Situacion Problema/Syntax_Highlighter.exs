@@ -5,9 +5,9 @@ defmodule Syntax_Highlighter do
    """
    @p_reservadas ~r/\b^(import|def|if|len|sys|argv|with|open|as|file|read|print|elif|except|as|else|and|assert|break|class|contine|del|exec|finally|for|from|global|in|is|lambda|not|or|pass|raise|return|try|while|yield|open)\b/
    @op_aritmeticos  ~r/\B^(\+|\-|\*{1,2}|\/{1,2}|\%)\B/
-   @op_relacionales  ~r/\B^(\>=?|\<=?|\={1,2}|\!=)\B/
+   @op_relacionales  ~r/\B^(\>\=?|\<\=?|\={1,2}|\!\=)\B/
    @op_bit_a_bit  ~r/^(\&|\||\^|\<{1,2}|>{1,2}|\/{1,2})/
-   @op_asignacion  ~r/^(\+=|\-=|\|=|\/{1,2}=|\%=|\*{1,2}=|\<{2}=|\>{2}=|\&=|\^=|\=)/
+   @op_asignacion  ~r/^(\+\=|\-\=|\|=|\/{1,2}\=|\%\=|\*{1,2}\=|\<{2}\=|\>{2}\=|\&\=|\^\=|\=)/
    @op_logicos  ~r/\b^(and|or|not)\b/
    @numeros  ~r/\b^(\d\.(\d)*|\d)\b/
    @booleanos  ~r/\b^(True|False|None)\b/
@@ -18,9 +18,6 @@ defmodule Syntax_Highlighter do
    @espacios  ~r/^\s+/
    @inicio_html "<html>\n<head>\n<title>Python Syntax Highlighter</title>\n<link rel = 'stylesheet' href= './style.css'>\n</head>\n<body>\n<pre>\n"
    @final_html "</pre>\n</body>\n</html>"
-   Expresiones = [@p_reservadas,@op_aritmeticos,@op_relacionales,@op_bit_a_bit,@op_asignacion,@op_logicos,@numeros,@booleanos,@strings,@estructuras,@identificadores,@comentarios,@espacios]
-   Tokens = ["reservadas", "aritmeticos", "relacionales","bitabit","asignacion","logicos","numeros","booleanos", "strings", "estructuras","identificadores","comentarios","espacios"]
-   # Funcions para leer un archivo y obtener los tokens
 
   def read_file(in_python_file, out_python_file) do
     {time, data} = :timer.tc(fn ->
@@ -35,81 +32,78 @@ defmodule Syntax_Highlighter do
     IO.puts("Execution time: #{time} microseconds")
   end
 
-  def tokens_regular_expresions(line), do: do_tokens(Expresiones,Tokens,line,"") # Funcion para obtener los tokens de una line
-   def do_tokens([],[],"", res), do: res # Caso base: Aquí detenemos la recursión
+  def tokens_regular_expresions(line), do: do_tokens(line,"") # Funcion para obtener los tokens de una line
+   def do_tokens("", res), do: res # Caso base: Aquí detenemos la recursión
 
-  def do_tokens(expresion,token,line, res) do
-    #  cond do
-      #Funcion Reciclaje
-      Regex.match?(hd(expresion),line)->
-        do_match(String.replace(line,head(expresion),""), res<>"<span class="<>estructuras">"<>hd(token)<>"</span>")
-        true->do_match([_head|tail],[_head|tail],String.slice(line,1,String.length(line)-1),res)
-      # # Palabras reservadas
-      #  Regex.match?(@p_reservadas, line) ->
-      #   [head|_tail] = Regex.run(@p_reservadas,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='reservadas'>"<>head<>"</span>")
+  def do_tokens(line, res) do
+     cond do
 
-      #  # Operadores aritméticos
-      #  Regex.match?(@op_aritmeticos, line) ->
-      #   [head|_tail] = Regex.run(@op_aritmeticos,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='aritmeticos'>"<>head<>"</span>")
+      # Palabras reservadas
+       Regex.match?(@p_reservadas, line) ->
+        [head|_tail] = Regex.run(@p_reservadas,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='reservadas'>"<>head<>"</span>")
 
-      #  # Operadores relacionales
-      #  Regex.match?(@op_relacionales, line) ->
-      #   [head|_tail] = Regex.run(@op_relacionales,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='relacionales'>"<>head<>"</span>")
+       # Operadores aritméticos
+       Regex.match?(@op_aritmeticos, line) ->
+        [head|_tail] = Regex.run(@op_aritmeticos,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='aritmeticos'>"<>head<>"</span>")
 
-      #  # Operadores bit a bit
-      #  Regex.match?(@op_bit_a_bit, line) ->
-      #   [head|_tail] = Regex.run(@op_bit_a_bit,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='bitabit'>"<>head<>"</span>")
+       # Operadores relacionales
+       Regex.match?(@op_relacionales, line) ->
+        [head|_tail] = Regex.run(@op_relacionales,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='relacionales'>"<>head<>"</span>")
 
-      #  # Operadores de asignación
-      #  Regex.match?(@op_asignacion, line) ->
-      #   [head|_tail] = Regex.run(@op_asignacion,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='asignacion'>"<>head<>"</span>")
+       # Operadores bit a bit
+       Regex.match?(@op_bit_a_bit, line) ->
+        [head|_tail] = Regex.run(@op_bit_a_bit,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='bitabit'>"<>head<>"</span>")
 
-      #  # Operadores lógicos
-      #  Regex.match?(@op_logicos, line) ->
-      #   [head|_tail] = Regex.run(@op_logicos,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='logicos>"<>head<>"</span>")
+       # Operadores de asignación
+       Regex.match?(@op_asignacion, line) ->
+        [head|_tail] = Regex.run(@op_asignacion,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='asignacion'>"<>head<>"</span>")
 
-      #  # Números
-      #  Regex.match?(@numeros, line) ->
-      #   [head|_tail] = Regex.run(@numeros,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='numeros'>"<>head<>"</span>")
+       # Operadores lógicos
+       Regex.match?(@op_logicos, line) ->
+        [head|_tail] = Regex.run(@op_logicos,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='logicos>"<>head<>"</span>")
 
-      #  # Booleanos
-      #  Regex.match?(@booleanos, line) ->
-      #   [head|_tail] = Regex.run(@booleanos,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='booleanos'>"<>head<>"</span>")
+       # Números
+       Regex.match?(@numeros, line) ->
+        [head|_tail] = Regex.run(@numeros,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='numeros'>"<>head<>"</span>")
 
-      #  # Strings
-      #  Regex.match?(@strings, line) ->
-      #   [head|_tail] = Regex.run(@strings,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='strings'>"<>head<>"</span>")
+       # Booleanos
+       Regex.match?(@booleanos, line) ->
+        [head|_tail] = Regex.run(@booleanos,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='booleanos'>"<>head<>"</span>")
 
-      #  # Estructuras
-      #  Regex.match?(@estructuras, line) ->
-      #   [head|_tail] = Regex.run(@estructuras,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='estructuras'>"<>head<>"</span>")
+       # Strings
+       Regex.match?(@strings, line) ->
+        [head|_tail] = Regex.run(@strings,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='strings'>"<>head<>"</span>")
 
-      #  # Identificadores
-      #  Regex.match?(@identificadores, line) ->
-      #   [head|_tail] = Regex.run(@identificadores,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='identificadores'>"<>head<>"</span>")
+       # Estructuras
+       Regex.match?(@estructuras, line) ->
+        [head|_tail] = Regex.run(@estructuras,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='estructuras'>"<>head<>"</span>")
 
-      #  # Comentarios
-      #  Regex.match?(@comentarios, line) ->
-      #   [head|_tail] = Regex.run(@comentarios,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='comentarios'>"<>head<>"</span>")
+       # Identificadores
+       Regex.match?(@identificadores, line) ->
+        [head|_tail] = Regex.run(@identificadores,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='identificadores'>"<>head<>"</span>")
 
-      #  # Espacios
-      #  Regex.match?(@espacios, line) ->
-      #   [head|_tail] = Regex.run(@espacios,line)
-      #    do_tokens(String.replace(line,head,""), res<>"<span class='espacios'>"<>head<>"</span>")
+       # Comentarios
+       Regex.match?(@comentarios, line) ->
+        [head|_tail] = Regex.run(@comentarios,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='comentarios'>"<>head<>"</span>")
 
-      # true -> do_tokens(String.slice(line,1,String.length(line)-1),res)
+       # Espacios
+       Regex.match?(@espacios, line) ->
+        [head|_tail] = Regex.run(@espacios,line)
+         do_tokens(String.replace(line,head,""), res<>"<span class='espacios'>"<>head<>"</span>")
+
+      true -> do_tokens(String.slice(line,1,String.length(line)-1),res)
 
      end
    end
