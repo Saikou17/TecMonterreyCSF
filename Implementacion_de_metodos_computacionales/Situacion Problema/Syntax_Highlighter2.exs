@@ -7,12 +7,12 @@ defmodule Syntax_Highlighter do
    @op_aritmeticos  ~r/\B^(\+|\-|\*{1,2}|\/{1,2}|\%)\B/
    @op_relacionales  ~r/\B^(\>=?|\<=?|\={1,2}|\!=)\B/
    @op_bit_a_bit  ~r/^(\&|\||\^|\<{1,2}|>{1,2}|\/{1,2})/
-   @op_asignacion  ~r/^(\+|\-|\|\/+|\%|\{1,2}|\<{1,2}|\>{1,2}|\&|\||\^|\?|\=)/
+   @op_asignacion  ~r/^(\+=|\-=|\|=|\/{1,2}=|\%=|\*{1,2}=|\<{2}=|\>{2}=|\&=|\^=|\=)/
    @op_logicos  ~r/\b^(and|or|not)\b/
-   @numeros  ~r/\b^(\d.(\d)*|\d)\b/
+   @numeros  ~r/\b^(\d\.(\d)*|\d)\b/
    @booleanos  ~r/\b^(True|False|None)\b/
    @strings  ~r/^(\".*\")/
-   @estructuras  ~r/^(\[.*\]|\(.*\)|\{.*\})/
+   @estructuras  ~r/^(\[|\]|\(|\)|\{|\})/
    @identificadores  ~r/^([a-zA-Z]+(\_|\d)*)/
    @comentarios  ~r/^(\#.*|\"{3}.*|\'{3}.*)/
    @espacios  ~r/^\s+/
