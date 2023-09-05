@@ -5,20 +5,19 @@ defmodule Syntax_Highlighter do
    """
    @p_reservadas ~r/\b^(import|def|if|len|sys|argv|with|open|as|file|read|print|elif|except|as|else|and|assert|break|class|contine|del|exec|finally|for|from|global|in|is|lambda|not|or|pass|raise|return|try|while|yield|open)\b/
    @op_aritmeticos  ~r/\B^(\+|\-|\*{1,2}|\/{1,2}|\%)\B/
-   @op_relacionales  ~r/\B^(\>=?|\<=?|\={1,2}|\!=)\B/
+   @op_relacionales  ~r/\B^(\>\=?|\<\=?|\={1,2}|\!\=)\B/
    @op_bit_a_bit  ~r/^(\&|\||\^|\<{1,2}|>{1,2}|\/{1,2})/
-   @op_asignacion  ~r/^(\+|\-|\|\/+|\%|\{1,2}|\<{1,2}|\>{1,2}|\&|\||\^|\?|\=)/
+   @op_asignacion  ~r/^(\+\=|\-\=|\|=|\/{1,2}\=|\%\=|\*{1,2}\=|\<{2}\=|\>{2}\=|\&\=|\^\=|\=)/
    @op_logicos  ~r/\b^(and|or|not)\b/
-   @numeros  ~r/\b^(\d.(\d)*|\d)\b/
+   @numeros  ~r/\b^(\d\.(\d)*|\d)\b/
    @booleanos  ~r/\b^(True|False|None)\b/
    @strings  ~r/^(\".*\")/
-   @estructuras  ~r/^(\[.*\]|\(.*\)|\{.*\})/
+   @estructuras  ~r/^(\[|\]|\(|\)|\{|\})/
    @identificadores  ~r/^([a-zA-Z]+(\_|\d)*)/
    @comentarios  ~r/^(\#.*|\"{3}.*|\'{3}.*)/
    @espacios  ~r/^\s+/
    @inicio_html "<html>\n<head>\n<title>Python Syntax Highlighter</title>\n<link rel = 'stylesheet' href= './style.css'>\n</head>\n<body>\n<pre>\n"
    @final_html "</pre>\n</body>\n</html>"
-  # Funcions para leer un archivo y obtener los tokens
 
   def read_file(in_python_file, out_python_file) do
     {time, data} = :timer.tc(fn ->
@@ -38,7 +37,8 @@ defmodule Syntax_Highlighter do
 
   def do_tokens(line, res) do
      cond do
-       # Palabras reservadas
+
+      # Palabras reservadas
        Regex.match?(@p_reservadas, line) ->
         [head|_tail] = Regex.run(@p_reservadas,line)
          do_tokens(String.replace(line,head,""), res<>"<span class='reservadas'>"<>head<>"</span>")
