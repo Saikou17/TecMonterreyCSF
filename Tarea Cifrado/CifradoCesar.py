@@ -1,20 +1,25 @@
 alfabeto = "abcdefghijklmnopqrstuvwxyz "
 
-def cifrado(alfabeto, archivo, llave):
-    resultado = ""
+#COdigos de Algoritmos de Cifrado (Ceasar, Vigenere, One Time Pad)
+
+def Cifrado_Ceasar(alfabeto, archivo, llave): #Funcion que recibe un alfabeto , un archivo y una llave
+    resultado = "" # Variable donde guardamos el mensaje cifrado
     contenido = archivo.read()  # Lee el contenido completo del archivo
-    for letra in contenido:
-        if letra in alfabeto:
-            indice = alfabeto.index(letra)
-            indice = (indice + llave) % len(alfabeto)
+    archivo.close()
+    for letra in contenido: #Recorrer letra por letra del contenido
+        if letra in alfabeto: #Verifica si la letra esta en nuestro alfabeto
+            indice = alfabeto.index(letra) #Variable que guarda la posicion de la letra
+            indice = (indice + llave) % len(alfabeto) 
             resultado += alfabeto[indice]
         else:
             resultado += letra
+    print(resultado)
     return resultado
 
-def descifrado(alfabeto, archivo, llave):
+def Descifrado_Ceasar(alfabeto, archivo, llave):
     resultado = ""
     contenido = archivo.read()  # Lee el contenido completo del archivo
+    archivo.close()
     for letra in contenido:
         if letra in alfabeto:
             indice = alfabeto.index(letra)
@@ -22,22 +27,53 @@ def descifrado(alfabeto, archivo, llave):
             resultado += alfabeto[indice]
         else:
             resultado += letra
+    print(resultado)
     return resultado
 
-
-def main():
-    
-    llave = 10
-    archivo = open("c:\\Tec\\TecMonterreyCSF\\Tarea Cifrado\\cipher1.txt", "r")
-    texto_cifrado = cifrado(alfabeto, archivo, llave)
+def Cifrado_Vigenere(alfabeto,archivo,llave):
+    resultado=""
+    mensaje = archivo.read()
     archivo.close()
-    
-    archivo = open("c:\\Tec\\TecMonterreyCSF\\Tarea Cifrado\\cipher1.txt", "r")
-    texto_descifrado = descifrado(alfabeto, archivo, llave)
-    archivo.close()
-    
-    print("Texto cifrado:", texto_cifrado)
-    print("Texto descifrado:", texto_descifrado)
+    #Realizamos que la llave concuerde con la longitud del mensaje a cifrar
+    longitudLlave = 0
+    for letra in mensaje:
+        if longitudLlave == len(llave) and letra in alfabeto:
+            pos = alfabeto.index(letra)
+            pos = (pos + alfabeto.index(llave[longitudLlave])) % len(alfabeto)
+            resultado += alfabeto[pos]
+            longitudLlave = 0
+        elif letra in alfabeto:
+            pos = alfabeto.index(letra)
+            pos = (pos + alfabeto.index(llave[longitudLlave])) % len(alfabeto)
+            resultado += alfabeto[pos]
+        else:
+            resultado += letra
+        longitudLlave += 1
+    print(resultado)
+    return resultado
 
-if __name__ == "__main__":
-    main()
+            
+
+
+# archivo = open('cipher0.txt','r')
+# archivo2 = open('cipher1.txt','r')
+archivo3 = open('vigenere0.txt','r')
+# archivo4 = open('vigenere1.txt','r')
+# Cifrado_Ceasar(alfabeto,archivo,8)
+# Descifrado_Ceasar(alfabeto,archivo2,10)
+Cifrado_Vigenere(alfabeto,archivo3,"pera")
+
+# def main():
+    
+#     llave = 10
+#     archivo = open('cipher0.txt', "r")
+#     texto_cifrado = Cifrado_Ceasarifrado(alfabeto, archivo, llave)
+    
+#     archivo = open("cipher1.txt", "r")
+#     texto_descifrado = Descifrado_Ceasar(alfabeto, archivo, llave)
+    
+#     print("Texto cifrado:", texto_cifrado)
+#     print("Texto descifrado:", texto_descifrado)
+
+# if __name__ == "__main__":
+#     main()
