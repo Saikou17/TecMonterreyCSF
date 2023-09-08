@@ -77,3 +77,36 @@ Cifrado_Vigenere(alfabeto,archivo3,"pera")
 
 # if __name__ == "__main__":
 #     main()
+def analisis_frecuencia(alfabeto, archivo):
+    letra_mas_comun = " "
+    frecuencia_letra = {}
+    
+    for letra in archivo:
+        if letra in frecuencia_letra:
+            frecuencia_letra[letra] += 1
+        else:
+            frecuencia_letra[letra] = 1
+    
+    posicion =  alfabeto.index(letra_mas_comun)
+    llave = posicion - alfabeto.index(" ") - posicion
+    
+    return llave
+
+def main():
+    archivo = open("c:\\Tec\\TecMonterreyCSF\\Tarea Cifrado\\cipher1.txt", "r")
+    llave = analisis_frecuencia(alfabeto, archivo)
+    archivo.close()
+
+    archivo = open("c:\\Tec\\TecMonterreyCSF\\Tarea Cifrado\\cipher1.txt", "r")
+    contenido = archivo.read()
+    archivo.close()
+    
+    texto_cifrado = cifrado(alfabeto, contenido, llave)
+    texto_descifrado = descifrado(alfabeto, contenido, llave)
+    
+    print("Texto cifrado:", texto_cifrado)
+    print("Texto descifrado:", texto_descifrado)
+    print("Llave:", llave)
+
+if __name__ == "__main__":
+    main()
