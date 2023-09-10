@@ -3,16 +3,11 @@ import random
 alfabeto = "abcdefghijklmnopqrstuvwxyz "
 
 def generar_clave(longitud):
-    """
-    Genera una clave aleatoria del alfabeto especificado.
-    """
     clave = [random.choice(alfabeto) for _ in range(longitud)]
     return ''.join(clave)
 
 def cifrar(mensaje, clave):
-    """
-    Cifra el mensaje utilizando la clave generada.
-    """
+
     if len(mensaje) != len(clave):
         raise ValueError("La longitud del mensaje y la clave deben ser iguales")
     

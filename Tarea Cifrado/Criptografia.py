@@ -1,7 +1,7 @@
 """ Actividad Criptografia y Criptologia 
 
 Juan Pablo Cruz Rodriguez A01783208
-Juan Pablo Moreno A01374091 
+Juan Pablo Moreno Robles Arenas A01374091 
 
 Instrucciones:
 
@@ -13,6 +13,7 @@ Instrucciones:
 
 import matplotlib.pyplot as plt #Importamos librerias necesarias
 
+import random
 alfabeto = "abcdefghijklmnopqrstuvwxyz "
 
 """ El alfabeto que utilizamos en este ejercicio se encuentra en el idioma ingles, con la pequeña 
@@ -34,10 +35,10 @@ excepcion de que agregamos un espacio al final. Tomamos en cuenta que la letra a
 """
 
 # Cifrado César
-def Cifrado_Ceasar(alfabeto, archivo, llave):
+def Cifrado_Ceasar(alfabeto, llave):
     resultado = ""  # Variable donde guardamos el mensaje cifrado
-    contenido = archivo.read()  # Lee el contenido completo del archivo
-    archivo.close()
+    with open('./cipher0.txt') as prueba1:
+        contenido = prueba1.readlines()
     for letra in contenido:  # Recorrer letra por letra del contenido
         if letra in alfabeto:  # Verifica si la letra está en nuestro alfabeto
             indice = alfabeto.index(letra)  # Variable que guarda la posición de la letra
@@ -49,11 +50,13 @@ def Cifrado_Ceasar(alfabeto, archivo, llave):
     return resultado
 
 # Descifrado César
-def Descifrado_Ceasar(alfabeto, archivo, llave):
+def Descifrado_Ceasar(alfabeto, llave):
     resultado = ""
-    contenido = archivo.read()  # Lee el contenido completo del archivo
-    archivo.close()
-    for letra in contenido:
+    with open('./cipher1.txt') as prueba1:
+        contenido = prueba1.readlines()
+    # contenido = archivo.read()  # Lee el contenido completo del archivo
+    # archivo.close()
+    for letra in contenido[0]:
         if letra in alfabeto:
             indice = alfabeto.index(letra)
             indice = (indice - alfabeto.index(llave)) % len(alfabeto)  # Aplicar descifrado César
@@ -64,21 +67,23 @@ def Descifrado_Ceasar(alfabeto, archivo, llave):
     return resultado
 
 # Cifrado Vigenère
-def Cifrado_Vigenere(alfabeto, archivo, llave):
+def Cifrado_Vigenere(alfabeto,llave):
     resultado = ""  # Variable donde guardamos el mensaje cifrado
-    mensaje = archivo.read()
-    archivo.close()
+    with open('./cipher0.txt') as test1:
+        mensaje= test1.readlines()
+    # mensaje = archivo.read()
+    # archivo.close()
     longitudLlave = 0  # Inicializamos un contador para la posición de la llave
-    for letra in mensaje:
+    for letra in mensaje[0]:
         if longitudLlave == (len(llave) - 1) and letra in alfabeto:
             pos = alfabeto.index(letra)  # Obtener la posición de la letra en el alfabeto
-            pos = (pos + alfabeto.index(llave[longitudLlave])) % (len(alfabeto) - 1)  # Aplicar cifrado Vigenère
+            pos = (pos + alfabeto.index(llave[longitudLlave])) % (len(alfabeto))  # Aplicar cifrado Vigenère
             resultado += alfabeto[pos]  # Agregar la letra cifrada al resultado
-            longitudLlave = 0  # Reiniciar la posición de la llave al llegar al final
+            longitudLlave = -1  # Reiniciar la posición de la llave al llegar al final
         elif letra in alfabeto:
             pos = alfabeto.index(letra)
-            pos = (pos + alfabeto.index(llave[longitudLlave])) % (len(alfabeto) - 1)  # Aplicar cifrado Vigenère
-            resultado += alfabeto[pos]  # Agregar la letra cifrada al resultado
+            pos = (pos + alfabeto.index(llave[longitudLlave])) % (len(alfabeto))  # Aplicar cifrado Vigenère
+            resultado += alfabeto[pos]# Agregar la letra cifrada al resultado
         else:
             resultado += letra  # Si no está en el alfabeto, mantenerla igual
         longitudLlave += 1  # Avanzar a la siguiente letra de la llave
@@ -87,20 +92,22 @@ def Cifrado_Vigenere(alfabeto, archivo, llave):
     return resultado
 
 # Descifrado Vigenère
-def Descifrado_Vigenere(alfabeto, archivo, llave):
+def Descifrado_Vigenere(alfabeto,llave):
     resultado = ""  # Variable donde guardamos el mensaje descifrado
-    mensaje = archivo.read()
-    archivo.close()
+    with open('./cipher2.txt') as test1:
+        mensaje= test1.readlines()
+    #mensaje = archivo.read()
+    #archivo.close()
     longitudLlave = 0  # Inicializamos un contador para la posición de la llave
-    for letra in mensaje:
+    for letra in mensaje[0]:
         if longitudLlave == (len(llave) - 1) and letra in alfabeto:
             pos = alfabeto.index(letra)  # Obtener la posición de la letra en el alfabeto
-            pos = (pos - alfabeto.index(llave[longitudLlave])) % (len(alfabeto) - 1)  # Aplicar descifrado Vigenère
+            pos = (pos - alfabeto.index(llave[longitudLlave])) % (len(alfabeto))  # Aplicar descifrado Vigenère
             resultado += alfabeto[pos]  # Agregar la letra descifrada al resultado
-            longitudLlave = 0  # Reiniciar la posición de la llave al llegar al final
+            longitudLlave = -1  # Reiniciar la posición de la llave al llegar al final
         elif letra in alfabeto:
             pos = alfabeto.index(letra)
-            pos = (pos - alfabeto.index(llave[longitudLlave])) % (len(alfabeto) - 1)  # Aplicar descifrado Vigenère
+            pos = (pos - alfabeto.index(llave[longitudLlave])) % (len(alfabeto))  # Aplicar descifrado Vigenère
             resultado += alfabeto[pos]  # Agregar la letra descifrada al resultado
         else:
             resultado += letra  # Si no está en el alfabeto, mantenerla igual
@@ -111,19 +118,11 @@ def Descifrado_Vigenere(alfabeto, archivo, llave):
 
 #Generar clave OTP
 def generar_clave_OTP(longitud):
-    """
-    Genera una clave aleatoria del alfabeto especificado.
-    """
     clave = [random.choice(alfabeto) for _ in range(longitud)]
     return ''.join(clave)
 
 #Cifrado OTP
-def cifrar_OTP(archivo, clave):
-    """
-    Cifra el mensaje utilizando la clave generada.
-    """
-    mensaje = archivo.read()
-    archivo.close()
+def cifrar_OTP(mensaje, clave):
     if len(mensaje) != len(clave):
         raise ValueError("La longitud del mensaje y la clave deben ser iguales")
     
@@ -142,11 +141,11 @@ def cifrar_OTP(archivo, clave):
 
 """
 
-def analisis_frecuencia_Ceasar(alfabeto, archivo):
-    mensaje = archivo.read()
-    archivo.close()
+def analisis_frecuencia_Ceasar():
+    with open('./cipher1.txt') as prueba1:
+        mensaje = prueba1.readlines()
     frecuencia_letra = {}
-    for letra in mensaje:
+    for letra in mensaje[0]:
         if letra in frecuencia_letra:
             frecuencia_letra[letra] += 1
         else:
@@ -158,20 +157,21 @@ def analisis_frecuencia_Ceasar(alfabeto, archivo):
     plt.ylabel("Frecuencia de la letras")
     plt.title("Ataque estadistico")
     plt.show()
-    return llave
+    #return llave
 
-def analisis_frecuencia_Virgenere(alfabeto,archivo,longitudLlave):
-    mensaje=archivo.read()
-    archivo.close()
+def analisis_frecuencia_Virgenere(longitudLlave):
+    with open('./cipher2.txt') as prueba1:
+        mensaje = prueba1.readlines()
     llaves = [{} for _ in range(longitudLlave)]
     grupo = 0
-    for letra in mensaje:
+    for letra in mensaje[0]:
+        print(grupo)
         if grupo == longitudLlave-1:
             if letra in llaves[grupo]:
                 llaves[grupo][letra] += 1
             else:
                 llaves[grupo][letra] = 1
-            grupo = 0
+            grupo = -1
         if letra in llaves[grupo]:
             llaves[grupo][letra] += 1
         else:
@@ -198,27 +198,27 @@ def analisis_frecuencia_Virgenere(alfabeto,archivo,longitudLlave):
 
 """
 
-archivo = open('cipher0.txt','r') #Archivo para cifrar
-archivo2 = open('cipher1.txt','r') #Archivo para descifrar con cesar (tarea)
-archivo3 = open('vigenere0.txt','r') #Archivo para cifrar 
-archivo4 = open('cipher2.txt','r') #Archivo para descrifrar con virgenere (tarea)
-archivo5 = open('vigenere2.txt','r') #Archivo para descifrar
-# Cifrado_Ceasar(alfabeto,archivo,"h")
-# Descifrado_Ceasar(alfabeto,archivo2,"j")
-# Cifrado_Vigenere(alfabeto,archivo3,"pera")
-# Descifrado_Vigenere(alfabeto,archivo4,"gggg")
+# archivo = open('cipher0.txt','r') #Archivo para cifrar
+# archivo2 = open('cipher1.txt','r') #Archivo para descifrar con cesar (tarea)
+# archivo3 = open('vigenere0.txt','r') #Archivo para cifrar 
+# archivo4 = open('cipher2.txt','r') #Archivo para descrifrar con virgenere (tarea)
+# archivo5 = open('vigenere2.txt','r') #Archivo para descifrar
+# Cifrado_Ceasar(alfabeto,"h")
+# Descifrado_Ceasar(alfabeto,"k")
+#Cifrado_Vigenere(alfabeto,"./cipher0.txt","jp es gay")
+#Descifrado_Vigenere(alfabeto,"hack")
 
-# Mensaje a cifrar
+#Mensaje a cifrar
 # mensaje = "este es un mensaje secreto"
 # # Generar una clave aleatoria del mismo tamaño que el mensaje
 # clave = generar_clave_OTP(len(mensaje))
 # # Cifrar el mensaje
-# mensaje_cifrado = cifrar_OTP(archivo6, clave)
+# mensaje_cifrado = cifrar_OTP(mensaje, clave)
 
 # print("Mensaje original:", mensaje)
 # print("Clave generada:", clave)
 # print("Mensaje cifrado:", mensaje_cifrado)
 
-# analisis_frecuencia_Ceasar(alfabeto,archivo2)
-analisis_frecuencia_Virgenere(alfabeto,archivo4,4)
+#analisis_frecuencia_Ceasar()
+analisis_frecuencia_Virgenere(4)
 
