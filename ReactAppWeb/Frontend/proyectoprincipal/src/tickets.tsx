@@ -4,12 +4,15 @@ import MyUrlField from "./MyUrlField";
 export const TicketsList = () => (
   <List>
     <Datagrid rowClick="show">
-      <TextField source="id" />
-      <TextField source="name" />
-      <EmailField source="email" />
-      <TextField source="phone" />
-      <MyUrlField source="website" />
-      <TextField source="company.name" />
+      <TextField source='Numero' />
+      <TextField source="Usuario"/>
+      <TextField source="Lugar"/>
+      <TextField source="Categoria"/>
+      <TextField source="Tipo"/>
+      <TextField source="Prioridad"/>
+      <TextField source="Estado"/>
+      <TextField source="Comentario"/>
+      <TextField source="Registro"/>
     </Datagrid>
   </List>
 );

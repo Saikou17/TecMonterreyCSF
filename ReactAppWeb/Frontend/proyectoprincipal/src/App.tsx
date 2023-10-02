@@ -6,8 +6,8 @@ import { TicketsList } from "./tickets";
 import PostIcon from "@mui/icons-material/Book";
 import UserIcon from "@mui/icons-material/Group";
 
-export const App = () => <Admin dataProvider={dataProvider}>
+export const App = () => (<Admin dataProvider={dataProvider}>
   <Resource name="users" list={UserList} show={ShowGuesser} recordRepresentation="name" icon={UserIcon}/>
   <Resource name="posts" list={PostList} edit={PostEdit} create={PostCreate} icon={PostIcon}/>
-  <Resource name="tickets" list={TicketsList} show={ShowGuesser} recordRepresentation="name"/>
-</Admin>;
+  <Resource name="Tickets" list={TicketsList} show={ShowGuesser} recordRepresentation="name"/>
+</Admin>);

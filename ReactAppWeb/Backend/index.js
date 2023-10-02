@@ -47,21 +47,45 @@ app.get("/Tickets",async(req,res)=>{ //Funcion asincronica que utiliza el metodo
     }
 })
 
-app.get("Tickets/:id",async (req,res) =>{
-    let data = await db.collection("Tickets").find({id: Number(req.params.id)}).project({_id:0}).toArray();
-    res.json(data[0])
+app.get("/Tickets/:Numero",async (req,res) =>{ //Funcion asincronica que obtiene un elemento. 
+    let data = await db.collection("Tickets").find({Numero : Number(req.params.Numero)}).project({_id:0}).toArray(); //Busca en la coleccion de Tickets el numero de ticket y revuelve un arreglo
+    res.json(data[0]) //Devuelve el primer elemento del arreglo
+    //? Porque guardamos el data en un arreglo
 })
 
 //**Implementamos los metodos POST y los endpoints */
 //** La operacion que realizan estos netodos del CRUD es la de Create */
 
+app.post("/Tickets/",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y devuelve un response en forma de crear un elemento
+    let addValues = req.body; //Guardamos el cuerpo o los datos del URL
+    let data = await db.collection("Tickets").find({}).toArray(); //Obtenemos todos los tickets
+    let id = data.lenght+1; //Variable que guarda un numero que le sigue al ultimo ticket
+    addValues["Numero"] = id; //Agregamos un nuevo valor al parametro del request
+    data = await db.collection("Tickets").insertOne(addValues); //Insertamos en nuestra base de datos el elemento o ticket
+    res.json(data); //Response Final
+
+})
 
 //**Implementamos los metodos PUT y los endpoints */
 //** La operacion que realizan estos netodos del CRUD es la de Update */
 
+app.put("/Tickets/:Numero",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y devuelve un response en forma de actualizacion de un elemento
+    let addValues = req.body; //Obtenemos los datos de nuestra request (URL)
+    addValues["Numero"] = Number(req.params.Numero); //Agregamos el numero que posee la URL en el parametro de "Numero", en la variable o parametro del body de la request
+    let data = await db.collection("Tickets").updateOne({Numero : addValues["Numero"]},{"$set" : addValues}); //Actualizamos nuestro elemento que buscamos con el numero que guardamos en el addValues
+    data = await db.collection("Tickets").find({Numero : Number(req.params.Numero)}).project({_id:0}).toArray(); //Obtenemos nuestro nuevo elemento actualizado
+    res.json(data[0]); //Response final
+
+})
 
 //**Implementamos los metodos DELETE y los endpoints */
 //** La operacion que realizan estos netodos del CRUD es la de Delete */
+
+app.delete("/Tickets/:Numero",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y borra un elemento
+    let data = await db.collection("Tickets").deleteOne({Numero : Number(req.params.Numero)}); //Borra el elemento
+    res.json(data); //Response final
+
+})
 
 app.listen(1337,()=>{ //Usamos el metodo Listen para acceder al servidor (En este caso es nuestro puerto local)
     connectDB();
