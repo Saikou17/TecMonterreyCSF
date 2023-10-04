@@ -1,10 +1,9 @@
-import { List, Datagrid, TextField, EmailField, UrlField } from "react-admin";
-import MyUrlField from "./MyUrlField";
+import { List, Datagrid, TextField, Edit  } from "react-admin";
 
 export const TicketsList = () => (
   <List>
-    <Datagrid rowClick="show">
-      <TextField source='Numero' />
+    <Datagrid rowClick="edit">
+      <TextField source="id"/>
       <TextField source="Usuario"/>
       <TextField source="Lugar"/>
       <TextField source="Categoria"/>
@@ -12,7 +11,13 @@ export const TicketsList = () => (
       <TextField source="Prioridad"/>
       <TextField source="Estado"/>
       <TextField source="Comentario"/>
-      <TextField source="Registro"/>
+      <TextField sorce="Registro"/>
     </Datagrid>
   </List>
 );
+
+// export const TicketEdit = () => (
+//   <Edit>
+
+//   </Edit>
+// );
