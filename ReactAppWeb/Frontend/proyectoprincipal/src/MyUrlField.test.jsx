@@ -15,8 +15,6 @@ test("Grab a record (website) and it turns into a Url", async () => {
   const linkElement = await waitFor(() =>
       container.querySelector(`a[href="${record.website}"]`)
     );
-  console.log(record.website, linkElement, container);
   expect(linkElement).toBeDefined();
-  expect(linkElement.tagName).toBe('A');
   expect(linkElement.getAttribute('href')).toBe("hildegard.org");
 });

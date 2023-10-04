@@ -1,7 +1,7 @@
 import jsonServerProvider from "ra-data-json-server";
 
-// export const dataProvider = jsonServerProvider(
-//   import.meta.env.VITE_JSON_SERVER_URL
-// );
+export const dataProvider = jsonServerProvider(
+  import.meta.env.VITE_JSON_SERVER_URL
+);
 
-export const dataProvider = jsonServerProvider("http://127.0.0.1:1337");
+// export const dataProvider = jsonServerProvider("http://127.0.0.1:1337");

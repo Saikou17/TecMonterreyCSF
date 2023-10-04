@@ -9,7 +9,8 @@ import UserIcon from "@mui/icons-material/Group";
 export const App = () => {
   return(
   <Admin dataProvider={dataProvider}>
-    <Resource name="Tickets" list={TicketsList}/>
+    <Resource name="users" list={UserList} />
+    {/* <Resource name="Tickets" list={TicketsList}/> */}
   </Admin>);
 };
 export default App;
