@@ -1,16 +1,20 @@
-import { Admin, ListGuesser, Resource, ShowGuesser } from "react-admin";
+import { Admin, ListGuesser, Resource, ShowGuesser, CustomRoutes } from "react-admin";
+import {  Route} from 'react-router-dom';
 import { dataProvider } from "./dataProvider";
-import { PostList, PostEdit, PostCreate } from "./posts";
+import  authProvider  from "./authProvider";
 import { UserList } from "./users";
-import { TicketsList } from "./tickets";
+import { TicketCreate, TicketEdit, TicketsList } from "./tickets";
+import Registrarse from "./registrarse";
 import PostIcon from "@mui/icons-material/Book";
-import UserIcon from "@mui/icons-material/Group";
 
 export const App = () => {
   return(
-  <Admin dataProvider={dataProvider}>
-    <Resource name="users" list={UserList} />
-    {/* <Resource name="Tickets" list={TicketsList}/> */}
+  <Admin dataProvider={dataProvider} authProvider={authProvider}>
+    {/* <Resource name="users" list={UserList} /> */}
+    <Resource name="Tickets" list={TicketsList} edit={TicketEdit} create={TicketCreate}/>
+    <CustomRoutes>
+      <Route path="/Registrarse" element={<Registrarse/>}/>
+    </CustomRoutes>
   </Admin>);
 };
 export default App;

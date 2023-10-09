@@ -24,7 +24,7 @@ async function LogIn(sujeto,accion,objeto){ //Funcion asincronica que recibe e p
     toLog["sujeto"]=sujeto;//Creamos un sujeto
     toLog["accion"]=accion;//Creamos una accion
     toLog["objeto"]=objeto;//Creamos un objeto
-    await db.collection("")
+    await db.collection("Log").insertOne(toLog);
 }
 
 //**Implementamos los metodos GET y los endpoints */
@@ -108,26 +108,47 @@ app.post("/Tickets/",async (req,res)=>{ //FUncion asincronica que recibe un requ
     }    
 })
 
-app.post("/Registrarse",async (req,res)=>{
+app.post("/Registrarse",async (req,res)=>{ //Funcion asincronica para registrarse 
     let user = req.body.Usuario; //Usuario de la persona
-    let password = req.body.Contrasena;
-    let name = req.body.Nombre;
+    let password = req.body.Contrasena; //Contraseña de la persona
+    let name = req.body.Nombre; //Nombre de la persona 
     console.log(req.body);
-    let data = db.collection("Usuario").findOne({"Usuario":user});
-    if(data==null){
+    let data = db.collection("Usuario").findOne({"Usuario":user}); //Se encuentra el elemento en la base de datos
+    if(data==null){ //Si no se encuentra en usuario
         try{
             bcrypt.genSalt(10,(error,salt) =>{ //Se genera un salt aleatorio de dif 10 (Un salt es una cadena generada de forma aleatoria)
                 bcrypt.hash(password,salt,async(error,hash)=>{ //Se genera el hash de una password usanso el salt de 10
-                    let usuarioAgregar = {"Usuario": user, "Contrasena": hash, "Nombre": name};
-                    data = await db.collection("Usuarios").insertOne(usuarioAgregar);
-                    res.sendStatus(201);
+                    let usuarioAgregar = {"Usuario": user, "Contrasena": hash, "Nombre": name}; //Creamos el usuario con la contraseña en hash
+                    data = await db.collection("Usuarios").insertOne(usuarioAgregar); //Insertamos a nuestro usuario en la base de datos
+                    res.sendStatus(201); //Devolvemos un mensaje de respuesta correcta
                 })
             })
         }catch{
-            res.sendStatus(401);
+            res.sendStatus(401); //Si el try falla enviamos un mensaje de error
         }
     }else{
-        res.sendStatus(401);
+        res.sendStatus(401); //Si no se puede crear un nuevo usuario , tira error
+    }
+})
+
+app.post("/LogIn",async (req,res)=> { //Funcion asincronica para iniciar sesion
+    let user = req.body.Usuario; //Obtenemos el usuario de la persona
+    let password = req.body.Contrasena; //Luego la contraseña
+    console.log(req)
+    console.log(req.body)
+    let data = await db.collection("Usuarios").findOne({"Usuario":user}); //Busacamos la persona en la base de datos
+    if(data==null){ //Si la persona no esta 
+        res.sendStatus(401); //Manda error de que no existe y no puede entrar antes de registrarse
+    }else{
+        bcrypt.compare(password,data.Contrasena,(error,result)=>{ //Comparamos si las contraseñas coinciden 
+            if(result){ //En caso de que se autentique la identidad de la persona 
+                let token = jwt.sign({"Usuario": data.Usuario},"secretKey",{expiresIn:600}); //Crea un token (JSON) que 
+                LogIn(user,"LogIn",""); //Crea un nuevo dato en la coleccion de Log
+                res.json({"Token": token, "id": data.Usuario, "Nombre": data.Nombre}); //Regresa el token , el usuario y el nombre
+            }else{
+                res.sendStatus(401); //Tira error si las contraseñas no son iguales
+            }
+        })
     }
 })
 
