@@ -19,5 +19,3 @@ export const App = () => {
   </Admin>);
 };
 export default App;
-
-
