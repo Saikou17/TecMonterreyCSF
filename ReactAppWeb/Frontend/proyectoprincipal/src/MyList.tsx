@@ -36,7 +36,7 @@ const CardView = () => {
             </Card.Text>
             <EditButton label="Editar" record={post} style={{ width: '70px', backgroundColor: '#4CB0FC', marginBottom: '5px', left: '200px', right: '10px', display: 'block', bottom: '40px', position: 'absolute', color: 'white', textAlign:'center'}}/>
             <Card.Footer style={{ borderColor: 'black', backgroundColor: '#FCFAFA', position: 'absolute', bottom: '0', width: '17.5rem' }}>
-              <small className="text-muted" style={{ textAlign: 'center' }}>{post.userId}</small>
+              <small className="text-muted" style={{ textAlign: 'center' }}>{"Id usuario: "}{post.userId}</small>
             </Card.Footer>
           </Card.Body>
         </Card>
