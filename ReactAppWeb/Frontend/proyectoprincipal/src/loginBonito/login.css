@@ -1,9 +1,13 @@
+
+
+
+
 .contenedorLogin{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-image: url("./imagenFondo.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 body {font-family: Arial, Helvetica, sans-serif;}
 /*form {border: 3px solid #f1f1f1;}*/
@@ -14,8 +18,9 @@ input[type=text], input[type=password] {
   margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
+  border-radius: 10px;
   box-sizing: border-box;
-  background-color: #6E8387;
+  background-color: #909698;
 }
 
 button {
@@ -24,6 +29,7 @@ button {
   padding: 14px 20px;
   margin: 8px 0;
   border: none;
+  border-radius: 10px;
   cursor: pointer;
   width: 100%;
 }
@@ -45,17 +51,17 @@ button:hover {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #6E8387;
     border-radius: 5px;
     margin-bottom: 10px;
 }
 
 .container {
-  padding: 100px;
-  margin: 20px;
+  padding: 50px;
   width: 600px;
   background-color: #C8D3D5;
   height: 720px;
+  grid-column-start: 2;
+  
 }
 
 span.psw {

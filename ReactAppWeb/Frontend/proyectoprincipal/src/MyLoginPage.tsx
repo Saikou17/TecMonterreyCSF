@@ -24,6 +24,13 @@ export const MyLoginPage = () => {
     <div className="contenedorLogin">
       <div className="container">
         <form>
+          <div className="imgcontainer">
+            <img
+              id="logoSocio"
+              src=".\src\loginBonito\logoSocio1.png"
+              alt="Logio de socio formador"
+            />
+          </div>
           <h5>Usuario</h5>
           <input
             name="usuario"
@@ -41,13 +48,6 @@ export const MyLoginPage = () => {
             onChange={(e) => setContraseña(e.target.value)}
           />
         </form>
-        <div className="imgcontainer">
-          <img
-            id="logoSocio"
-            src="src\loginBonito\logoSocio.jpg"
-            alt="Logio de socio formador"
-          />
-        </div>
         <button onClick={handleLogIn}>Iniciar Sesión</button>
         <button onClick={handleSignUp}>Registrarse</button>
         <label>
