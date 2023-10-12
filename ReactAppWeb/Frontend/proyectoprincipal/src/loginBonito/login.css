@@ -1,15 +1,24 @@
-
-
-
-
-.contenedorLogin{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    background-image: url("./imagenFondo.jpg");
-    background-repeat: no-repeat;
-    background-size: cover;
+body {
+  background-image: url('./imagenFondo.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0; /* Asegúrate de eliminar el margen predeterminado del body */
+  padding: 0; /* Asegúrate de eliminar el relleno predeterminado del body */
+  display: flex;
+  flex-direction: column; /* Establece el diseño en columna para que los elementos se apilen verticalmente */
+  align-items: center; /* Centra verticalmente el contenido */
+  justify-content: center; /* Centra horizontalmente el contenido */
+  min-height: 100vh; /* Asegura que el fondo se extienda a lo largo de toda la ventana visible */
 }
-body {font-family: Arial, Helvetica, sans-serif;}
+
+.contenedorLogin {
+  /* Estilos específicos para el contenedor de tu componente */
+  width: 600px;
+  background-color: #C8D3D5;
+  height: 720px;
+  /* Otras propiedades específicas para tu contenedor */
+}
 /*form {border: 3px solid #f1f1f1;}*/
 
 input[type=text], input[type=password] {
@@ -61,7 +70,7 @@ button:hover {
   background-color: #C8D3D5;
   height: 720px;
   grid-column-start: 2;
-  
+  margin-top: 70px;
 }
 
 span.psw {
