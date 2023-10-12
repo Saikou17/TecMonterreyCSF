@@ -14,7 +14,7 @@ const loginPageStyle = {
   backgroundSize: "cover",
 };
 
-const MyLoginPage = () => {
+export const MyLoginPage = () => {
   const [usuario, setUsuario] = useState("");
   const [contraseña, setContraseña] = useState("");
   const login = useLogin();
@@ -31,43 +31,39 @@ const MyLoginPage = () => {
     navigate("/Registrarse");
   };
   return (
-    <div style={loginPageStyle}>
-      <div className="contenedorLogin">
-        <div className="container">
-          <form>
-            <div className="imgcontainer">
-              <img
-                id="logoSocio"
-                src=".\src\loginBonito\logoSocio1.png"
-                alt="Logo de socio formador"
-              />
-            </div>
-            <h5>Usuario</h5>
-            <input
-              name="usuario"
-              type="text"
-              placeholder="Ingrese el usuario"
-              value={usuario}
-              onChange={(e) => setUsuario(e.target.value)}
+    <div className="contenedorLogin">
+      <div className="container">
+        <form>
+          <div className="imgcontainer">
+            <img
+              id="logoSocio"
+              src=".\src\loginBonito\logoSocio1.png"
+              alt="Logo de socio formador"
             />
-            <h5>Contraseña</h5>
-            <input
-              name="contraseña"
-              type="password"
-              placeholder="Escriba la contraseña"
-              value={contraseña}
-              onChange={(e) => setContraseña(e.target.value)}
-            />
-          </form>
-          <button onClick={handleLogIn}>Iniciar Sesión</button>
-          <button onClick={handleSignUp}>Registrarse</button>
-          <label>
-            <input type="checkbox" name="remember" /> Recordarme
-          </label>
-        </div>
+          </div>
+          <h5>Usuario</h5>
+          <input
+            name="usuario"
+            type="text"
+            placeholder="Ingrese el usuario"
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
+          />
+          <h5>Contraseña</h5>
+          <input
+            name="contraseña"
+            type="password"
+            placeholder="Escriba la contraseña"
+            value={contraseña}
+            onChange={(e) => setContraseña(e.target.value)}
+          />
+        </form>
+        <button onClick={handleLogIn}>Iniciar Sesión</button>
+        <button onClick={handleSignUp}>Registrarse</button>
+        <label>
+          <input type="checkbox" name="remember" /> Recordarme
+        </label>
       </div>
     </div>
   );
 };
-
-export default MyLoginPage;
