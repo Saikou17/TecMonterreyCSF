@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import {useState} from "react";
 
 const Registrarse = () =>{
 
@@ -6,6 +6,7 @@ const Registrarse = () =>{
         Usuario: "",
         Contrasena: "",
         Nombre: "",
+        Rol: "",
     });
 
     const handleChange= (event: any)=>{
@@ -25,7 +26,12 @@ const Registrarse = () =>{
         try {
             const response = await fetch(request);
             if (response.status < 200 || response.status >= 300) {
-                throw new Error(response.statusText);
+                if(response.status == 409){
+                    alert("El usuario ya existe");
+                    throw new Error(response.statusText);
+                }else{
+                    throw new Error(response.statusText);
+                }
             }
             
         } catch {
@@ -38,34 +44,43 @@ const Registrarse = () =>{
             <h2>Registro de nuevos usuarios</h2>
             <form>
                 <div>
-                    <label htmlFor="username">Usuario: </label>
+                    <label htmlFor="Usuario">Usuario: </label>
                     <input 
                         type="text"
-                        id="username"
-                        name="username"
+                        id="Usuario"
+                        name="Usuario"
                         value={datos.Usuario}
                         onChange={handleChange}
                     />
                 </div>
                 <div>
-                    <label htmlFor="password">Password: </label>
+                    <label htmlFor="Contrasena">Contraseña: </label>
                     <input 
                         type="password"
-                        id="password"
-                        name="password"
+                        id="Contrasena"
+                        name="Contrasena"
                         value={datos.Contrasena}
                         onChange={handleChange}
                     />
                 </div>
                 <div>
-                    <label htmlFor="fullName">Nombre Completo: </label>
+                    <label htmlFor="Nombre">Nombre Completo: </label>
                     <input 
                         type="text"
-                        id="fullName"
-                        name="fullName"
+                        id="Nombre"
+                        name="Nombre"
                         value={datos.Nombre}
                         onChange={handleChange}
                     />
+                </div>
+                <div>
+                    <label htmlFor="Rol">Selecciona tu Rol:</label>
+                    <select id="Rol" name="Rol" value={datos.Rol} onChange={handleChange}>
+                        <option value=""></option>
+                        <option value="Coordinador Aula">Coordinador de Aula</option>
+                        <option value="Coordinador Nacional">Coordinador Nacional</option>
+                        <option value="Ejecutivo">Ejecutivo</option>
+                    </select>
                 </div>
                 <div>
                     <button type="button" onClick={handleSendData}>

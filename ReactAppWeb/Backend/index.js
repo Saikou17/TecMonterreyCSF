@@ -4,13 +4,13 @@ bodyParset = require("body-parser") //Importamos el modulo que analiza la solici
 let cors = require("cors") //Implementa el modulo que perimite acceder a nuestra API desde diferentes dominios
 const bcrypt=require("bcrypt") // bcrypt es una librería utilizada para el hashing seguro de contraseñas.
 const jwt=require("jsonwebtoken")// jsonwebtoken es una librería utilizada para la autenticación basada en tokens
-
+const https=require('https')
+const fs=require('fs')
 
 let db; //Variable que guarda 
 const app = express(); //Instancia a Express
 app.use(cors()); //Activa el modulo
 app.use(bodyParset.json()); //Actuva el modulo
-
 async function connectDB(){ //Funcion que retorna una promesa implicita (valor que puede tardar)
     let client = new MongoClient("mongodb://localhost:27017/RetoTC2007B"); //Variable que guarda un cliente hacia nuetra base de datos
     await client.connect(); //Espera que la base de datos se conecte antes de seguir con el codigo
@@ -34,11 +34,18 @@ app.get("/Tickets",async(req,res)=>{ //Funcion asincronica que utiliza el metodo
     console.log(req.query);
     try{
         let token=req.get("Authentication"); //Se obtiene el elemento de autenticacion del encabezado HTTP
+        console.log(token)
         let verifiedToken = await jwt.verify(token, "secretKey"); //Usamos la libreria para verikicar que el Token (Autenticacion) utilizando la llave secreta
         let authData=await db.collection("Usuarios").findOne({"Usuario": verifiedToken.Usuario}) // Obtenemos la informacion del usuario que esta autenticado
         let parametersFind={} //Creamos un objeto vacio
         if(authData.Rol=="Coordinador Nacional"){ // Si el usuario es coordinador nacional 
             parametersFind["Usuario"]=verifiedToken.Usuario; //? Guardamos un parametro Usuario que guarda la informacion del usuario
+        }
+        else if(authData.Rol=="Coordinador Aula"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+        }
+        else if(authData.Rol=="Ejecutivo"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
         }
     if("_sort" in req.query){ //Metodo getList. Busca en los parametros del endpoint (Query)
         let sortBy = req.query._sort; //Guarda el valor del parametro Sort
@@ -78,8 +85,14 @@ app.get("/Tickets/:id",async (req,res) =>{ //Funcion asincronica que obtiene un 
         let verifiedToken = await jwt.verify(token, "secretKey"); //Verifica si el token se obtiene con la llave
         let authData=await db.collection("Usuarios").findOne({"Usuario": verifiedToken.Usuario}) //Obtiene la informacion del usuario verificado
         let parametersFind={"id": Number(req.params.id)} //Obtiene el id del request
-        if(authData.Rol=="Coordinador Nacional"){ //Si es coordinador nacional
-            parametersFind["Usuario"]=verifiedToken.Usuario; //Guarda el usuario en el objeto de parametersFind
+        if(authData.Rol=="Coordinador Nacional"){ // Si el usuario es coordinador nacional 
+            parametersFind["Usuario"]=verifiedToken.Usuario; //? Guardamos un parametro Usuario que guarda la informacion del usuario
+        }
+        else if(authData.Rol=="Coordinador Aula"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+        }
+        else if(authData.Rol=="Ejecutivo"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
         }
         let data = await db.collection("Tickets").find({id : Number(req.params.id)}).project({_id:0}).toArray(); //Busca en la coleccion de Tickets el numero de ticket y revuelve un arreglo
         res.json(data[0]) //Devuelve el primer elemento del arreglo
@@ -111,40 +124,53 @@ app.post("/Tickets/",async (req,res)=>{ //FUncion asincronica que recibe un requ
 app.post("/Registrarse",async (req,res)=>{ //Funcion asincronica para registrarse 
     let user = req.body.Usuario; //Usuario de la persona
     let password = req.body.Contrasena; //Contraseña de la persona
-    let name = req.body.Nombre; //Nombre de la persona 
+    let name = req.body.Nombre; //Nombre de la persona
+    let rol = req.body.Rol;
     console.log(req.body);
-    let data = db.collection("Usuario").findOne({"Usuario":user}); //Se encuentra el elemento en la base de datos
+    let data = await db.collection("Usuario").findOne({"Usuario":user}); //Se encuentra el elemento en la base de datos
     if(data==null){ //Si no se encuentra en usuario
         try{
             bcrypt.genSalt(10,(error,salt) =>{ //Se genera un salt aleatorio de dif 10 (Un salt es una cadena generada de forma aleatoria)
                 bcrypt.hash(password,salt,async(error,hash)=>{ //Se genera el hash de una password usanso el salt de 10
-                    let usuarioAgregar = {"Usuario": user, "Contrasena": hash, "Nombre": name}; //Creamos el usuario con la contraseña en hash
+                    let id = Math.floor(Math.random() * 100);
+                    let id_already = await db.collection("Usuarios").findOne({"id": id});
+                    while(id_already){
+                        id = Math.floor(Math.random() * 100);
+                        id_already = await db.collection("Usuarios").findOne({"id": id});
+                    }
+                    let usuarioAgregar = {"Usuario": user, "Contrasena": hash, "Nombre": name, "Rol": rol, "id": id }; //Creamos el usuario con la contraseña en hash
                     data = await db.collection("Usuarios").insertOne(usuarioAgregar); //Insertamos a nuestro usuario en la base de datos
                     res.sendStatus(201); //Devolvemos un mensaje de respuesta correcta
                 })
             })
-        }catch{
+        }catch(error){
+            console.log(error);
             res.sendStatus(401); //Si el try falla enviamos un mensaje de error
         }
+    }if(data){
+        res.sendStatus(409); //Indica al usuario que ya existe una cuenta en la base de datos
     }else{
         res.sendStatus(401); //Si no se puede crear un nuevo usuario , tira error
     }
 })
 
-app.post("/LogIn",async (req,res)=> { //Funcion asincronica para iniciar sesion
+app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
     let user = req.body.Usuario; //Obtenemos el usuario de la persona
     let password = req.body.Contrasena; //Luego la contraseña
-    console.log(req)
     console.log(req.body)
     let data = await db.collection("Usuarios").findOne({"Usuario":user}); //Busacamos la persona en la base de datos
+    console.log(data)
     if(data==null){ //Si la persona no esta 
         res.sendStatus(401); //Manda error de que no existe y no puede entrar antes de registrarse
     }else{
+        console.log(password)
+        console.log(data.Contrasena)
         bcrypt.compare(password,data.Contrasena,(error,result)=>{ //Comparamos si las contraseñas coinciden 
+            console.log(result)
             if(result){ //En caso de que se autentique la identidad de la persona 
                 let token = jwt.sign({"Usuario": data.Usuario},"secretKey",{expiresIn:600}); //Crea un token (JSON) que 
                 LogIn(user,"LogIn",""); //Crea un nuevo dato en la coleccion de Log
-                res.json({"Token": token, "id": data.Usuario, "Nombre": data.Nombre}); //Regresa el token , el usuario y el nombre
+                res.json({"token": token, "id": data.Usuario, "Nombre": data.Nombre}); //Regresa el token , el usuario y el nombre
             }else{
                 res.sendStatus(401); //Tira error si las contraseñas no son iguales
             }
@@ -177,3 +203,8 @@ app.listen(1337,()=>{ //Usamos el metodo Listen para acceder al servidor (En est
     connectDB();
     console.log('Servidor corriendo en el puerto 1337');
 })
+
+// https.createServer({cert: fs.readFileSync("../Raiz.cer"), key: fs.readFileSync("../CA.key")}, app).listen(1337, ()=>{
+//     connectDB();
+//     console.log("Servidor escuchando en puerto 1337")
+// })

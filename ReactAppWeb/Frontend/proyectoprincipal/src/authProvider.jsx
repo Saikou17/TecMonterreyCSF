@@ -2,9 +2,11 @@
 
 const authProvider={
     login: async ({ username , password }) => {
-        const request = new Request('https://127.0.0.1:1337/LogIn', {
+        console.log('Usuario:', username); // Imprimir el valor de Usuario en la consola
+        console.log('Contrasena:', password); // Imprimir el valor de Contrasena en la consola
+        const request = new Request('http://127.0.0.1:1337/login', {
             method: 'POST',
-            body: JSON.stringify({ "username":username, "password": password }),
+            body: JSON.stringify({ "Usuario":username, "Contrasena": password }),
             headers: new Headers({ 'Content-Type': 'application/json' }),
         });
         try {
@@ -14,7 +16,7 @@ const authProvider={
             }
             const auth = await response.json();
             localStorage.setItem('auth', auth.token);
-            localStorage.setItem('identity',  JSON.stringify({"id": auth.id,  "fullName":auth.fullName}));
+            localStorage.setItem('identity',  JSON.stringify({"id": auth.id,  "Nombre":auth.fullName}));
             return Promise.resolve()
         } catch {
             throw new Error('Error en usuario o password');
