@@ -1,4 +1,5 @@
 import {useState} from "react";
+import "./loginBonito/registrarse.css"
 
 const Registrarse = () =>{
 
@@ -40,9 +41,10 @@ const Registrarse = () =>{
     };
 
     return (
-        <div>
+        <div className="container">
             <h2>Registro de nuevos usuarios</h2>
             <form>
+                <div className="imageContainer">
                 <div>
                     <label htmlFor="Usuario">Usuario: </label>
                     <input 
@@ -87,6 +89,7 @@ const Registrarse = () =>{
                         Crear Usuario
                     </button>
                 </div>
+            </div>
             </form>
         </div>
     );

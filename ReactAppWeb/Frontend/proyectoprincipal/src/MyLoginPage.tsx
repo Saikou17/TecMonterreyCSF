@@ -14,7 +14,7 @@ const loginPageStyle = {
   backgroundSize: "cover",
 };
 
-const MyLoginPage = () => {
+export const MyLoginPage = () => {
   const [usuario, setUsuario] = useState("");
   const [contraseña, setContraseña] = useState("");
   const login = useLogin();
@@ -70,4 +70,3 @@ const MyLoginPage = () => {
   );
 };
 
-export default MyLoginPage;
