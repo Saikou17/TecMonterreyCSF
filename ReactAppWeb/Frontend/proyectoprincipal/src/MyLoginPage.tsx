@@ -1,46 +1,69 @@
-import {useState} from "react";
+import { useState } from "react";
 import React from "react";
-import {useLogin, useNotify, Notification} from "react-admin";
-import { useNavigate } from 'react-router-dom';
+import { useLogin, useNotify, Notification } from "react-admin";
+import { useNavigate } from "react-router-dom";
+import "./loginBonito/login.css";
 
-
+const loginPageStyle = {
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  minHeight: "100vh", // Asegura que el fondo se extienda por toda la altura de la ventana
+  backgroundImage: `url('./imagenFondo.jpg')`, // Ruta a tu imagen de fondo
+  backgroundRepeat: "no-repeat",
+  backgroundSize: "cover",
+};
 
 export const MyLoginPage = () => {
-    const [usuario,setUsuario] = useState(""); //Hook que establece el usuario
-    const [contraseña,setContraseña] = useState(""); //Hook que establece la contraseña
-    const login = useLogin();
-    const notify = useNotify();
-    const navigate = useNavigate();
-    const handleLogIn = () => {
-        console.log(usuario);
-        console.log(contraseña);
-        login({username:usuario,password:contraseña}).catch(() => 
-            notify("usuario o contraseña incorrecta. Intentalo de nuevo.")
-        );
-    };
-    const handleSignUp = () => {
-        navigate("/Registrarse");
-    }
-    return(
-    <div>
+  const [usuario, setUsuario] = useState("");
+  const [contraseña, setContraseña] = useState("");
+  const login = useLogin();
+  const notify = useNotify();
+  const navigate = useNavigate();
+  const handleLogIn = () => {
+    console.log(usuario);
+    console.log(contraseña);
+    login({ username: usuario, password: contraseña }).catch(() =>
+      notify("Usuario o contraseña incorrecta. Inténtalo de nuevo.")
+    );
+  };
+  const handleSignUp = () => {
+    navigate("/Registrarse");
+  };
+  return (
+    <div className="contenedorLogin">
+      <div className="container">
         <form>
-            <input
-                name="usuario"
-                type="text"
-                value={usuario}
-                onChange={e => setUsuario(e.target.value)}
+          <div className="imgcontainer">
+            <img
+              id="logoSocio"
+              src=".\src\loginBonito\logoSocio1.png"
+              alt="Logo de socio formador"
             />
-            <input
-                name="contraseña"
-                type="password"
-                value={contraseña}
-                onChange={e => setContraseña(e.target.value)}
-            />
+          </div>
+          <h5>Usuario</h5>
+          <input
+            name="usuario"
+            type="text"
+            placeholder="Ingrese el usuario"
+            value={usuario}
+            onChange={(e) => setUsuario(e.target.value)}
+          />
+          <h5>Contraseña</h5>
+          <input
+            name="contraseña"
+            type="password"
+            placeholder="Escriba la contraseña"
+            value={contraseña}
+            onChange={(e) => setContraseña(e.target.value)}
+          />
         </form>
         <button onClick={handleLogIn}>Iniciar Sesión</button>
         <button onClick={handleSignUp}>Registrarse</button>
+        {/* <label>
+          <input type="checkbox" name="remember" /> Recordarme
+        </label> */}
+      </div>
     </div>
-    );
-
+  );
 };
-
