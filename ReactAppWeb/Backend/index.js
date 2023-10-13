@@ -12,7 +12,7 @@ const app = express(); //Instancia a Express
 app.use(cors()); //Activa el modulo
 app.use(bodyParset.json()); //Actuva el modulo
 async function connectDB(){ //Funcion que retorna una promesa implicita (valor que puede tardar)
-    let client = new MongoClient("mongodb://localhost:27017/RetoTC2007B"); //Variable que guarda un cliente hacia nuetra base de datos
+    let client = new MongoClient("mongodb+srv://a01783208:lFASNJWi9CpImoOd@cluster0.zgyl4mg.mongodb.net/RetoTC2007B"); //Variable que guarda un cliente hacia nuetra base de datos
     await client.connect(); //Espera que la base de datos se conecte antes de seguir con el codigo
     db=client.db(); //La variable guarda nuestra base de datos RetoTC2007B
     console.log("Conexion exitosa")
@@ -100,6 +100,27 @@ app.get("/Tickets/:id",async (req,res) =>{ //Funcion asincronica que obtiene un 
     }catch{
         res.sendStatus(401);// Mensaje de error si no funciona el try
     }
+})
+
+app.get("/Dashboard",async(req,res)=>{
+    try{
+        let token=req.get("Authentication"); // Obtiene el token de autenticacion del encabezado del Req
+        let verifiedToken = await jwt.verify(token, "secretKey"); //Verifica si el token se obtiene con la llave
+        let authData=await db.collection("Usuarios").findOne({"Usuario": verifiedToken.Usuario}) //Obtiene la informacion del usuario verificado
+        let parametersFind={} //Obtiene el id del request
+        if(authData.Rol=="Coordinador Nacional"){ // Si el usuario es coordinador nacional 
+            parametersFind["Usuario"]=verifiedToken.Usuario; //? Guardamos un parametro Usuario que guarda la informacion del usuario
+        }
+        else if(authData.Rol=="Coordinador Aula"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+        }
+        else if(authData.Rol=="Ejecutivo"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+        }
+    }catch{
+        res.sendStatus(401);// Mensaje de error si no funciona el try
+    }
+
 })
 
 //**Implementamos los metodos POST y los endpoints */

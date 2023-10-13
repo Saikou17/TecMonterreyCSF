@@ -1,0 +1,16 @@
+[{
+  "_id": {
+    "$oid": "651b604c4c3616799b38fc10"
+  },
+  "Prioridad": "Intermedia",
+  "Estado": "Sin revisar",
+  "Lugar": "Aula5403",
+  "Categoria": "Digital",
+  "Comentario": "Hay dos computadoras que no funcionan",
+  "Usuario": "AngelDiMaria",
+  "Tipo": "Hardware",
+  "Registro": {
+    "$date": "2023-10-03T00:30:08.509Z"
+  },
+  "id": 1
+}]
