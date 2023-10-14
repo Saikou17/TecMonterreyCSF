@@ -3,21 +3,19 @@ body {
   background-repeat: no-repeat;
   background-size: cover;
   font-family: Arial, Helvetica, sans-serif;
-  margin: 0; /* Asegúrate de eliminar el margen predeterminado del body */
-  padding: 0; /* Asegúrate de eliminar el relleno predeterminado del body */
+  margin: 0;
+  padding: 0;
   display: flex;
-  flex-direction: column; /* Establece el diseño en columna para que los elementos se apilen verticalmente */
-  align-items: center; /* Centra verticalmente el contenido */
-  justify-content: center; /* Centra horizontalmente el contenido */
-  min-height: 100vh; /* Asegura que el fondo se extienda a lo largo de toda la ventana visible */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 }
 
 .contenedorLogin {
-  /* Estilos específicos para el contenedor de tu componente */
   width: 600px;
   background-color: #C8D3D5;
   height: 720px;
-  /* Otras propiedades específicas para tu contenedor */
 }
 
 input[type=text], input[type=password] {
