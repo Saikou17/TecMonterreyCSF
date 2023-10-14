@@ -60,9 +60,9 @@ export const MyLoginPage = () => {
         </form>
         <button onClick={handleLogIn}>Iniciar Sesión</button>
         <button onClick={handleSignUp}>Registrarse</button>
-        <label>
+        {/* <label>
           <input type="checkbox" name="remember" /> Recordarme
-        </label>
+        </label> */}
       </div>
     </div>
   );

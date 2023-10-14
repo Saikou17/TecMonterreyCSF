@@ -7,7 +7,7 @@ const Registrarse = () =>{
         Usuario: "",
         Contrasena: "",
         Nombre: "",
-        Rol: "",
+        Rol: ""
     });
 
     const handleChange= (event: any)=>{
