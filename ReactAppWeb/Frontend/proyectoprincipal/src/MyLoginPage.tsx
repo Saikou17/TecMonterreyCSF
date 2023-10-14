@@ -58,8 +58,8 @@ export const MyLoginPage = () => {
             onChange={(e) => setContraseña(e.target.value)}
           />
         </form>
-        <button onClick={handleLogIn}>Iniciar Sesión</button>
-        <button onClick={handleSignUp}>Registrarse</button>
+        <button onClick={handleLogIn} className="botonlogin">Iniciar Sesión</button>
+        <button onClick={handleSignUp} className="botonregistro">Registrarse</button>
         {/* <label>
           <input type="checkbox" name="remember" /> Recordarme
         </label> */}

@@ -3,6 +3,8 @@ import { Card, Button, Modal } from 'react-bootstrap';
 import { List, useListContext, ReferenceInput, TextInput, EditButton, SelectInput } from 'react-admin';
 import { format } from "date-fns";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './MyList.css';
+
 
 const CardFilters = [
   <TextInput source="Usuario" label="Search" alwaysOn />, //Input de texto que busca o filtra por el atributo Usuario 
@@ -84,7 +86,7 @@ const CardView = () => { //Componente que genera una carta
               <h2 style={{ marginBottom: '10px' }}>Tipo: {selectedPost.Tipo}</h2>
               <div style={{ display: 'flex', marginBottom: '10px' }}>
                 <p style={{ margin: '0' }}><b>Emitido por:</b> {selectedPost.Usuario}</p>
-                <p style={{ margin: '0', marginLeft: '10px' }}><b>Lugar:</b> {selectedPost.Lugar}</p>
+                <p><b>Lugar:</b> {selectedPost.Lugar}</p>
               </div>
               <p>{selectedPost.Comentario}</p>
             </div>
