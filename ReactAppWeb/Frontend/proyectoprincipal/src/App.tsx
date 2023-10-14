@@ -11,6 +11,7 @@ import { PostCreate, PostEdit, PostList } from "./posts";
 import { DashboardList } from "./DashboardList";
 import { Home, DynamicFeed, Description } from "@mui/icons-material";
 import { Dashboard } from "./dashboard/Dashboard";
+import { ReportsList } from "./Reportes";
 
 export const App = () => {
   return(
@@ -28,6 +29,7 @@ export const App = () => {
     <CustomRoutes noLayout>
         <Route path="/Registrarse" element={<Registrarse/>}/>
     </CustomRoutes>
+    <Resource name="Reportes" list={ReportsList} icon={Description} /> 
   </Admin>);
 };
 export default App;
