@@ -1,6 +1,7 @@
 import {useState} from "react";
 import "./loginBonito/registrarse.css"
 
+
 const Registrarse = () =>{
 
     const [datos, setDatos]=useState({
@@ -43,9 +44,16 @@ const Registrarse = () =>{
     return (
         <div className="container">
             <h2>Registro de nuevos usuarios</h2>
+            <div className="imgcontainer">
+                <img
+                id="logoSocio"
+                src=".\src\loginBonito\logoSocio1.png"
+                alt="Logo de socio formador"
+                />
+            </div>
             <form>
                 <div className="imageContainer">
-                <div>
+                <div className="user">
                     <label htmlFor="Usuario">Usuario: </label>
                     <input 
                         type="text"
@@ -55,7 +63,7 @@ const Registrarse = () =>{
                         onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className="contrasena">
                     <label htmlFor="Contrasena">Contraseña: </label>
                     <input 
                         type="password"
@@ -65,7 +73,7 @@ const Registrarse = () =>{
                         onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className="nombre">
                     <label htmlFor="Nombre">Nombre Completo: </label>
                     <input 
                         type="text"
@@ -75,7 +83,7 @@ const Registrarse = () =>{
                         onChange={handleChange}
                     />
                 </div>
-                <div>
+                <div className="rol">
                     <label htmlFor="Rol">Selecciona tu Rol:</label>
                     <select id="Rol" name="Rol" value={datos.Rol} onChange={handleChange}>
                         <option value=""></option>
@@ -84,7 +92,7 @@ const Registrarse = () =>{
                         <option value="Ejecutivo">Ejecutivo</option>
                     </select>
                 </div>
-                <div>
+                <div className="botonRegistro">
                     <button type="button" onClick={handleSendData}>
                         Crear Usuario
                     </button>
