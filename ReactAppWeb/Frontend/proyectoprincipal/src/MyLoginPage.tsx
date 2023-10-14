@@ -8,8 +8,8 @@ const loginPageStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  minHeight: "100vh", // Asegura que el fondo se extienda por toda la altura de la ventana
-  backgroundImage: `url('./imagenFondo.jpg')`, // Ruta a tu imagen de fondo
+  minHeight: "100vh",
+  backgroundImage: `url('./imagenFondo.jpg')`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
 };

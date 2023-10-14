@@ -9,14 +9,15 @@ body {
     flex-direction: column; /* Establece el diseño en columna para que los elementos se apilen verticalmente */
     align-items: center; /* Centra verticalmente el contenido */
     justify-content: center; /* Centra horizontalmente el contenido */
-    min-height: 100vh; /* Asegura que el fondo se extienda a lo largo de toda la ventana visible */
+    min-height: 100vh;
 }
 
-
+.imgcontainer{
+    width: 319px;
+    height: 150px;
+}
 
 .container{
-    width: 500px; /* Set the new width (half of the original) */
-    height: 620px; /* Set the new height (half of the original) */
     background-color: #C8D3D5;
     display: flex;
     flex-direction: column;
