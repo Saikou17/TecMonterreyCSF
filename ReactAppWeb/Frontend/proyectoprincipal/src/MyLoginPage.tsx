@@ -31,43 +31,46 @@ export const MyLoginPage = () => {
     navigate("/Registrarse");
   };
   return (
-    <div className="contenedorLogin">
-      <div className="container">
-        <form>
-          <div className="imgcontainer">
-            <img
-              id="logoSocio"
-              src=".\src\loginBonito\logoSocio1.png"
-              alt="Logo de socio formador"
+    <body id="todoLogin">
+      <div className="contenedorLogin">
+        <div className="container">
+          <form>
+            <div className="imgcontainer">
+              <img
+                id="logoSocio"
+                src=".\src\loginBonito\logoSocio1.png"
+                alt="Logo de socio formador"
+              />
+            </div>
+            <h5>Usuario</h5>
+            <input
+              name="usuario"
+              type="text"
+              placeholder="Ingrese el usuario"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
             />
-          </div>
-          <h5>Usuario</h5>
-          <input
-            name="usuario"
-            type="text"
-            placeholder="Ingrese el usuario"
-            value={usuario}
-            onChange={(e) => setUsuario(e.target.value)}
-          />
-          <h5>Contraseña</h5>
-          <input
-            name="contraseña"
-            type="password"
-            placeholder="Escriba la contraseña"
-            value={contraseña}
-            onChange={(e) => setContraseña(e.target.value)}
-          />
-        </form>
-        <button onClick={handleLogIn} className="botonlogin">
-          Iniciar Sesión
-        </button>
-        <button onClick={handleSignUp} className="botonregistro">
-          Registrarse
-        </button>
-        {/* <label>
+            <h5>Contraseña</h5>
+            <input
+              name="contraseña"
+              type="password"
+              placeholder="Escriba la contraseña"
+              value={contraseña}
+              onChange={(e) => setContraseña(e.target.value)}
+            />
+          </form>
+          <button onClick={handleLogIn} className="botonlogin">
+            Iniciar Sesión
+          </button>
+          <button onClick={handleSignUp} className="botonregistro">
+            Registrarse
+          </button>
+          <br />
+          {/* <label>
           <input type="checkbox" name="remember" /> Recordarme
         </label> */}
+        </div>
       </div>
-    </div>
+    </body>
   );
 };
