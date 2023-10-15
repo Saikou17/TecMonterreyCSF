@@ -3,7 +3,7 @@ import React from "react";
 import { useLogin, useNotify, Notification } from "react-admin";
 import { useNavigate } from "react-router-dom";
 import "./loginBonito/login.css";
-
+/*
 const loginPageStyle = {
   display: "flex",
   justifyContent: "center",
@@ -12,7 +12,7 @@ const loginPageStyle = {
   backgroundImage: `url('./imagenFondo.jpg')`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
-};
+};*/
 
 export const MyLoginPage = () => {
   const [usuario, setUsuario] = useState("");
@@ -58,8 +58,12 @@ export const MyLoginPage = () => {
             onChange={(e) => setContraseña(e.target.value)}
           />
         </form>
-        <button onClick={handleLogIn} className="botonlogin">Iniciar Sesión</button>
-        <button onClick={handleSignUp} className="botonregistro">Registrarse</button>
+        <button onClick={handleLogIn} className="botonlogin">
+          Iniciar Sesión
+        </button>
+        <button onClick={handleSignUp} className="botonregistro">
+          Registrarse
+        </button>
         {/* <label>
           <input type="checkbox" name="remember" /> Recordarme
         </label> */}
