@@ -123,6 +123,88 @@ app.get("/Dashboard",async(req,res)=>{
 
 })
 
+/*Prueba de conectar los reportes*/
+app.get("/Reportes", async (req, res) => {
+    console.log(req.query);
+  
+    try {
+      const token = req.get("Authentication");
+      console.log(token);
+      const verifiedToken = await jwt.verify(token, "secretKey");
+      const authData = await db.collection("Usuarios").findOne({ "Usuario": verifiedToken.Usuario });
+  
+      const parametersFind = {};
+  
+      if (authData.Rol == "Coordinador Nacional") {
+        parametersFind["Usuario"] = verifiedToken.Usuario;
+      } else if (authData.Rol == "Coordinador Aula" || authData.Rol == "Ejecutivo") {
+        parametersFind["Usuario"] = verifiedToken.Usuario;
+      }
+  
+      if ("_sort" in req.query) {
+        const sortBy = req.query._sort;
+        const sortOrder = req.query._order == "ASC" ? 1 : -1;
+        const start = Number(req.query._start);
+        const end = Number(req.query._end);
+  
+        const sorter = {};
+        sorter[sortBy] = sortOrder;
+  
+        const data = await db.collection("Reportes").find(parametersFind).sort(sorter).project({ _id: 0 }).toArray();
+  
+        res.set("Access-Control-Expose-Headers", "X-Total-Count");
+        res.set("X-Total-Count", data.length);
+        const slicedData = data.slice(start, end);
+  
+        console.log(slicedData);
+        res.json(slicedData);
+      } else if ("id" in req.query) {
+        const data = [];
+        for (let index = 0; index < req.query.id.length; index++) {
+          const dbData = await db.collection("Reportes").find({ id: Number(req.query.id[index]) }).project({ _id: 0 }).toArray();
+          data.push(...dbData);
+        }
+        res.json(data);
+      } 
+      else if ("Fecha" in req.query) {
+        const start = Number(req.query._start);
+        const end = Number(req.query._end);
+        const fecha = new Date(req.query.Fecha); // Convertir la fecha del query a un objeto Date
+  
+        // Filtrar por fecha
+        parametersFind["Fecha"] = fecha;
+  
+        const data = await db.collection("Reportes").find(parametersFind).project({ _id: 0 }).toArray();
+  
+        res.set("Access-Control-Expose-Headers", "X-Total-Count");
+        res.set("X-Total-Count", data.length);
+        const slicedData = data.slice(start, end);
+  
+        console.log(slicedData);
+        res.json(slicedData);
+      }
+
+
+
+
+
+      else {
+        const data = await db.collection("Reportes").find(parametersFind).project({ _id: 0 }).toArray();
+        res.set("Access-Control-Expose-Headers", "X-Total-Count");
+        res.set("X-Total-Count", data.length);
+        console.log(data);
+        res.json(data);
+      }
+    } catch (error) {
+      console.error(error);
+      res.sendStatus(401);
+    }
+  });
+  
+
+
+
+
 //**Implementamos los metodos POST y los endpoints */
 //** La operacion que realizan estos netodos del CRUD es la de Create */
 
