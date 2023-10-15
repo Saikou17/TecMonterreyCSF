@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Grid, Card, CardContent, CardHeader } from "@mui/material";
-import "./dashEstilo.css";
 
 import { Welcome } from "./Welcome";
 import { GraficaTickets } from "./GraficaTickets";

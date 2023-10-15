@@ -105,9 +105,6 @@ const CardView = () => { //Componente que genera una carta
 export const CardList = (props) => (
   <List filters={CardFilters}>
     <CardView />
-    <div className="complete">
-      <h1>...................................................................................................................................................</h1>
-    </div>
   </List>
   
 );

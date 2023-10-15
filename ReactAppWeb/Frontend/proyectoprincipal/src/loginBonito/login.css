@@ -1,4 +1,4 @@
-body {
+.contenedorLogin {
   background-image: url('./imagenFondo.jpg');
   background-repeat: no-repeat;
   background-size: cover;
@@ -12,11 +12,11 @@ body {
   min-height: 100vh;
 }
 
-.contenedorLogin {
+/*.contenedorLogin {
   width: 600px;
   background-color: #C8D3D5;
   height: 720px;
-}
+}*/
 
 input[type=text], input[type=password] {
   width: 100%;
