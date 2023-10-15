@@ -12,7 +12,8 @@
   min-height: 100vh;
 }
 
-/*.contenedorLogin {
+/*
+.contenedorLogin {
   width: 600px;
   background-color: #C8D3D5;
   height: 720px;
@@ -74,12 +75,13 @@ button:hover {
 
 .container {
   padding: 50px;
-  width: 600px;
+  width: 0px;
   background-color: #C8D3D5;
-  height: 720px;
-  grid-column-start: 2;
+  height: 550px;
   margin-top: 70px;
+  border-radius: 20px;
 }
+
 
 span.psw {
   float: right;
