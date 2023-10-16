@@ -21,10 +21,12 @@ import { ReportsList } from "./Reportes";
 import { CardList } from "./MyList";
 import { Label } from "recharts";
 import { report } from "process";
+import { i18nProvider } from "./i18nProvider";
 
 export const App = () => {
   return (
     <Admin
+      i18nProvider={i18nProvider}
       dashboard={Dashboard}
       dataProvider={dataProvider}
       authProvider={authProvider}
