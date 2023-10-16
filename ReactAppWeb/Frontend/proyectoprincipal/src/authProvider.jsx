@@ -15,8 +15,10 @@ const authProvider={
                 throw new Error(response.statusText);
             }
             const auth = await response.json();
+            console.log(auth)
+            console.log(auth.Nombre)
             localStorage.setItem('auth', auth.token);
-            localStorage.setItem('identity',  JSON.stringify({"id": auth.id,  "Nombre":auth.fullName}));
+            localStorage.setItem('identity',  JSON.stringify({"id": auth.id,  "Nombre":auth.Nombre}));
             return Promise.resolve()
         } catch {
             throw new Error('Error en usuario o password');
