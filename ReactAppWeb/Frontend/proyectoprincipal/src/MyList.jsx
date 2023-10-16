@@ -1,34 +1,36 @@
 import React, { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
-import { List, useListContext, ReferenceInput, TextInput, EditButton, SelectInput } from 'react-admin';
+import { List, useListContext, ReferenceInput, TextInput, EditButton, SelectInput, useRecordContext,Edit, SimpleForm, RadioButtonGroupInput, Create, useDelete, Confirm, NumberInput } from 'react-admin';
 import { format } from "date-fns";
+import DeleteIcon from '@mui/icons-material/Delete';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import EditIcon from '@mui/icons-material/Edit';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MyList.css';
 
 
-const CardFilters = [
-  <TextInput source="Usuario" label="Search" alwaysOn />, //Input de texto que busca o filtra por el atributo Usuario 
-  <ReferenceInput source="id" label="ID" reference="Tickets" />, //Input de referencia que busca o filtra al escribir el atributo id
+const CardFilters = [ 
+  <NumberInput source="id" label="ID" reference="Tickets" />, //Input de referencia que busca o filtra al escribir el atributo id
   <SelectInput source="Prioridad" label="Prioridad" choices={[ //Input de seleccion que busca o filtra por atributo de prioridad
-    {id: "normal", name: "Bajo"}, //Prioridad baja
-    {id: "medio", name: "Intermedio"}, //Prioridad intermedia
-    {id: "grave", name: "Alto"}, //Prioridad alta
+    {id: "Baja", name: "Bajo"}, //Prioridad baja
+    {id: "Intermedia", name: "Intermedio"}, //Prioridad intermedia
+    {id: "Alta", name: "Alto"}, //Prioridad alta
   ]}/>,
   <SelectInput source="Estado" label="Estado" choices={[ //Input de seleccion que busca o filtra por atributo de estado
-    {id: "incompleto", name: "Sin Revisar"}, //Estados sin revisar
-    {id: "trabajando", name: "En Proceso"}, //Estado en proceso
-    {id: "completado", name: "Completado"}, //Estado completado
+    {id: "Sin Revisar", name: "Sin Revisar"}, //Estados sin revisar
+    {id: "En Proceso", name: "En Proceso"}, //Estado en proceso
+    {id: "Completado", name: "Completado"}, //Estado completado
   ]}/>,
   <SelectInput source="Categoria" choices={[ //Input de seleccion que busca o filtra por atributo de categoria 
-    {id: "serv", name: "Servicios"}, 
-    {id: "dig", name: "Digital"},
-    {id: "infra", name: "Infraestructura"},
-    {id: "rc", name: "Recursos Humanos"},
-    {id: "bene", name: "Beneficiarios"},
-    {id: "mobi", name: "Mobiliarios"},
-    {id: "segu", name: "Seguridad"},
-    {id: "mate", name: "Materiales"},
-    {id: "fm", name: "Fenomeno Meteorologico"}
+    {id: "Servicios", name: "Servicios"}, 
+    {id: "Digital", name: "Digital"},
+    {id: "Infraestructura", name: "Infraestructura"},
+    {id: "RecursosHumanos", name: "Recursos Humanos"},
+    {id: "Beneficiarios", name: "Beneficiarios"},
+    {id: "Mobiliarios", name: "Mobiliarios"},
+    {id: "Seguridad", name: "Seguridad"},
+    {id: "Materiales", name: "Materiales"},
+    {id: "FenomenoMeteorologico", name: "Fenomeno Meteorologico"}
   ]}/>
 ];
 
@@ -65,10 +67,35 @@ const CardView = () => { //Componente que genera una carta
                 <span>Usuario: {ticket.Usuario}</span>
               </div>
             </Card.Title>
-            <Button style={{width: '50px', backgroundColor: '#4CB0FC', marginBottom: '5px', left: '225px', right: '10px', display: 'block', bottom: '40px', position: 'absolute', color: 'white', textAlign: 'center',}} onClick={() => openModal(ticket)}>
-              Ver
-            </Button>
-            <EditButton label="Editar" record={ticket} style={{ width: '70px', backgroundColor: '#4CB0FC', marginBottom: '5px', left: '5px', right: '10px', display: 'block', bottom: '40px', position: 'absolute', color: 'white', textAlign:'center'}}/>
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button
+                style={{
+                  width: '50px',
+                  backgroundColor: '#4CB0FC',
+                  marginBottom: '5px',
+                  marginRight: '10px',
+                  color: 'white',
+                  textAlign: 'center',
+                }}
+                onClick={() => openModal(ticket)}
+              >
+                <VisibilityIcon/>
+              </Button>
+              <DeleteButton/>
+              <EditButton
+                icon={<EditIcon/>}
+                label="Editar"
+                record={ticket}
+                style={{
+                  width: '50px',
+                  backgroundColor: '#4CB0FC',
+                  marginBottom: '5px',
+                  marginRight: '10px',
+                  color: 'white',
+                  textAlign: 'center',
+                }}
+              />
+            </div>
             <Card.Footer style={{ borderColor: 'black', backgroundColor: '#FCFAFA', position: 'absolute', bottom: '0', width: '17.5rem' }}>
               <small className="text-muted" style={{ textAlign: 'center' }}>{"Creado el "}{format(new Date(ticket.Registro), "yyyy-MM-dd")}</small>
             </Card.Footer>
@@ -108,3 +135,216 @@ export const CardList = (props) => (
   </List>
   
 );
+
+const TicketTitle = () => {
+  const Ticket = useRecordContext();
+  return (<span>Ticket #{Ticket? `${Ticket.id}` : ''}</span>);
+};
+
+const DeleteButton = () =>{
+  let record = useRecordContext();
+  const [open,setOpen] = useState(false);
+  const [borrarTicket,{isLoading}] = useDelete("Tickets",{id: record && record.Usuario && record.id});
+
+  const handleClick = () =>  setOpen(true);
+  const handleDialogie = () => setOpen(false);
+  const handleConfirm = () => {
+    borrarTicket();
+    setOpen(false);
+  }
+  return(
+    <>
+      <Button label="Delete" onClick={handleClick}  style={{ width: '50px',backgroundColor: '#4CB0FC', marginBottom: '5px',marginRight: '10px',color: 'white',textAlign: 'center'}}><DeleteIcon/></Button>
+      <Confirm isOpen={open} loading={isLoading} title={`Borrar ticket`} content="Estas seguro de borrar el ticket actual?" onConfirm={handleConfirm} onClose={handleDialogie}/>
+    </>
+  );
+};
+
+export const CardEdit = () => {
+  const [categoriaActual,setCategoria] = useState("");
+
+  const eventoCambioCategoria = (evento) => {
+    setCategoria(evento.target.value)
+  }
+
+  const TipoOpciones = {
+    Servicios:[
+      {id: "Agua", name: "Agua"},
+      {id: "Luz", name: "Luz"},
+      {id: "Telefono", name: "Telefono"},
+      {id: "Basura", name: "Basura"},
+      {id: "Limpieza del Aula", name: "Limpieza del Aula"}
+    ],
+    Digital:[
+      {id: "Internet, Servicios y Equipo", name: "Internet, Servidores y Equipo"},
+      {id: "Software", name: "Software"},
+      {id: "Hardware", name: "Hardware"},
+      {id: "Camaras de Seguridad", name: "Camaras de Seguridad"},
+      {id: "Soporte tecnico presencial y remoto", name: "Soporte tecnico presencial y remoto"}
+    ],
+    Infraestructura:[
+      {id: "Paredes", name: "Paredes"},
+      {id: "Techo", name: "Techo"},
+      {id: "Ventanas", name: "Ventanas"},
+      {id: "Puertas", name: "Puertas"},
+      {id: "Aulas en general", name: "Aulas en general"},
+    ],
+    RecursosHumanos:[
+      {id: "Permisos", name: "Permisos"},
+      {id: "Asistencias", name: "Asistencias"},
+      {id: "Salud", name: "Salud"},
+      {id: "Tramites", name: "Tramites"},
+      {id: "Honorarios", name: "Honorarios"},
+    ],
+    Beneficiarios:[
+      {id: "Asistencias", name: "Asistencias"},
+      {id: "Documentacion", name: "Documentacion"},
+      {id: "Apoyo Academico", name: "Apoyo Academico"},
+      {id: "Salud", name: "Salud"},
+      {id: "Seguridad y Bulling", name: "Seguridad y Bulling"},
+    ],
+    Mobiliarios:[
+      {id: "Sillas y Butacas", name: "Sillas y Butacas"},
+      {id: "Escritorios", name: "Escritorios"},
+      {id: "Pizarrones", name: "Pizarrones"},
+      {id: "Cafeteria", name: "Cafeteria"},
+      {id: "Estantes y Archiveros", name: "Estantes y Archiveros"},
+    ],
+    Seguridad:[
+      {id: "Delincuencia", name: "Delincuencia"},
+      {id: "Robos", name: "Robos"},
+      {id: "Vandalismo", name: "Vandalismo"},
+      {id: "Imagen Institucional", name: "Imagen Institucional"},
+    ],
+    Materiales:[
+      {id: "Educativos", name: "Educativos"},
+      {id: "Papeleria", name: "Papeleria"},
+      {id: "Limpieza", name: "Limpieza"},
+    ],
+    FenomenoMeteorologico:[
+      {id: "Inundaciones", name: "Inundaciones"},
+      {id: "Incendios", name: "Incendios"},
+      {id: "Sismos", name: "Sismos"},
+    ]
+  };
+
+  return (
+    <Edit title={<TicketTitle/>}>
+      <SimpleForm>
+        <TextInput source="Lugar"/>
+        <SelectInput source="Categoria" choices={[
+          {id: "Servicios", name: "Servicios"},
+          {id: "Digital", name: "Digital"},
+          {id: "Infraestructura", name: "Infraestructura"},
+          {id: "RecursosHumanos", name: "Recursos Humanos"},
+          {id: "Beneficiarios", name: "Beneficiarios"},
+          {id: "Mobiliarios", name: "Mobiliarios"},
+          {id: "Seguridad", name: "Seguridad"},
+          {id: "Materiales", name: "Materiales"},
+          {id: "FenomenoMeteorologico", name: "Fenomeno Meteorologico"}
+        ]} onChange={eventoCambioCategoria} />
+        <SelectInput source="Tipo" choices={TipoOpciones[categoriaActual] || []}/>
+        <RadioButtonGroupInput source="Prioridad" choices={[
+            {id: "Baja", name: "Bajo"},
+            {id: "Intermedia", name: "Intermedio"},
+            {id: "Alta", name: "Alto"},
+        ]}/>
+        <TextInput source="Comentario"/>
+      </SimpleForm>
+    </Edit>
+  );
+};
+
+export const CardCreate = () => {
+  const [categoriaActual,setCategoria] = useState("");
+
+  const eventoCambioCategoria = (evento) => {
+    setCategoria(evento.target.value)
+  }
+
+  const TipoOpciones = {
+    Servicios:[
+      {id: "Agua", name: "Agua"},
+      {id: "Luz", name: "Luz"},
+      {id: "Telefono", name: "Telefono"},
+      {id: "Basura", name: "Basura"},
+      {id: "Limpieza del Aula", name: "Limpieza del Aula"}
+    ],
+    Digital:[
+      {id: "Internet, Servicios y Equipo", name: "Internet, Servidores y Equipo"},
+      {id: "Software", name: "Software"},
+      {id: "Hardware", name: "Hardware"},
+      {id: "Camaras de Seguridad", name: "Camaras de Seguridad"},
+      {id: "Soporte tecnico presencial y remoto", name: "Soporte tecnico presencial y remoto"}
+    ],
+    Infraestructura:[
+      {id: "Paredes", name: "Paredes"},
+      {id: "Techo", name: "Techo"},
+      {id: "Ventanas", name: "Ventanas"},
+      {id: "Puertas", name: "Puertas"},
+      {id: "Aulas en general", name: "Aulas en general"},
+    ],
+    RecursosHumanos:[
+      {id: "Permisos", name: "Permisos"},
+      {id: "Asistencias", name: "Asistencias"},
+      {id: "Salud", name: "Salud"},
+      {id: "Tramites", name: "Tramites"},
+      {id: "Honorarios", name: "Honorarios"},
+    ],
+    Beneficiarios:[
+      {id: "Asistencias", name: "Asistencias"},
+      {id: "Documentacion", name: "Documentacion"},
+      {id: "Apoyo Academico", name: "Apoyo Academico"},
+      {id: "Salud", name: "Salud"},
+      {id: "Seguridad y Bulling", name: "Seguridad y Bulling"},
+    ],
+    Mobiliarios:[
+      {id: "Sillas y Butacas", name: "Sillas y Butacas"},
+      {id: "Escritorios", name: "Escritorios"},
+      {id: "Pizarrones", name: "Pizarrones"},
+      {id: "Cafeteria", name: "Cafeteria"},
+      {id: "Estantes y Archiveros", name: "Estantes y Archiveros"},
+    ],
+    Seguridad:[
+      {id: "Delincuencia", name: "Delincuencia"},
+      {id: "Robos", name: "Robos"},
+      {id: "Vandalismo", name: "Vandalismo"},
+      {id: "Imagen Institucional", name: "Imagen Institucional"},
+    ],
+    Materiales:[
+      {id: "Educativos", name: "Educativos"},
+      {id: "Papeleria", name: "Papeleria"},
+      {id: "Limpieza", name: "Limpieza"},
+    ],
+    FenomenoMeteorologico:[
+      {id: "Inundaciones", name: "Inundaciones"},
+      {id: "Incendios", name: "Incendios"},
+      {id: "Sismos", name: "Sismos"},
+    ]
+  };
+  
+  return (<Create>
+    <SimpleForm>
+      <TextInput source="Lugar"/>
+      <SelectInput source="Categoria" choices={[ //Input de seleccion que busca o filtra por atributo de categoria 
+        {id: "Servicios", name: "Servicios"}, 
+        {id: "Digital", name: "Digital"},
+        {id: "Infraestructura", name: "Infraestructura"},
+        {id: "Recursos Humanos", name: "Recursos Humanos"},
+        {id: "Beneficiarios", name: "Beneficiarios"},
+        {id: "Mobiliarios", name: "Mobiliarios"},
+        {id: "Seguridad", name: "Seguridad"},
+        {id: "Materiales", name: "Materiales"},
+        {id: "Fenomeno Meteorologico", name: "Fenomeno Meteorologico"}
+      ]} onChange={eventoCambioCategoria}/>
+        <SelectInput source="Tipo" choices={TipoOpciones[categoriaActual] || []}/>
+        <RadioButtonGroupInput source="Prioridad" choices={[
+            {id: "Baja", name: "Bajo"},
+            {id: "Intermedia", name: "Intermedio"},
+            {id: "Alta", name: "Alto"},
+        ]}/>
+        <TextInput source="Comentario"/>
+    </SimpleForm>
+  </Create>);
+};
+
