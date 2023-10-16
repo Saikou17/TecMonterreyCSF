@@ -26,6 +26,7 @@ import { i18nProvider } from "./i18nProvider";
 export const App = () => {
   return (
     <Admin
+      i18nProvider={i18nProvider}
       dashboard={Dashboard}
       dataProvider={dataProvider}
       authProvider={authProvider}
