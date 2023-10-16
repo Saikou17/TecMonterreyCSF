@@ -3,16 +3,16 @@ import React from "react";
 import { useLogin, useNotify, Notification } from "react-admin";
 import { useNavigate } from "react-router-dom";
 import "./loginBonito/login.css";
-
+/*
 const loginPageStyle = {
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
-  minHeight: "100vh", // Asegura que el fondo se extienda por toda la altura de la ventana
-  backgroundImage: `url('./imagenFondo.jpg')`, // Ruta a tu imagen de fondo
+  minHeight: "100vh",
+  backgroundImage: `url('./imagenFondo.jpg')`,
   backgroundRepeat: "no-repeat",
   backgroundSize: "cover",
-};
+};*/
 
 export const MyLoginPage = () => {
   const [usuario, setUsuario] = useState("");
@@ -31,39 +31,46 @@ export const MyLoginPage = () => {
     navigate("/Registrarse");
   };
   return (
-    <div className="contenedorLogin">
-      <div className="container">
-        <form>
-          <div className="imgcontainer">
-            <img
-              id="logoSocio"
-              src=".\src\loginBonito\logoSocio1.png"
-              alt="Logo de socio formador"
+    <body id="todoLogin">
+      <div className="contenedorLogin">
+        <div className="container">
+          <form>
+            <div className="imgcontainer">
+              <img
+                id="logoSocio"
+                src=".\src\loginBonito\logoSocio1.png"
+                alt="Logo de socio formador"
+              />
+            </div>
+            <h5>Usuario</h5>
+            <input
+              name="usuario"
+              type="text"
+              placeholder="Ingrese el usuario"
+              value={usuario}
+              onChange={(e) => setUsuario(e.target.value)}
             />
-          </div>
-          <h5>Usuario</h5>
-          <input
-            name="usuario"
-            type="text"
-            placeholder="Ingrese el usuario"
-            value={usuario}
-            onChange={(e) => setUsuario(e.target.value)}
-          />
-          <h5>Contraseña</h5>
-          <input
-            name="contraseña"
-            type="password"
-            placeholder="Escriba la contraseña"
-            value={contraseña}
-            onChange={(e) => setContraseña(e.target.value)}
-          />
-        </form>
-        <button onClick={handleLogIn}>Iniciar Sesión</button>
-        <button onClick={handleSignUp}>Registrarse</button>
-        {/* <label>
+            <h5>Contraseña</h5>
+            <input
+              name="contraseña"
+              type="password"
+              placeholder="Escriba la contraseña"
+              value={contraseña}
+              onChange={(e) => setContraseña(e.target.value)}
+            />
+          </form>
+          <button onClick={handleLogIn} className="botonlogin">
+            Iniciar Sesión
+          </button>
+          <button onClick={handleSignUp} className="botonregistro">
+            Registrarse
+          </button>
+          <br />
+          {/* <label>
           <input type="checkbox" name="remember" /> Recordarme
         </label> */}
+        </div>
       </div>
-    </div>
+    </body>
   );
 };

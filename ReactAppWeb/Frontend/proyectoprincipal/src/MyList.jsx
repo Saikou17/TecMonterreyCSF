@@ -6,6 +6,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './MyList.css';
+
 
 const CardFilters = [ 
   <NumberInput source="id" label="ID" reference="Tickets" />, //Input de referencia que busca o filtra al escribir el atributo id
@@ -111,7 +113,7 @@ const CardView = () => { //Componente que genera una carta
               <h2 style={{ marginBottom: '10px' }}>Tipo: {selectedPost.Tipo}</h2>
               <div style={{ display: 'flex', marginBottom: '10px' }}>
                 <p style={{ margin: '0' }}><b>Emitido por:</b> {selectedPost.Usuario}</p>
-                <p style={{ margin: '0', marginLeft: '10px' }}><b>Lugar:</b> {selectedPost.Lugar}</p>
+                <p><b>Lugar:</b> {selectedPost.Lugar}</p>
               </div>
               <p>{selectedPost.Comentario}</p>
             </div>
@@ -131,6 +133,7 @@ export const CardList = (props) => (
   <List filters={CardFilters}>
     <CardView />
   </List>
+  
 );
 
 const TicketTitle = () => {

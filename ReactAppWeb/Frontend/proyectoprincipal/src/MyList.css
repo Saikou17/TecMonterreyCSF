@@ -1,0 +1,75 @@
+
+
+.card-style {
+    background-color: #FCFAFA;
+    width: 17.5rem;
+    height: 17.5rem;
+    display: inline-flex;
+    margin: 10px 5px 15px 20px;
+  }
+  
+  .card-header {
+    background-color: #D9D9D9;
+    padding: 3px;
+  }
+  
+  .header-content {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .card-title {
+    margin-left: 5px;
+    margin-bottom: 5px;
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .title-content {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card-button {
+    width: 50px;
+    background-color: #4CB0FC;
+    margin-bottom: 5px;
+    left: 225px;
+    right: 10px;
+    display: block;
+    bottom: 40px;
+    position: absolute;
+    color: white;
+    text-align: center;
+  }
+  
+  .card-button.edit {
+    width: 70px;
+    left: 5px;
+  }
+  
+  .card-footer {
+    border-color: black;
+    background-color: #FCFAFA;
+    position: absolute;
+    bottom: 0;
+    width: 17.5rem;
+  }
+  
+  .modal-title {
+    margin-bottom: 10px;
+  }
+  
+  .modal-content {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .modal-content p {
+    margin: 0;
+  }
+  
+  .modal-content p:first-child {
+    margin-right: 10px;
+  }
+  

@@ -1,99 +1,119 @@
-import {useState} from "react";
-import "./loginBonito/registrarse.css"
+import { useState } from "react";
+import "./loginBonito/registrarse.css";
 
-const Registrarse = () =>{
+const Registrarse = () => {
+  const [datos, setDatos] = useState({
+    Usuario: "",
+    Contrasena: "",
+    Nombre: "",
+    Rol: "",
+  });
 
-    const [datos, setDatos]=useState({
-        Usuario: "",
-        Contrasena: "",
-        Nombre: "",
-        Rol: ""
+  const handleChange = (event: any) => {
+    setDatos({
+      ...datos,
+      [event.target.name]: event.target.value,
     });
+  };
 
-    const handleChange= (event: any)=>{
-        setDatos({
-            ...datos,
-            [event.target.name]: event.target.value,
-        });
-    };
-
-    const handleSendData = async() => {
-        // Convert the form data to JSON
-        const request = await new Request('http://127.0.0.1:1337/Registrarse', {
-            method: 'POST',
-            body: JSON.stringify(datos),
-            headers: new Headers({ 'Content-Type': 'application/json'}),
-        });
-        try {
-            const response = await fetch(request);
-            if (response.status < 200 || response.status >= 300) {
-                if(response.status == 409){
-                    alert("El usuario ya existe");
-                    throw new Error(response.statusText);
-                }else{
-                    throw new Error(response.statusText);
-                }
-            }
-            
-        } catch {
-            throw new Error('No se pudo registrar el usuario');
+  const handleSendData = async () => {
+    // Convert the form data to JSON
+    const request = await new Request("http://127.0.0.1:1337/Registrarse", {
+      method: "POST",
+      body: JSON.stringify(datos),
+      headers: new Headers({ "Content-Type": "application/json" }),
+    });
+    try {
+      const response = await fetch(request);
+      if (response.status < 200 || response.status >= 300) {
+        if (response.status == 409) {
+          alert("El usuario ya existe");
+          throw new Error(response.statusText);
+        } else {
+          throw new Error(response.statusText);
         }
-    };
+      }
+    } catch {
+      throw new Error("No se pudo registrar el usuario");
+    }
+  };
 
-    return (
+  return (
+    <body>
+      <div id="todoRegistro">
         <div className="container">
-            <h2>Registro de nuevos usuarios</h2>
-            <form>
-                <div className="imageContainer">
-                <div>
-                    <label htmlFor="Usuario">Usuario: </label>
-                    <input 
-                        type="text"
-                        id="Usuario"
-                        name="Usuario"
-                        value={datos.Usuario}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="Contrasena">Contraseña: </label>
-                    <input 
-                        type="password"
-                        id="Contrasena"
-                        name="Contrasena"
-                        value={datos.Contrasena}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="Nombre">Nombre Completo: </label>
-                    <input 
-                        type="text"
-                        id="Nombre"
-                        name="Nombre"
-                        value={datos.Nombre}
-                        onChange={handleChange}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="Rol">Selecciona tu Rol:</label>
-                    <select id="Rol" name="Rol" value={datos.Rol} onChange={handleChange}>
-                        <option value=""></option>
-                        <option value="Coordinador Aula">Coordinador de Aula</option>
-                        <option value="Coordinador Nacional">Coordinador Nacional</option>
-                        <option value="Ejecutivo">Ejecutivo</option>
-                    </select>
-                </div>
-                <div>
-                    <button type="button" onClick={handleSendData}>
-                        Crear Usuario
-                    </button>
-                </div>
+          <br />
+          <h2>Registro de nuevos usuarios</h2>
+          <div className="imgcontainer">
+            <img
+              id="logoSocio"
+              src=".\src\loginBonito\logoSocio1.png"
+              alt="Logo de socio formador"
+            />
+          </div>
+          <form>
+            <div className="imageContainer">
+              <div className="user">
+                <label htmlFor="Usuario">Usuario: </label>
+                <input
+                  type="text"
+                  id="Usuario"
+                  name="Usuario"
+                  placeholder="Usuario"
+                  value={datos.Usuario}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="contrasena">
+                <label htmlFor="Contrasena">Contraseña: </label>
+                <input
+                  type="password"
+                  id="Contrasena"
+                  name="Contrasena"
+                  placeholder="Escriba la contraseña"
+                  value={datos.Contrasena}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="nombre">
+                <label htmlFor="Nombre">Nombre Completo: </label>
+                <input
+                  type="text"
+                  id="Nombre"
+                  name="Nombre"
+                  placeholder="Introducir Nombre Completo"
+                  value={datos.Nombre}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="rol">
+                <label htmlFor="Rol">Selecciona tu Rol:</label>
+                <select
+                  id="Rol"
+                  name="Rol"
+                  value={datos.Rol}
+                  onChange={handleChange}
+                >
+                  <option value=""></option>
+                  <option value="Coordinador Aula">Coordinador de Aula</option>
+                  <option value="Coordinador Nacional">
+                    Coordinador Nacional
+                  </option>
+                  <option value="Ejecutivo">Ejecutivo</option>
+                </select>
+              </div>
+              <div>
+                <button className="botonRegistro" onClick={handleSendData}>
+                  Crear Usuario
+                </button>
+              </div>
+              <br />
             </div>
-            </form>
+          </form>
         </div>
-    );
-
+      </div>
+    </body>
+  );
 };
 
 export default Registrarse;

@@ -1,7 +1,13 @@
-import { Admin, ListGuesser, Resource, ShowGuesser, CustomRoutes } from "react-admin";
-import {BrowserRouter, Route} from 'react-router-dom';
+import {
+  Admin,
+  ListGuesser,
+  Resource,
+  ShowGuesser,
+  CustomRoutes,
+} from "react-admin";
+import { BrowserRouter, Route } from "react-router-dom";
 import { dataProvider } from "./dataProvider";
-import  authProvider  from "./authProvider";
+import authProvider from "./authProvider";
 import { UserList } from "./users";
 import { TicketCreate, TicketEdit, TicketsList } from "./tickets";
 import Registrarse from "./registrarse";
@@ -12,6 +18,9 @@ import { DashboardList } from "./DashboardList";
 import { Home, DynamicFeed, Description } from "@mui/icons-material";
 import { Dashboard } from "./dashboard/Dashboard";
 import {CardList, CardEdit, CardCreate} from "./MyList"
+import { ReportsList } from "./Reportes";
+import { Label } from "recharts";
+import { report } from "process";
 
 export const App = () => {
   return(
@@ -25,9 +34,16 @@ export const App = () => {
         create={PostCreate}
         icon={DynamicFeed}
       /> */}
-    <CustomRoutes noLayout>
-        <Route path="/Registrarse" element={<Registrarse/>}/>
-    </CustomRoutes>
-  </Admin>);
+      <CustomRoutes noLayout>
+        <Route path="/Registrarse" element={<Registrarse />} />
+      </CustomRoutes>
+      <Resource
+        name="Reportes"
+        list={ReportsList}
+        icon={Description}
+        options={{ Label: "Reportes" }}
+      />
+    </Admin>
+  );
 };
 export default App;
