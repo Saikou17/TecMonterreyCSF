@@ -31,10 +31,10 @@ async function LogIn(sujeto,accion,objeto){ //Funcion asincronica que recibe e p
 //** La operacion que realizan estos netodos del CRUD es la de Read */
 
 app.get("/Tickets",async(req,res)=>{ //Funcion asincronica que utiliza el metodos GET. Recibe un request (Endpoint) y devuelve un Response (Record Json)
+    console.log(req.body);
     console.log(req.query);
     try{
         let token=req.get("Authentication"); //Se obtiene el elemento de autenticacion del encabezado HTTP
-        console.log(token)
         let verifiedToken = await jwt.verify(token, "secretKey"); //Usamos la libreria para verikicar que el Token (Autenticacion) utilizando la llave secreta
         let authData=await db.collection("Usuarios").findOne({"Usuario": verifiedToken.Usuario}) // Obtenemos la informacion del usuario que esta autenticado
         let parametersFind={} //Creamos un objeto vacio
@@ -52,14 +52,26 @@ app.get("/Tickets",async(req,res)=>{ //Funcion asincronica que utiliza el metodo
         let sortOrder = req.query._order=="ASC"?1:-1; //Guarda el valor del parametro Order
         let start = Number (req.query._start); //GUarda el valor del parametro Start en numero
         let end = Number (req.query._end); //Guarda el valor del parametro ENd en numero
-        let sorter = { //Crea un objeto que posee un atributo o propiedad
-            sortBy : sortOrder
+        let sorter = {} //Crea un objeto que posee un atributo o propiedad
+        sorter[sortBy]=sortOrder;
+        let Query = {}
+        if("id" in req.query){
+            Query["id"]=req.query.id;
         }
-        let data = await db.collection("Tickets").find({}).sort(sorter).project({_id:0}).toArray(); //Se utiliza el syntax de Mongodb para buscar de manera ascendente o descendente de un atributo mienstras usamos pryeccion para excluir ciertos datos
+        if("Estado" in req.query){
+            Query["Estado"]=req.query.Estado;
+        }
+        if("Prioridad" in req.query){
+            Query["Prioridad"]=req.query.Prioridad;
+        }
+        if("Categoria" in req.query){
+            Query["Categoria"]=req.query.Categoria;
+        }
+        console.log(sorter);
+        let data = await db.collection("Tickets").find(Query).sort(sorter).project({_id:0}).toArray(); //Se utiliza el syntax de Mongodb para buscar de manera ascendente o descendente de un atributo mienstras usamos pryeccion para excluir ciertos datos
         res.set("Access-Control-Expose-Headers","X-Total-Count"); //Headers de respuesta 
         res.set("X-Total-Count",data.length); //Headers de respuesta
         data = data.slice(start,end); 
-        console.log(data);
         res.json(data); //Response Final
     }else if("id" in req.query){ //Metodo getMany
         let data = [] //Creamos un arreglo, ya que vamos a guardar varias busquedas o responses
@@ -128,13 +140,26 @@ app.get("/Dashboard",async(req,res)=>{
 
 app.post("/Tickets/",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y devuelve un response en forma de crear un elemento
     try{
-        let token=request.get("Authentication");
+        let token=req.get("Authentication");
         let verifiedToken = await jwt.verify(token, "secretKey");
         let addValues = req.body; //Guardamos el cuerpo o los datos del URL
         let data = await db.collection("Tickets").find({}).toArray(); //Obtenemos todos los tickets
-        let id = data.lenght+1; //Variable que guarda un numero que le sigue al ultimo ticket
+        let id = data.length+1; //Variable que guarda un numero que le sigue al ultimo ticket
         addValues["id"] = id; //Agregamos un nuevo valor al parametro del request
         addValues["Usuario"] = verifiedToken.Usuario;
+        addValues["Registro"] = new Date();
+        addValues["Estado"] = "Sin Revisar";
+        let authData=await db.collection("Usuarios").findOne({"Usuario": verifiedToken.Usuario}) //Obtiene la informacion del usuario verificado
+        let parametersFind={} //Obtiene el id del request
+        if(authData.Rol=="Coordinador Nacional"){ // Si el usuario es coordinador nacional 
+            parametersFind["Usuario"]=verifiedToken.Usuario; //? Guardamos un parametro Usuario que guarda la informacion del usuario
+        }
+        else if(authData.Rol=="Coordinador Aula"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+        }
+        else if(authData.Rol=="Ejecutivo"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+        }
         data = await db.collection("Tickets").insertOne(addValues); //Insertamos en nuestra base de datos el elemento o ticket
         res.json(data); //Response Final
     }catch{
@@ -147,7 +172,6 @@ app.post("/Registrarse",async (req,res)=>{ //Funcion asincronica para registrars
     let password = req.body.Contrasena; //Contraseña de la persona
     let name = req.body.Nombre; //Nombre de la persona
     let rol = req.body.Rol;
-    console.log(req.body);
     let data = await db.collection("Usuario").findOne({"Usuario":user}); //Se encuentra el elemento en la base de datos
     if(data==null){ //Si no se encuentra en usuario
         try{
@@ -165,7 +189,6 @@ app.post("/Registrarse",async (req,res)=>{ //Funcion asincronica para registrars
                 })
             })
         }catch(error){
-            console.log(error);
             res.sendStatus(401); //Si el try falla enviamos un mensaje de error
         }
     }if(data){
@@ -178,20 +201,15 @@ app.post("/Registrarse",async (req,res)=>{ //Funcion asincronica para registrars
 app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
     let user = req.body.Usuario; //Obtenemos el usuario de la persona
     let password = req.body.Contrasena; //Luego la contraseña
-    console.log(req.body)
     let data = await db.collection("Usuarios").findOne({"Usuario":user}); //Busacamos la persona en la base de datos
-    console.log(data)
     if(data==null){ //Si la persona no esta 
         res.sendStatus(401); //Manda error de que no existe y no puede entrar antes de registrarse
     }else{
-        console.log(password)
-        console.log(data.Contrasena)
         bcrypt.compare(password,data.Contrasena,(error,result)=>{ //Comparamos si las contraseñas coinciden 
-            console.log(result)
             if(result){ //En caso de que se autentique la identidad de la persona 
                 let token = jwt.sign({"Usuario": data.Usuario},"secretKey",{expiresIn:600}); //Crea un token (JSON) que 
                 LogIn(user,"LogIn",""); //Crea un nuevo dato en la coleccion de Log
-                res.json({"token": token, "id": data.Usuario, "Nombre": data.Nombre}); //Regresa el token , el usuario y el nombre
+                res.json({"token": token, "id": data.id, "Nombre": data.Nombre}); //Regresa el token , el usuario y el nombre
             }else{
                 res.sendStatus(401); //Tira error si las contraseñas no son iguales
             }
@@ -205,7 +223,7 @@ app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
 app.put("/Tickets/:id",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y devuelve un response en forma de actualizacion de un elemento
     let addValues = req.body; //Obtenemos los datos de nuestra request (URL)
     addValues["id"] = Number(req.params.id); //Agregamos el numero que posee la URL en el parametro de "Numero", en la variable o parametro del body de la request
-    let data = await db.collection("Tickets").updateOne({id : addValues["id"]},{"$set" : addValues}); //Actualizamos nuestro elemento que buscamos con el numero que guardamos en el addValues
+    let data = await db.collection("Tickets").updateOne({id : addValues["id"]},{"$set" : addValues, Registro: new Date()}); //Actualizamos nuestro elemento que buscamos con el numero que guardamos en el addValues
     data = await db.collection("Tickets").find({id : Number(req.params.id)}).project({_id:0}).toArray(); //Obtenemos nuestro nuevo elemento actualizado
     res.json(data[0]); //Response final
 
@@ -215,7 +233,13 @@ app.put("/Tickets/:id",async (req,res)=>{ //FUncion asincronica que recibe un re
 //** La operacion que realizan estos netodos del CRUD es la de Delete */
 
 app.delete("/Tickets/:id",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y borra un elemento
-    let data = await db.collection("Tickets").deleteOne({id : Number(req.params.Numero)}); //Borra el elemento
+    let data = await db.collection("Tickets").deleteOne({id : Number(req.params.id)}); //Borra el elemento
+    res.json(data); //Response final
+
+})
+
+app.delete("/Tickets",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y borra un elemento
+    let data = await db.collection("Tickets").deleteOne({id : Number(req.params.id)}); //Borra el elemento
     res.json(data); //Response final
 
 })

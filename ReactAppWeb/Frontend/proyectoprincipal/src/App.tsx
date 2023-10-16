@@ -11,13 +11,13 @@ import { PostCreate, PostEdit, PostList } from "./posts";
 import { DashboardList } from "./DashboardList";
 import { Home, DynamicFeed, Description } from "@mui/icons-material";
 import { Dashboard } from "./dashboard/Dashboard";
-import {CardList} from "./MyList"
+import {CardList, CardEdit, CardCreate} from "./MyList"
 
 export const App = () => {
   return(
   <Admin dashboard={Dashboard} dataProvider={dataProvider} authProvider={authProvider} loginPage={MyLoginPage}>
     {/* <Resource name="users" list={UserList} /> */}
-    <Resource name="Tickets" list={CardList}/>
+    <Resource name="Tickets" list={CardList} edit={CardEdit} create={CardCreate}/>
     {/* <Resource
         name="posts"
         list={PostList}
