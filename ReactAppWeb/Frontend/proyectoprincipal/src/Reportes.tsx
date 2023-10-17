@@ -1,4 +1,6 @@
-import { Accordion } from "react-bootstrap";
+import { useState } from "react";
+import { Accordion, Button } from "react-bootstrap";
+
 import {
   List,
   useListContext,
@@ -6,6 +8,9 @@ import {
   TextInput,
   SelectInput,
   DateInput,
+  Create,
+  SimpleForm,
+  RadioButtonGroupInput,
 } from "react-admin";
 /*import { report } from "process";*/
 
@@ -55,3 +60,16 @@ export const ReportsList = (props: any) => (
     <ReportsView />
   </List>
 );
+
+export const ReportCreate = () => {
+  const [isCreateFormOpen, setCreateFormOpen] = useState(false);
+
+  <Button variant="primary" onClick={() => setCreateFormOpen(true)}></Button>;
+  return (
+    <Create>
+      <SimpleForm>
+        <TextInput source="Fecha" label="Fecha" />
+      </SimpleForm>
+    </Create>
+  );
+};

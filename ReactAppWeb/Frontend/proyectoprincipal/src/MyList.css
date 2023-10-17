@@ -32,7 +32,7 @@
   
   .card-button {
     width: 50px;
-    background-color: #4CB0FC;
+    background-color: #4CB0FC;  /*4CB0FC*/
     margin-bottom: 5px;
     left: 225px;
     right: 10px;
@@ -72,4 +72,13 @@
   .modal-content p:first-child {
     margin-right: 10px;
   }
+
+  .btnEdit:hover {
+    background-color: rgb(21, 184, 238);
+  }
+
+  .card-button.edit:hover{
+    background-color: rgb(21, 184, 238);
+  }
+
   

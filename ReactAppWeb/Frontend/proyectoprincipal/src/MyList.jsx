@@ -70,12 +70,14 @@ const CardView = () => { //Componente que genera una carta
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Button
                 style={{
+                  border:'5px',
                   width: '50px',
-                  backgroundColor: '#4CB0FC',
+                  backgroundColor: '#D9D9D9',
                   marginBottom: '5px',
                   marginRight: '10px',
-                  color: 'white',
+                  color: 'black',
                   textAlign: 'center',
+                  
                 }}
                 onClick={() => openModal(ticket)}
               >
@@ -87,10 +89,10 @@ const CardView = () => { //Componente que genera una carta
                 record={ticket}
                 style={{
                   width: '50px',
-                  backgroundColor: '#4CB0FC',
+                  backgroundColor: '#D9D9D9',
                   marginBottom: '5px',
                   marginRight: '10px',
-                  color: 'white',
+                  color: 'black',
                   textAlign: 'center',
                 }}
               />
