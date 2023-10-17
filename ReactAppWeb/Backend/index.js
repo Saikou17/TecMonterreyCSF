@@ -73,7 +73,8 @@ app.get("/Tickets",async(req,res)=>{ //Funcion asincronica que utiliza el metodo
         res.set("X-Total-Count",data.length); //Headers de respuesta
         data = data.slice(start,end); 
         res.json(data); //Response Final
-    }else if("id" in req.query){ //Metodo getMany
+    }
+    else if("id" in req.query){ //Metodo getMany
         let data = [] //Creamos un arreglo, ya que vamos a guardar varias busquedas o responses
         for(let index=0; index < req.query.id.length; index++){ // Iteramos todo los parametros del endpoint
             let dbData = await db.collection("Tickets").find({id: Number(req.query.id[index])}).project({_id:0}).toArray(); // Buscamos los elementos en nuestra bae de datos con find
@@ -140,13 +141,14 @@ app.get("/Reportes", async (req, res) => {
     console.log(req.query); 
     try {
       const token = req.get("Authentication");
-      console.log(token);
       const verifiedToken = await jwt.verify(token, "secretKey");
       const authData = await db.collection("Usuarios").findOne({ "Usuario": verifiedToken.Usuario });
       const parametersFind = {};
       if (authData.Rol == "Coordinador Nacional") {
         parametersFind["Usuario"] = verifiedToken.Usuario;
-      } else if (authData.Rol == "Coordinador Aula" || authData.Rol == "Ejecutivo") {
+      } else if (authData.Rol == "Coordinador Aula") {
+        parametersFind["Usuario"] = verifiedToken.Usuario;
+      } else if (authData.Rol == "Ejecutivo"){
         parametersFind["Usuario"] = verifiedToken.Usuario;
       }
       if ("_sort" in req.query) {
@@ -156,33 +158,27 @@ app.get("/Reportes", async (req, res) => {
         const end = Number(req.query._end);
         const sorter = {};
         sorter[sortBy] = sortOrder;
-        const data = await db.collection("Reportes").find({}).sort(sorter).project({ _id: 0 }).toArray();
+        let Query = {}
+        if ("Fecha" in req.query) {
+            const fechaOriginal = req.query.Fecha; // Fecha en formato '2023-10-14'
+            const partesFecha = fechaOriginal.split('-'); // Dividir la fecha en partes usando el guion como separador
+            Query["Fecha"] = `${partesFecha[2]}/${partesFecha[1]}/${partesFecha[0]}`; // Formatear la fecha en el nuevo formato
+            console.log(Query)
+          }
+        const data = await db.collection("Reportes").find(Query).sort(sorter).project({ _id: 0 }).toArray();
         res.set("Access-Control-Expose-Headers", "X-Total-Count");
         res.set("X-Total-Count", data.length);
         const slicedData = data.slice(start, end);
-  
         console.log(slicedData);
         res.json(slicedData);
-      } else if ("id" in req.query) {
+      } 
+        else if ("id" in req.query) {
         const data = [];
         for (let index = 0; index < req.query.id.length; index++) {
           const dbData = await db.collection("Reportes").find({ id: Number(req.query.id[index]) }).project({ _id: 0 }).toArray();
           data.push(...dbData);
         }
         res.json(data);
-      } 
-      else if ("Fecha" in req.query) {
-        const start = Number(req.query._start);
-        const end = Number(req.query._end);
-        const fecha = new Date(req.query.Fecha); // Convertir la fecha del query a un objeto Date
-        // Filtrar por fecha
-        parametersFind["Fecha"] = fecha;
-        const data = await db.collection("Reportes").find(parametersFind).project({ _id: 0 }).toArray();
-        res.set("Access-Control-Expose-Headers", "X-Total-Count");
-        res.set("X-Total-Count", data.length);
-        const slicedData = data.slice(start, end);
-        console.log(slicedData);
-        res.json(slicedData);
       }
       else {
         const data = await db.collection("Reportes").find(parametersFind).project({ _id: 0 }).toArray();

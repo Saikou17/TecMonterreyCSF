@@ -70,28 +70,30 @@ const CardView = () => { //Componente que genera una carta
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <Button
                 style={{
+                  border:'5px',
                   width: '50px',
-                  backgroundColor: '#4CB0FC',
+                  backgroundColor: '#D9D9D9',
                   marginBottom: '5px',
                   marginRight: '10px',
-                  color: 'white',
+                  color: 'black',
                   textAlign: 'center',
+                  
                 }}
                 onClick={() => openModal(ticket)}
               >
                 <VisibilityIcon/>
               </Button>
-              <DeleteButton/>
+              <DeleteButton sx={{backgroundColor:'#D9D9D9'}}/>
               <EditButton
                 icon={<EditIcon/>}
                 label="Editar"
                 record={ticket}
                 style={{
                   width: '50px',
-                  backgroundColor: '#4CB0FC',
+                  backgroundColor: '#D9D9D9',
                   marginBottom: '5px',
                   marginRight: '10px',
-                  color: 'white',
+                  color: 'black',
                   textAlign: 'center',
                 }}
               />
@@ -154,7 +156,7 @@ const DeleteButton = () =>{
   }
   return(
     <>
-      <Button label="Delete" onClick={handleClick}  style={{ width: '50px',backgroundColor: '#4CB0FC', marginBottom: '5px',marginRight: '10px',color: 'white',textAlign: 'center'}}><DeleteIcon/></Button>
+      <Button label="Delete" onClick={handleClick}  style={{ border:'5px', borderBlockColor:'black', width: '50px',backgroundColor: '#D9D9D9', marginBottom: '5px',marginRight: '10px',color: 'black',textAlign: 'center'}}><DeleteIcon/></Button>
       <Confirm isOpen={open} loading={isLoading} title={`Borrar ticket`} content="Estas seguro de borrar el ticket actual?" onConfirm={handleConfirm} onClose={handleDialogie}/>
     </>
   );
