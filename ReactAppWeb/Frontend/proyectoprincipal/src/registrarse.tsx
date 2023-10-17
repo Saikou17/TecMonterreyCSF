@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLogin, useNotify } from "react-admin";
 import "./loginBonito/registrarse.css";
 
 const Registrarse = () => {
@@ -8,6 +9,7 @@ const Registrarse = () => {
     Nombre: "",
     Rol: "",
   });
+  const notify = useNotify();
 
   const handleChange = (event: any) => {
     setDatos({
@@ -27,11 +29,13 @@ const Registrarse = () => {
       const response = await fetch(request);
       if (response.status < 200 || response.status >= 300) {
         if (response.status == 409) {
-          alert("El usuario ya existe");
+          notify("El usuario ya existe");
           throw new Error(response.statusText);
         } else {
           throw new Error(response.statusText);
         }
+      }else if (response.status === 201) {
+        notify("Usuario creado con éxito");
       }
     } catch {
       throw new Error("No se pudo registrar el usuario");
@@ -39,8 +43,8 @@ const Registrarse = () => {
   };
 
   return (
-    <body>
-      <div id="todoRegistro">
+    <div id="todoRegistro">
+      <div>
         <div className="container">
           <br />
           <h2>Registro de nuevos usuarios</h2>
@@ -112,7 +116,7 @@ const Registrarse = () => {
           </form>
         </div>
       </div>
-    </body>
+    </div>
   );
 };
 

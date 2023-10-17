@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
-import { List, useListContext, ReferenceInput, TextInput, EditButton, SelectInput, useRecordContext,Edit, SimpleForm, RadioButtonGroupInput, Create, useDelete, Confirm, NumberInput } from 'react-admin';
+import { List, useListContext, SaveButton, TextInput, EditButton, SelectInput, useRecordContext,Edit, SimpleForm, RadioButtonGroupInput, Create, useDelete, Confirm, NumberInput, Toolbar } from 'react-admin';
 import { format } from "date-fns";
-import DeleteIcon from '@mui/icons-material/Delete';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
+import {CardEditCustomTool} from "./MyListToolBar"
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './MyList.css';
 
@@ -81,9 +81,8 @@ const CardView = () => { //Componente que genera una carta
               >
                 <VisibilityIcon/>
               </Button>
-              <DeleteButton/>
               <EditButton
-                icon={<EditIcon/>}
+                icon={<EditIcon />}
                 label="Editar"
                 record={ticket}
                 style={{
@@ -139,25 +138,6 @@ export const CardList = (props) => (
 const TicketTitle = () => {
   const Ticket = useRecordContext();
   return (<span>Ticket #{Ticket? `${Ticket.id}` : ''}</span>);
-};
-
-const DeleteButton = () =>{
-  let record = useRecordContext();
-  const [open,setOpen] = useState(false);
-  const [borrarTicket,{isLoading}] = useDelete("Tickets",{id: record && record.Usuario && record.id});
-
-  const handleClick = () =>  setOpen(true);
-  const handleDialogie = () => setOpen(false);
-  const handleConfirm = () => {
-    borrarTicket();
-    setOpen(false);
-  }
-  return(
-    <>
-      <Button label="Delete" onClick={handleClick}  style={{ width: '50px',backgroundColor: '#4CB0FC', marginBottom: '5px',marginRight: '10px',color: 'white',textAlign: 'center'}}><DeleteIcon/></Button>
-      <Confirm isOpen={open} loading={isLoading} title={`Borrar ticket`} content="Estas seguro de borrar el ticket actual?" onConfirm={handleConfirm} onClose={handleDialogie}/>
-    </>
-  );
 };
 
 export const CardEdit = () => {
@@ -230,7 +210,7 @@ export const CardEdit = () => {
 
   return (
     <Edit title={<TicketTitle/>}>
-      <SimpleForm>
+      <SimpleForm toolbar={<CardEditCustomTool/>}>
         <TextInput source="Lugar"/>
         <SelectInput source="Categoria" choices={[
           {id: "Servicios", name: "Servicios"},

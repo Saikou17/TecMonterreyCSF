@@ -3,16 +3,6 @@ import React from "react";
 import { useLogin, useNotify, Notification } from "react-admin";
 import { useNavigate } from "react-router-dom";
 import "./loginBonito/login.css";
-/*
-const loginPageStyle = {
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  minHeight: "100vh",
-  backgroundImage: `url('./imagenFondo.jpg')`,
-  backgroundRepeat: "no-repeat",
-  backgroundSize: "cover",
-};*/
 
 export const MyLoginPage = () => {
   const [usuario, setUsuario] = useState("");
@@ -31,7 +21,7 @@ export const MyLoginPage = () => {
     navigate("/Registrarse");
   };
   return (
-    <body id="todoLogin">
+    <div id="todoLogin">
       <div className="contenedorLogin">
         <div className="container">
           <form>
@@ -71,6 +61,6 @@ export const MyLoginPage = () => {
         </label> */}
         </div>
       </div>
-    </body>
+    </div>
   );
 };

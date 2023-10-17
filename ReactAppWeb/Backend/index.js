@@ -56,7 +56,7 @@ app.get("/Tickets",async(req,res)=>{ //Funcion asincronica que utiliza el metodo
         sorter[sortBy]=sortOrder;
         let Query = {}
         if("id" in req.query){
-            Query["id"]=req.query.id;
+            Query["id"]=Number(req.query.id);
         }
         if("Estado" in req.query){
             Query["Estado"]=req.query.Estado;
@@ -67,6 +67,7 @@ app.get("/Tickets",async(req,res)=>{ //Funcion asincronica que utiliza el metodo
         if("Categoria" in req.query){
             Query["Categoria"]=req.query.Categoria;
         }
+        console.log(Query);
         console.log(sorter);
         let data = await db.collection("Tickets").find(Query).sort(sorter).project({_id:0}).toArray(); //Se utiliza el syntax de Mongodb para buscar de manera ascendente o descendente de un atributo mienstras usamos pryeccion para excluir ciertos datos
         res.set("Access-Control-Expose-Headers","X-Total-Count"); //Headers de respuesta 
@@ -233,36 +234,57 @@ app.post("/Tickets/",async (req,res)=>{ //FUncion asincronica que recibe un requ
     }    
 })
 
-app.post("/Registrarse",async (req,res)=>{ //Funcion asincronica para registrarse 
-    let user = req.body.Usuario; //Usuario de la persona
-    let password = req.body.Contrasena; //Contraseña de la persona
-    let name = req.body.Nombre; //Nombre de la persona
-    let rol = req.body.Rol;
-    let data = await db.collection("Usuario").findOne({"Usuario":user}); //Se encuentra el elemento en la base de datos
-    if(data==null){ //Si no se encuentra en usuario
-        try{
-            bcrypt.genSalt(10,(error,salt) =>{ //Se genera un salt aleatorio de dif 10 (Un salt es una cadena generada de forma aleatoria)
-                bcrypt.hash(password,salt,async(error,hash)=>{ //Se genera el hash de una password usanso el salt de 10
-                    let id = Math.floor(Math.random() * 100);
-                    let id_already = await db.collection("Usuarios").findOne({"id": id});
-                    while(id_already){
-                        id = Math.floor(Math.random() * 100);
-                        id_already = await db.collection("Usuarios").findOne({"id": id});
-                    }
-                    let usuarioAgregar = {"Usuario": user, "Contrasena": hash, "Nombre": name, "Rol": rol, "id": id }; //Creamos el usuario con la contraseña en hash
-                    data = await db.collection("Usuarios").insertOne(usuarioAgregar); //Insertamos a nuestro usuario en la base de datos
-                    res.sendStatus(201); //Devolvemos un mensaje de respuesta correcta
-                })
-            })
-        }catch(error){
-            res.sendStatus(401); //Si el try falla enviamos un mensaje de error
+app.post("/Registrarse", async (req, res) => {
+    try {
+        const user = req.body.Usuario;
+        const password = req.body.Contrasena;
+        const name = req.body.Nombre;
+        const rol = req.body.Rol;
+        console.log(req.body);
+        const data = await db.collection("Usuarios").findOne({ "Usuario": user });
+        console.log(data);
+
+        if (data!=null) {
+            res.sendStatus(409); // Usuario ya existe
+            return; // Salimos del controlador de ruta
         }
-    }if(data){
-        res.sendStatus(409); //Indica al usuario que ya existe una cuenta en la base de datos
-    }else{
-        res.sendStatus(401); //Si no se puede crear un nuevo usuario , tira error
+
+        bcrypt.genSalt(10, (error, salt) => {
+            bcrypt.hash(password, salt, async (error, hash) => {
+                if (error) {
+                    res.sendStatus(401); // Error al generar el hash
+                    return;
+                }
+
+                const id = Math.floor(Math.random() * 100);
+                const id_already = await db.collection("Usuarios").findOne({ "id": id });
+
+                while (id_already) {
+                    id = Math.floor(Math.random() * 100);
+                    id_already = await db.collection("Usuarios").findOne({ "id": id });
+                }
+
+                const usuarioAgregar = {
+                    "Usuario": user,
+                    "Contrasena": hash,
+                    "Nombre": name,
+                    "Rol": rol,
+                    "id": id
+                };
+
+                try {
+                    await db.collection("Usuarios").insertOne(usuarioAgregar);
+                    res.sendStatus(201); // Registro exitoso
+                } catch (error) {
+                    res.sendStatus(401); // Error al insertar en la base de datos
+                }
+            });
+        });
+    } catch (error) {
+        res.sendStatus(500); // Error inesperado
     }
-})
+});
+
 
 app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
     let user = req.body.Usuario; //Obtenemos el usuario de la persona
@@ -287,9 +309,13 @@ app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
 //** La operacion que realizan estos netodos del CRUD es la de Update */
 
 app.put("/Tickets/:id",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y devuelve un response en forma de actualizacion de un elemento
+    console.log(req.body);
     let addValues = req.body; //Obtenemos los datos de nuestra request (URL)
     addValues["id"] = Number(req.params.id); //Agregamos el numero que posee la URL en el parametro de "Numero", en la variable o parametro del body de la request
-    let data = await db.collection("Tickets").updateOne({id : addValues["id"]},{"$set" : addValues, Registro: new Date()}); //Actualizamos nuestro elemento que buscamos con el numero que guardamos en el addValues
+    addValues["Registro"] = new Date();
+    console.log(addValues);
+    console.log("Llega aca");
+    let data = await db.collection("Tickets").updateOne({id : addValues["id"]},{"$set" : addValues}); //Actualizamos nuestro elemento que buscamos con el numero que guardamos en el addValues
     data = await db.collection("Tickets").find({id : Number(req.params.id)}).project({_id:0}).toArray(); //Obtenemos nuestro nuevo elemento actualizado
     res.json(data[0]); //Response final
 
@@ -298,17 +324,11 @@ app.put("/Tickets/:id",async (req,res)=>{ //FUncion asincronica que recibe un re
 //**Implementamos los metodos DELETE y los endpoints */
 //** La operacion que realizan estos netodos del CRUD es la de Delete */
 
-app.delete("/Tickets/:id",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y borra un elemento
-    let data = await db.collection("Tickets").deleteOne({id : Number(req.params.id)}); //Borra el elemento
-    res.json(data); //Response final
+// app.delete("/Tickets/:id",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y borra un elemento
+//     let data = await db.collection("Tickets").deleteOne({id : Number(req.params.id)}); //Borra el elemento
+//     res.json(data); //Response final
 
-})
-
-app.delete("/Tickets",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y borra un elemento
-    let data = await db.collection("Tickets").deleteOne({id : Number(req.params.id)}); //Borra el elemento
-    res.json(data); //Response final
-
-})
+// })
 
 app.listen(1337,()=>{ //Usamos el metodo Listen para acceder al servidor (En este caso es nuestro puerto local)
     connectDB();
