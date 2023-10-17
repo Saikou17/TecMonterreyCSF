@@ -4,6 +4,7 @@ import {
   Resource,
   ShowGuesser,
   CustomRoutes,
+  Layout,
 } from "react-admin";
 import { BrowserRouter, Route } from "react-router-dom";
 import { dataProvider } from "./dataProvider";
@@ -18,10 +19,13 @@ import { DashboardList } from "./DashboardList";
 import { Home, DynamicFeed, Description } from "@mui/icons-material";
 import { Dashboard } from "./dashboard/Dashboard";
 import { CardList, CardEdit, CardCreate } from "./MyList";
-import { ReportsList } from "./Reportes";
+import { ReportsList, ReportCreate } from "./Reportes";
 import { Label } from "recharts";
 import { report } from "process";
 import { i18nProvider } from "./i18nProvider";
+import { MyAppBar } from "./MyAppBar";
+
+const MyLayout = (props: any) => <Layout {...props} appBar={MyAppBar} />;
 
 export const App = () => {
   return (
@@ -31,6 +35,8 @@ export const App = () => {
       dataProvider={dataProvider}
       authProvider={authProvider}
       loginPage={MyLoginPage}
+      layout={MyLayout}
+      darkTheme={{ palette: { mode: "dark" } }}
     >
       {/* <Resource name="users" list={UserList} /> */}
       <Resource
@@ -54,6 +60,7 @@ export const App = () => {
         list={ReportsList}
         icon={Description}
         options={{ Label: "Reportes" }}
+        create={ReportCreate}
       />
     </Admin>
   );
