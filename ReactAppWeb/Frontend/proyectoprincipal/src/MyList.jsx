@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
-import { List, useListContext, SaveButton, TextInput, EditButton, SelectInput, useRecordContext,Edit, SimpleForm, RadioButtonGroupInput, Create, useDelete, Confirm, NumberInput, Toolbar } from 'react-admin';
+import { List, useListContext, TextInput, EditButton, SelectInput, useRecordContext,Edit, SimpleForm, RadioButtonGroupInput, Create, NumberInput, usePermissions } from 'react-admin';
 import { format } from "date-fns";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
@@ -9,7 +9,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './MyList.css';
 
 
-const CardFilters = [ 
+
+const CardFilters = [
+  <TextInput source="Usuario" label="Usuarios" reference="Tickets"/>,
   <NumberInput source="id" label="ID" reference="Tickets" />, //Input de referencia que busca o filtra al escribir el atributo id
   <SelectInput source="Prioridad" label="Prioridad" choices={[ //Input de seleccion que busca o filtra por atributo de prioridad
     {id: "Baja", name: "Bajo"}, //Prioridad baja
@@ -130,12 +132,17 @@ const CardView = () => { //Componente que genera una carta
   );
 };
 
-export const CardList = (props) => (
+export const CardList = (props) => {
+  // const {permissions} =usePermissions();
+  // if(permissions==="Coordinador Nacional"){
+  //   CardFilters.push(<TextInput source="Usuario" label="Usuarios" reference="Tickets"/>)
+  // }
+  return(
   <List filters={CardFilters}>
     <CardView />
   </List>
-  
-);
+  )
+};
 
 const TicketTitle = () => {
   const Ticket = useRecordContext();
@@ -148,6 +155,8 @@ export const CardEdit = () => {
   const eventoCambioCategoria = (evento) => {
     setCategoria(evento.target.value)
   }
+
+  const {permissions} = usePermissions();
 
   const TipoOpciones = {
     Servicios:[
@@ -231,6 +240,11 @@ export const CardEdit = () => {
             {id: "Intermedia", name: "Intermedio"},
             {id: "Alta", name: "Alto"},
         ]}/>
+        {permissions==="Coordinador Nacional" && <RadioButtonGroupInput source="Estado" choices={[
+          {id: "Sin Revisar", name: "Sin Revisar"},
+          {id: "En Proceso", name: "En Proceso"},
+          {id: "Completado", name:"Completado"}
+        ]}/>}
         <TextInput source="Comentario"/>
       </SimpleForm>
     </Edit>
@@ -312,12 +326,12 @@ export const CardCreate = () => {
         {id: "Servicios", name: "Servicios"}, 
         {id: "Digital", name: "Digital"},
         {id: "Infraestructura", name: "Infraestructura"},
-        {id: "Recursos Humanos", name: "Recursos Humanos"},
+        {id: "RecursosHumanos", name: "Recursos Humanos"},
         {id: "Beneficiarios", name: "Beneficiarios"},
         {id: "Mobiliarios", name: "Mobiliarios"},
         {id: "Seguridad", name: "Seguridad"},
         {id: "Materiales", name: "Materiales"},
-        {id: "Fenomeno Meteorologico", name: "Fenomeno Meteorologico"}
+        {id: "FenomenoMeteorologico", name: "Fenomeno Meteorologico"}
       ]} onChange={eventoCambioCategoria}/>
         <SelectInput source="Tipo" choices={TipoOpciones[categoriaActual] || []}/>
         <RadioButtonGroupInput source="Prioridad" choices={[

@@ -31,21 +31,19 @@ async function LogIn(sujeto,accion,objeto){ //Funcion asincronica que recibe e p
 //** La operacion que realizan estos netodos del CRUD es la de Read */
 
 app.get("/Tickets",async(req,res)=>{ //Funcion asincronica que utiliza el metodos GET. Recibe un request (Endpoint) y devuelve un Response (Record Json)
-    console.log(req.body);
-    console.log(req.query);
     try{
         let token=req.get("Authentication"); //Se obtiene el elemento de autenticacion del encabezado HTTP
         let verifiedToken = await jwt.verify(token, "secretKey"); //Usamos la libreria para verikicar que el Token (Autenticacion) utilizando la llave secreta
         let authData=await db.collection("Usuarios").findOne({"Usuario": verifiedToken.Usuario}) // Obtenemos la informacion del usuario que esta autenticado
         let parametersFind={} //Creamos un objeto vacio
         if(authData.Rol=="Coordinador Nacional"){ // Si el usuario es coordinador nacional 
-            parametersFind["Usuario"]=verifiedToken.Usuario; //? Guardamos un parametro Usuario que guarda la informacion del usuario
+            // parametersFind["Usuario"]=verifiedToken.Usuario; //? Guardamos un parametro Usuario que guarda la informacion del usuario
         }
         else if(authData.Rol=="Coordinador Aula"){
             parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
         }
         else if(authData.Rol=="Ejecutivo"){
-            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+            // parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
         }
     if("_sort" in req.query){ //Metodo getList. Busca en los parametros del endpoint (Query)
         let sortBy = req.query._sort; //Guarda el valor del parametro Sort
@@ -54,22 +52,22 @@ app.get("/Tickets",async(req,res)=>{ //Funcion asincronica que utiliza el metodo
         let end = Number (req.query._end); //Guarda el valor del parametro ENd en numero
         let sorter = {} //Crea un objeto que posee un atributo o propiedad
         sorter[sortBy]=sortOrder;
-        let Query = {}
+        if("Usuario" in req.query){
+            parametersFind["Usuario"]=req.query.Usuario;
+        }
         if("id" in req.query){
-            Query["id"]=Number(req.query.id);
+            parametersFind["id"]=Number(req.query.id);
         }
         if("Estado" in req.query){
-            Query["Estado"]=req.query.Estado;
+            parametersFind["Estado"]=req.query.Estado;
         }
         if("Prioridad" in req.query){
-            Query["Prioridad"]=req.query.Prioridad;
+            parametersFind["Prioridad"]=req.query.Prioridad;
         }
         if("Categoria" in req.query){
-            Query["Categoria"]=req.query.Categoria;
+            parametersFind["Categoria"]=req.query.Categoria;
         }
-        console.log(Query);
-        console.log(sorter);
-        let data = await db.collection("Tickets").find(Query).sort(sorter).project({_id:0}).toArray(); //Se utiliza el syntax de Mongodb para buscar de manera ascendente o descendente de un atributo mienstras usamos pryeccion para excluir ciertos datos
+        let data = await db.collection("Tickets").find(parametersFind).sort(sorter).project({_id:0}).toArray(); //Se utiliza el syntax de Mongodb para buscar de manera ascendente o descendente de un atributo mienstras usamos pryeccion para excluir ciertos datos
         res.set("Access-Control-Expose-Headers","X-Total-Count"); //Headers de respuesta 
         res.set("X-Total-Count",data.length); //Headers de respuesta
         data = data.slice(start,end); 
@@ -139,7 +137,6 @@ app.get("/Dashboard",async(req,res)=>{
 
 /*Prueba de conectar los reportes*/
 app.get("/Reportes", async (req, res) => {
-    console.log(req.query); 
     try {
       const token = req.get("Authentication");
       const verifiedToken = await jwt.verify(token, "secretKey");
@@ -159,18 +156,10 @@ app.get("/Reportes", async (req, res) => {
         const end = Number(req.query._end);
         const sorter = {};
         sorter[sortBy] = sortOrder;
-        let Query = {}
-        if ("Fecha" in req.query) {
-            const fechaOriginal = req.query.Fecha; // Fecha en formato '2023-10-14'
-            const partesFecha = fechaOriginal.split('-'); // Dividir la fecha en partes usando el guion como separador
-            Query["Fecha"] = `${partesFecha[2]}/${partesFecha[1]}/${partesFecha[0]}`; // Formatear la fecha en el nuevo formato
-            console.log(Query)
-          }
-        const data = await db.collection("Reportes").find(Query).sort(sorter).project({ _id: 0 }).toArray();
+        const data = await db.collection("Reportes").find({}).sort(sorter).project({ _id: 0 }).toArray();
         res.set("Access-Control-Expose-Headers", "X-Total-Count");
         res.set("X-Total-Count", data.length);
         const slicedData = data.slice(start, end);
-        console.log(slicedData);
         res.json(slicedData);
       } 
         else if ("id" in req.query) {
@@ -185,18 +174,13 @@ app.get("/Reportes", async (req, res) => {
         const data = await db.collection("Reportes").find(parametersFind).project({ _id: 0 }).toArray();
         res.set("Access-Control-Expose-Headers", "X-Total-Count");
         res.set("X-Total-Count", data.length);
-        console.log(data);
         res.json(data);
       }
     } catch (error) {
-      console.error(error);
       res.sendStatus(401);
     }
   });
   
-
-
-
 
 //**Implementamos los metodos POST y los endpoints */
 //** La operacion que realizan estos netodos del CRUD es la de Create */
@@ -206,19 +190,19 @@ app.post("/Tickets/",async (req,res)=>{ //FUncion asincronica que recibe un requ
         let token=req.get("Authentication");
         let verifiedToken = await jwt.verify(token, "secretKey");
         let addValues = req.body; //Guardamos el cuerpo o los datos del URL
-        let data = await db.collection("Tickets").find({}).toArray(); //Obtenemos todos los tickets
-        let id = data.length+1; //Variable que guarda un numero que le sigue al ultimo ticket
-        addValues["id"] = id; //Agregamos un nuevo valor al parametro del request
-        addValues["Usuario"] = verifiedToken.Usuario;
-        addValues["Registro"] = new Date();
-        addValues["Estado"] = "Sin Revisar";
         let authData=await db.collection("Usuarios").findOne({"Usuario": verifiedToken.Usuario}) //Obtiene la informacion del usuario verificado
         let parametersFind={} //Obtiene el id del request
+        let data = await db.collection("Tickets").find({}).toArray(); //Obtenemos todos los tickets
+        let id = data.length+1; //Variable que guarda un numero que le sigue al ultimo ticket
         if(authData.Rol=="Coordinador Nacional"){ // Si el usuario es coordinador nacional 
             parametersFind["Usuario"]=verifiedToken.Usuario; //? Guardamos un parametro Usuario que guarda la informacion del usuario
         }
         else if(authData.Rol=="Coordinador Aula"){
             parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+            addValues["id"] = id; //Agregamos un nuevo valor al parametro del request
+            addValues["Usuario"] = verifiedToken.Usuario;
+            addValues["Registro"] = new Date();
+            addValues["Estado"] = "Sin Revisar";
         }
         else if(authData.Rol=="Ejecutivo"){
             parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
@@ -236,30 +220,23 @@ app.post("/Registrarse", async (req, res) => {
         const password = req.body.Contrasena;
         const name = req.body.Nombre;
         const rol = req.body.Rol;
-        console.log(req.body);
         const data = await db.collection("Usuarios").findOne({ "Usuario": user });
-        console.log(data);
-
         if (data!=null) {
             res.sendStatus(409); // Usuario ya existe
             return; // Salimos del controlador de ruta
         }
-
         bcrypt.genSalt(10, (error, salt) => {
             bcrypt.hash(password, salt, async (error, hash) => {
                 if (error) {
                     res.sendStatus(401); // Error al generar el hash
                     return;
                 }
-
                 const id = Math.floor(Math.random() * 100);
                 const id_already = await db.collection("Usuarios").findOne({ "id": id });
-
                 while (id_already) {
                     id = Math.floor(Math.random() * 100);
                     id_already = await db.collection("Usuarios").findOne({ "id": id });
                 }
-
                 const usuarioAgregar = {
                     "Usuario": user,
                     "Contrasena": hash,
@@ -267,7 +244,6 @@ app.post("/Registrarse", async (req, res) => {
                     "Rol": rol,
                     "id": id
                 };
-
                 try {
                     await db.collection("Usuarios").insertOne(usuarioAgregar);
                     res.sendStatus(201); // Registro exitoso
@@ -288,12 +264,12 @@ app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
     let data = await db.collection("Usuarios").findOne({"Usuario":user}); //Busacamos la persona en la base de datos
     if(data==null){ //Si la persona no esta 
         res.sendStatus(401); //Manda error de que no existe y no puede entrar antes de registrarse
-    }else{
+    }else{  
         bcrypt.compare(password,data.Contrasena,(error,result)=>{ //Comparamos si las contraseñas coinciden 
             if(result){ //En caso de que se autentique la identidad de la persona 
                 let token = jwt.sign({"Usuario": data.Usuario},"secretKey",{expiresIn:600}); //Crea un token (JSON) que 
                 LogIn(user,"LogIn",""); //Crea un nuevo dato en la coleccion de Log
-                res.json({"token": token, "id": data.id, "Nombre": data.Nombre}); //Regresa el token , el usuario y el nombre
+                res.json({"token": token, "id": data.id, "Nombre": data.Nombre, "Rol": data.Rol}); //Regresa el token , el usuario y el nombre
             }else{
                 res.sendStatus(401); //Tira error si las contraseñas no son iguales
             }
@@ -305,16 +281,34 @@ app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
 //** La operacion que realizan estos netodos del CRUD es la de Update */
 
 app.put("/Tickets/:id",async (req,res)=>{ //FUncion asincronica que recibe un request (URL) y devuelve un response en forma de actualizacion de un elemento
-    console.log(req.body);
-    let addValues = req.body; //Obtenemos los datos de nuestra request (URL)
-    addValues["id"] = Number(req.params.id); //Agregamos el numero que posee la URL en el parametro de "Numero", en la variable o parametro del body de la request
-    addValues["Registro"] = new Date();
-    console.log(addValues);
-    console.log("Llega aca");
-    let data = await db.collection("Tickets").updateOne({id : addValues["id"]},{"$set" : addValues}); //Actualizamos nuestro elemento que buscamos con el numero que guardamos en el addValues
-    data = await db.collection("Tickets").find({id : Number(req.params.id)}).project({_id:0}).toArray(); //Obtenemos nuestro nuevo elemento actualizado
-    res.json(data[0]); //Response final
-
+    try{
+        let token=req.get("Authentication");
+        let verifiedToken = await jwt.verify(token, "secretKey");
+        let authData=await db.collection("Usuarios").findOne({"Usuario": verifiedToken.Usuario});
+        let addValues = req.body;
+        console.log(req.body);
+        console.log(req.params);
+        parametersFind ={};
+        if(authData.Rol=="Coordinador Nacional"){ // Si el usuario es coordinador nacional 
+            parametersFind["Usuario"]=verifiedToken.Usuario; //? Guardamos un parametro Usuario que guarda la informacion del usuario
+            addValues["id"] = Number(req.params.id); //Agregamos el numero que posee la URL en el parametro de "Numero", en la variable o parametro del body de la request
+            addValues["Registro"] = new Date();
+            addValues["Estado"]=req.body.Estado;
+        }
+        else if(authData.Rol=="Coordinador Aula"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+            addValues["id"] = Number(req.params.id); //Agregamos el numero que posee la URL en el parametro de "Numero", en la variable o parametro del body de la request
+            addValues["Registro"] = new Date();
+        }
+        else if(authData.Rol=="Ejecutivo"){
+            parametersFind["Usuario"]=verifiedToken.Usuario; //Solo busca aquellos alumnos que esten en su
+        }
+        let data = await db.collection("Tickets").updateOne({id : addValues["id"]},{"$set" : addValues}); //Actualizamos nuestro elemento que buscamos con el numero que guardamos en el addValues
+        data = await db.collection("Tickets").find({id : Number(req.params.id)}).project({_id:0}).toArray(); //Obtenemos nuestro nuevo elemento actualizado
+        res.json(data[0]); //Response final
+    }catch{
+        res.sendStatus(401);
+    }
 })
 
 //**Implementamos los metodos DELETE y los endpoints */

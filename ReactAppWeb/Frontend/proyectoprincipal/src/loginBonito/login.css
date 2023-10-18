@@ -15,18 +15,21 @@ input[type=text], input[type=password] {
   width: 100%;
   padding: 14px 20px;
   margin-top: 8px;
+  margin-bottom: 8px;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 10px;
   box-sizing: border-box;
   background-color: #909698;
+  color :#000;
 }
 
 .botonlogin {
   background-color: #6E8387;
-  color: white;
+  color: rgb(0, 0, 0);
+  font-family: "Titillium", sans-serif;
   padding: 10px;
-  margin-top: 35px;
+  margin-top: 10px;
   border: none;
   border-radius: 10px;
   cursor: pointer;
@@ -35,7 +38,8 @@ input[type=text], input[type=password] {
 
 .botonregistro {
   background-color: #6E8387;
-  color: white;
+  color: rgb(0, 0, 0);
+  font-family: "Titillium", sans-serif;
   padding: 10px;
   margin-top: 20px;
   border: none;
@@ -45,7 +49,14 @@ input[type=text], input[type=password] {
 }
 
 button:hover {
-    background-color: #007BFF;
+    background-color: #2b3335;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 10px; /* Ajusta el margen superior entre el formulario y los botones */
 }
 
 .imgcontainer {
@@ -85,4 +96,10 @@ span.psw {
      display: block;
      float: none;
   }
+}
+
+.Customh5{
+  font-family: "Blogger Sans", sans-serif;
+  font-size: 20px;
+  color: #000;
 }

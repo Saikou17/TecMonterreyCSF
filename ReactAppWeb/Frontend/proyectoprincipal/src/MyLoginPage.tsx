@@ -1,6 +1,5 @@
 import { useState } from "react";
-import React from "react";
-import { useLogin, useNotify, Notification } from "react-admin";
+import { useLogin, useNotify } from "react-admin";
 import { useNavigate } from "react-router-dom";
 import "./loginBonito/login.css";
 
@@ -32,7 +31,7 @@ export const MyLoginPage = () => {
                 alt="Logo de socio formador"
               />
             </div>
-            <h5>Usuario</h5>
+            <h5 className="Customh5">Usuario :</h5>
             <input
               name="usuario"
               type="text"
@@ -40,7 +39,7 @@ export const MyLoginPage = () => {
               value={usuario}
               onChange={(e) => setUsuario(e.target.value)}
             />
-            <h5>Contraseña</h5>
+            <h5 className="Customh5">Contraseña :</h5>
             <input
               name="contraseña"
               type="password"
@@ -49,16 +48,15 @@ export const MyLoginPage = () => {
               onChange={(e) => setContraseña(e.target.value)}
             />
           </form>
-          <button onClick={handleLogIn} className="botonlogin">
-            Iniciar Sesión
-          </button>
-          <button onClick={handleSignUp} className="botonregistro">
-            Registrarse
-          </button>
+          <div className="button-container">
+            <button onClick={handleLogIn} className="botonlogin">
+              Iniciar Sesión
+            </button>
+            <button onClick={handleSignUp} className="botonregistro">
+              Registrarse
+            </button>
+          </div>
           <br />
-          {/* <label>
-          <input type="checkbox" name="remember" /> Recordarme
-        </label> */}
         </div>
       </div>
     </div>

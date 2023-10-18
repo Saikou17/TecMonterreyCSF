@@ -1,5 +1,4 @@
 
-
 const authProvider={
     login: async ({ username , password }) => {
         console.log('Usuario:', username); // Imprimir el valor de Usuario en la consola
@@ -17,7 +16,9 @@ const authProvider={
             const auth = await response.json();
             console.log(auth)
             console.log(auth.Nombre)
+            console.log(auth.Rol);
             localStorage.setItem('auth', auth.token);
+            localStorage.setItem("permissions",auth.Rol);
             localStorage.setItem('identity',  JSON.stringify({"id": auth.id,  "Nombre":auth.Nombre}));
             return Promise.resolve()
         } catch {
@@ -26,6 +27,7 @@ const authProvider={
     },
     logout: ()=>{
         localStorage.removeItem("auth");
+        localStorage.removeItem("permissions");
         localStorage.removeItem("identity");
         return Promise.resolve();
     },
@@ -48,7 +50,10 @@ const authProvider={
             return Promise.reject()
         }
     },
-    getPermissions: ()=>{return Promise.resolve()},
+    getPermissions: ()=>{
+        const role = localStorage.getItem('permissions');
+        return role ? Promise.resolve(role) : Promise.reject();
+    },
 };
 
 export default authProvider;

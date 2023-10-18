@@ -4,13 +4,10 @@ import { Accordion, Button } from "react-bootstrap";
 import {
   List,
   useListContext,
-  ReferenceInput,
   TextInput,
-  SelectInput,
   DateInput,
   Create,
-  SimpleForm,
-  RadioButtonGroupInput,
+  SimpleForm
 } from "react-admin";
 /*import { report } from "process";*/
 
@@ -55,7 +52,7 @@ const ReportsView = () => {
   );
 };
 
-export const ReportsList = (props: any) => (
+export const ReportsList = (props) => (
   <List filters={ReportFilter}>
     <ReportsView />
   </List>

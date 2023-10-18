@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useLogin, useNotify } from "react-admin";
+import { useNotify } from "react-admin";
 import "./loginBonito/registrarse.css";
+import { useNavigate } from "react-router-dom";
 
 const Registrarse = () => {
   const [datos, setDatos] = useState({
@@ -10,6 +11,7 @@ const Registrarse = () => {
     Rol: "",
   });
   const notify = useNotify();
+  const navigate = useNavigate();
 
   const handleChange = (event: any) => {
     setDatos({
@@ -17,6 +19,10 @@ const Registrarse = () => {
       [event.target.name]: event.target.value,
     });
   };
+
+  const handleBack = (event: any) => {
+    navigate("/login")
+  }
 
   const handleSendData = async () => {
     // Convert the form data to JSON
@@ -36,6 +42,7 @@ const Registrarse = () => {
         }
       }else if (response.status === 201) {
         notify("Usuario creado con éxito");
+        alert("Usuario creado con exito");
       }
     } catch {
       throw new Error("No se pudo registrar el usuario");
@@ -46,8 +53,6 @@ const Registrarse = () => {
     <div id="todoRegistro">
       <div>
         <div className="container">
-          <br />
-          <h2>Registro de nuevos usuarios</h2>
           <div className="imgcontainer">
             <img
               id="logoSocio"
@@ -58,18 +63,18 @@ const Registrarse = () => {
           <form>
             <div className="imageContainer">
               <div className="user">
-                <label htmlFor="Usuario">Usuario: </label>
+                <label className="titulosCustom" htmlFor="Usuario">Usuario: </label>
                 <input
                   type="text"
                   id="Usuario"
                   name="Usuario"
-                  placeholder="Usuario"
+                  placeholder="Introducir usuario nuevo"
                   value={datos.Usuario}
                   onChange={handleChange}
                 />
               </div>
               <div className="contrasena">
-                <label htmlFor="Contrasena">Contraseña: </label>
+                <label className="titulosCustom" htmlFor="Contrasena">Contraseña: </label>
                 <input
                   type="password"
                   id="Contrasena"
@@ -80,18 +85,18 @@ const Registrarse = () => {
                 />
               </div>
               <div className="nombre">
-                <label htmlFor="Nombre">Nombre Completo: </label>
+                <label className="titulosCustom" htmlFor="Nombre">Nombre Completo: </label>
                 <input
                   type="text"
                   id="Nombre"
                   name="Nombre"
-                  placeholder="Introducir Nombre Completo"
+                  placeholder="Introducir nombre completo"
                   value={datos.Nombre}
                   onChange={handleChange}
                 />
               </div>
               <div className="rol">
-                <label htmlFor="Rol">Selecciona tu Rol:</label>
+                <label className="titulosCustom" htmlFor="Rol">Selecciona tu Rol:</label>
                 <select
                   id="Rol"
                   name="Rol"
@@ -109,6 +114,9 @@ const Registrarse = () => {
               <div>
                 <button className="botonRegistro" onClick={handleSendData}>
                   Crear Usuario
+                </button>
+                <button className="botonRegresar" onClick={handleBack}>
+                  Regresar
                 </button>
               </div>
               <br />

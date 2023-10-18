@@ -1,15 +1,12 @@
-import * as React from "react";
-import { Grid, Card, CardContent, CardHeader } from "@mui/material";
-
-import { Welcome } from "./Welcome";
-import { GraficaTickets } from "./GraficaTickets";
+import { Card, CardContent, CardHeader, Avatar } from "@mui/material";
+import HomeIcon from '@mui/icons-material/Home';
 
 export const Dashboard = () => (
   <div className="DashboardList">
     <Card>
       <CardHeader title="Bienvenido a Fundación Por México" />
       <CardContent>
-        Debajo se presentan gráficas con respecto a los ticket de la semana
+        Debajo se presentan gráficas con respecto a tu actividad en la aplicacion
       </CardContent>
     </Card>
     <iframe
