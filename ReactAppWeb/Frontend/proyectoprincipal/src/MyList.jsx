@@ -62,14 +62,14 @@ const CardView = () => { //Componente que genera una carta
                 <span>Estado: {ticket.Estado}</span>
               </div>
             </Card.Header>
-            <Card.Title style={{ marginLeft: '5px', marginBottom: '5px', textAlign: 'center', marginTop: '50px' }}>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                <span>Categoria: {ticket.Categoria}</span>
-                <span>Prioridad: {ticket.Prioridad}</span>
-                <span>Usuario: {ticket.Usuario}</span>
+            <Card.Title style={{ marginLeft: '5px', marginBottom: '15px', textAlign: 'center', marginTop: '35px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', marginBottom: '20px'}}>
+              <span style={{marginBottom: '5px'}}>Categoria: <span style={{fontSize: '15px', fontWeight: 'normal'}}>{ticket.Categoria}</span></span>
+                <span style={{marginBottom: '5px'}}>Prioridad: <span style={{fontSize: '15px', fontWeight: 'normal'}}>{ticket.Prioridad}</span></span>
+                <span style={{marginBottom: '5px'}}>Usuario: <span style={{fontSize: '15px', fontWeight: 'normal'}}>{ticket.Usuario}</span></span>
               </div>
             </Card.Title>
-            <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <div style={{ display: 'flex', justifyContent: 'center'}}>
               <Button
                 style={{
                   border:'5px',
@@ -96,6 +96,7 @@ const CardView = () => { //Componente que genera una carta
                   marginRight: '10px',
                   color: 'black',
                   textAlign: 'center',
+                  padding: '0px 40px'
                 }}
               />
             </div>
@@ -112,13 +113,16 @@ const CardView = () => { //Componente que genera una carta
         <Modal.Body>
           {selectedPost && (
             <div>
-              <h2 style={{ marginBottom: '10px' }}>Categoria: {selectedPost.Categoria}</h2>
-              <h2 style={{ marginBottom: '10px' }}>Tipo: {selectedPost.Tipo}</h2>
-              <div style={{ display: 'flex', marginBottom: '10px' }}>
-                <p style={{ margin: '0' }}><b>Emitido por:</b> {selectedPost.Usuario}</p>
-                <p><b>Lugar:</b> {selectedPost.Lugar}</p>
-              </div>
-              <p>{selectedPost.Comentario}</p>
+              <span style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '20px' }}>Categoria: <span style={{fontSize: '18px', fontWeight: 'normal'}}>{selectedPost.Categoria}</span></span>
+              <br />
+              <span style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '20px' }}>Tipo: <span style={{fontSize: '18px', fontWeight: 'normal'}}>{selectedPost.Tipo}</span></span>
+              <br />
+              <span style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '20px' }}>Emitido por: <span style={{fontSize: '18px', fontWeight: 'normal'}}>{selectedPost.Usuario}</span></span>
+              <br />
+              <span style={{ marginBottom: '10px', fontWeight: 'bold', fontSize: '20px' }}>Lugar: <span style={{fontSize: '18px', fontWeight: 'normal'}}>{selectedPost.Lugar}</span></span>
+              <br />
+              <br />
+              <span style={{fontSize: '18px', fontWeight: 'normal'}}>{selectedPost.Comentario}</span>
             </div>
           )}
         </Modal.Body>
