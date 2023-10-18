@@ -277,6 +277,13 @@ app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
     }
 })
 
+
+/*Prueba de generar reporte automático*/
+
+  
+
+
+
 //**Implementamos los metodos PUT y los endpoints */
 //** La operacion que realizan estos netodos del CRUD es la de Update */
 
