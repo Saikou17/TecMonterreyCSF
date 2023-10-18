@@ -15,7 +15,7 @@ import { DashboardList } from "./DashboardList";
 import { Home, DynamicFeed, Description } from "@mui/icons-material";
 import { Dashboard } from "./dashboard/Dashboard";
 import { CardList, CardEdit, CardCreate } from "./MyList";
-import { ReportsList, ReportCreate } from "./Reportes";
+import { ReportsList } from "./Reportes";
 import { Label } from "recharts";
 import { report } from "process";
 import { i18nProvider } from "./i18nProvider";
@@ -56,7 +56,6 @@ export const App = () => {
         list={ReportsList}
         icon={Description}
         options={{ Label: "Reportes" }}
-        create={ReportCreate}
       />
     </Admin>
   );
