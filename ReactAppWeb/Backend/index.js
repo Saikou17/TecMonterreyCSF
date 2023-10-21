@@ -267,7 +267,7 @@ app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
     }else{  
         bcrypt.compare(password,data.Contrasena,(error,result)=>{ //Comparamos si las contraseñas coinciden 
             if(result){ //En caso de que se autentique la identidad de la persona 
-                let token = jwt.sign({"Usuario": data.Usuario},"secretKey",{expiresIn:600}); //Crea un token (JSON) que 
+                let token = jwt.sign({"Usuario": data.Usuario},"secretKey",{expiresIn:1200}); //Crea un token (JSON) que 
                 LogIn(user,"LogIn",""); //Crea un nuevo dato en la coleccion de Log
                 res.json({"token": token, "id": data.id, "Nombre": data.Nombre, "Rol": data.Rol}); //Regresa el token , el usuario y el nombre
             }else{
@@ -327,12 +327,12 @@ app.put("/Tickets/:id",async (req,res)=>{ //FUncion asincronica que recibe un re
 
 // })
 
-app.listen(1337,()=>{ //Usamos el metodo Listen para acceder al servidor (En este caso es nuestro puerto local)
-    connectDB();
-    console.log('Servidor corriendo en el puerto 1337');
-})
-
-// https.createServer({cert: fs.readFileSync("../Raiz.cer"), key: fs.readFileSync("../CA.key")}, app).listen(1337, ()=>{
+// app.listen(1337,()=>{ //Usamos el metodo Listen para acceder al servidor (En este caso es nuestro puerto local)
 //     connectDB();
-//     console.log("Servidor escuchando en puerto 1337")
+//     console.log('Servidor corriendo en el puerto 1337');
 // })
+
+https.createServer({cert: fs.readFileSync("../Raiz.cer"), key: fs.readFileSync("../CA.key")}, app).listen(1337, ()=>{
+    connectDB();
+    console.log("Servidor escuchando en puerto 1337")
+})
