@@ -1,2 +1,2 @@
 # TecMonterreyCSF
-Repositorio con la aplicacion web de FUndacion por Mexico.
+Repositorio con la aplicacion web de Fundacion por Mexico.
