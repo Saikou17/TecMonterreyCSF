@@ -3,7 +3,7 @@ const authProvider={
     login: async ({ username , password }) => {
         console.log('Usuario:', username); // Imprimir el valor de Usuario en la consola
         console.log('Contrasena:', password); // Imprimir el valor de Contrasena en la consola
-        const request = new Request('http://127.0.0.1:1337/login', {
+        const request = new Request('https://127.0.0.1:1337/login', {
             method: 'POST',
             body: JSON.stringify({ "Usuario":username, "Contrasena": password }),
             headers: new Headers({ 'Content-Type': 'application/json' }),
@@ -35,7 +35,9 @@ const authProvider={
         return localStorage.getItem("auth")? Promise.resolve(): Promise.reject();
     },
     checkError: (error) =>{
-        const status=error.status;
+        
+        if (error && error.status) {
+            const status = error.status;}
         if(status===401|| status===403){
             localStorage.removeItem("auth");
             localStorage.removeItem("identity");

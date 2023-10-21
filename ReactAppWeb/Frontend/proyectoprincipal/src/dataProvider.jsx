@@ -13,4 +13,4 @@ const fetchJsonUtil = (url, options={})=>{
   return fetchUtils.fetchJson(url, options).catch(error => {console.error(error);throw error;});
 };
 
-export const dataProvider = jsonServerProvider("http://127.0.0.1:1337",fetchJsonUtil);
+export const dataProvider = jsonServerProvider("https://127.0.0.1:1337",fetchJsonUtil);

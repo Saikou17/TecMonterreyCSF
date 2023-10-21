@@ -1,12 +1,24 @@
 import { Card, CardContent, CardHeader, Avatar } from "@mui/material";
-import HomeIcon from '@mui/icons-material/Home';
+import HomeIcon from "@mui/icons-material/Home";
 
 export const Dashboard = () => (
   <div className="DashboardList">
     <Card>
       <CardHeader title="Bienvenido a Fundación Por México" />
-      <CardContent>
-        Debajo se presentan gráficas con respecto a tu actividad en la aplicacion
+      <CardContent style={{ textAlign: "justify" }}>
+        Fundación por México es una organización comprometida con el bienestar y
+        el progreso de la sociedad mexicana. Nuestra misión es impulsar el
+        cambio positivo y el desarrollo sostenible en México a través de
+        proyectos y programas que abordan desafíos clave en áreas como la
+        educación, la salud, el medio ambiente y el desarrollo comunitario.
+      </CardContent>
+      <br />
+      <CardContent style={{ textAlign: "justify" }}>
+        El objetivo de la aplicación es poder tramitar tickets con respecto a
+        los probelmas que se presentan en lugares, tanto problemas a individuos
+        como al moviliario. De igualmanera se presentan reportes con respecto a
+        como se han estado manejando los tickets, cuantos fueron tramitados,
+        porque, quien, y el estado en el que estan.
       </CardContent>
     </Card>
     <iframe
