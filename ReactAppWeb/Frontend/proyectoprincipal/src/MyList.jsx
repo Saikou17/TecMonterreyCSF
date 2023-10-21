@@ -6,6 +6,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import {CardEditCustomTool} from "./MyListToolBar"
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Typography from '@mui/material/Typography';
 import './MyList.css';
 
 
@@ -226,7 +227,9 @@ export const CardEdit = () => {
   return (
     <Edit title={<TicketTitle/>}>
       <SimpleForm toolbar={<CardEditCustomTool/>}>
+        <Typography variant="subtitle2">Ingresa el lugar del problema:</Typography>
         <TextInput source="Lugar"/>
+        <Typography variant="subtitle2">Selecciona la categoria del problema:</Typography>
         <SelectInput source="Categoria" choices={[
           {id: "Servicios", name: "Servicios"},
           {id: "Digital", name: "Digital"},
@@ -238,17 +241,27 @@ export const CardEdit = () => {
           {id: "Materiales", name: "Materiales"},
           {id: "FenomenoMeteorologico", name: "Fenomeno Meteorologico"}
         ]} onChange={eventoCambioCategoria} />
-        <SelectInput source="Tipo" choices={TipoOpciones[categoriaActual] || []}/>
+          {categoriaActual && (
+          <div>
+          <Typography variant="subtitle2">Selecciona el tipo de la categoria:</Typography>
+          <SelectInput source="Tipo" choices={TipoOpciones[categoriaActual] || []}/>
+          </div>)}
+        <Typography variant="subtitle2">Selecciona la prioridad del problema:</Typography>
         <RadioButtonGroupInput source="Prioridad" choices={[
             {id: "Baja", name: "Bajo"},
             {id: "Intermedia", name: "Intermedio"},
             {id: "Alta", name: "Alto"},
         ]}/>
-        {permissions==="Coordinador Nacional" && <RadioButtonGroupInput source="Estado" choices={[
+        {permissions==="Coordinador Nacional" && (
+        <div>
+        <Typography variant="subtitle2">Selecciona el estado del ticket:</Typography>
+        <RadioButtonGroupInput source="Estado" choices={[
           {id: "Sin Revisar", name: "Sin Revisar"},
           {id: "En Proceso", name: "En Proceso"},
           {id: "Completado", name:"Completado"}
-        ]}/>}
+        ]}/>
+        </div>)}
+        <Typography variant="subtitle2">Ingresa un comentario:</Typography>
         <TextInput source="Comentario"/>
       </SimpleForm>
     </Edit>
@@ -337,7 +350,7 @@ export const CardCreate = () => {
         {id: "Materiales", name: "Materiales"},
         {id: "FenomenoMeteorologico", name: "Fenomeno Meteorologico"}
       ]} onChange={eventoCambioCategoria}/>
-        <SelectInput source="Tipo" choices={TipoOpciones[categoriaActual] || []}/>
+        {categoriaActual && <SelectInput source="Tipo" choices={TipoOpciones[categoriaActual] || []}/>}
         <RadioButtonGroupInput source="Prioridad" choices={[
             {id: "Baja", name: "Bajo"},
             {id: "Intermedia", name: "Intermedio"},

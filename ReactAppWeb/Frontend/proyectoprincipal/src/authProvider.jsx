@@ -34,14 +34,15 @@ const authProvider={
     checkAuth: ()=>{
         return localStorage.getItem("auth")? Promise.resolve(): Promise.reject();
     },
-    checkError: (error) =>{
-        
-        if (error && error.status) {
-            const status = error.status;}
-        if(status===401|| status===403){
-            localStorage.removeItem("auth");
-            localStorage.removeItem("identity");
-            return Promise.reject();
+    checkError: (error) =>{ 
+        if(error){
+            const status=error.status;
+            if(status===401|| status===403){
+                localStorage.removeItem("auth");
+                localStorage.removeItem("identity");
+                localStorage.removeItem("permissions");
+                return Promise.reject();
+            }
         }
         return Promise.resolve();
     },

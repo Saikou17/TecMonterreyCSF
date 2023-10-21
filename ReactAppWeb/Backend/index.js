@@ -267,7 +267,7 @@ app.post("/login",async (req,res)=> { //Funcion asincronica para iniciar sesion
     }else{  
         bcrypt.compare(password,data.Contrasena,(error,result)=>{ //Comparamos si las contraseñas coinciden 
             if(result){ //En caso de que se autentique la identidad de la persona 
-                let token = jwt.sign({"Usuario": data.Usuario},"secretKey",{expiresIn:1200}); //Crea un token (JSON) que 
+                let token = jwt.sign({"Usuario": data.Usuario},"secretKey",{expiresIn:600}); //Crea un token (JSON) que 
                 LogIn(user,"LogIn",""); //Crea un nuevo dato en la coleccion de Log
                 res.json({"token": token, "id": data.id, "Nombre": data.Nombre, "Rol": data.Rol}); //Regresa el token , el usuario y el nombre
             }else{

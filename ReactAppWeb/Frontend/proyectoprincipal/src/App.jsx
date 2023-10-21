@@ -28,7 +28,7 @@ const MyLayout = (props) => <Layout {...props} appBar={MyAppBar} />;
         authProvider={authProvider}
         loginPage={MyLoginPage}
         layout={MyLayout}
-        darkTheme={{ palette: { mode: "dark" } }}
+        // darkTheme={{ palette: { mode: "dark" } }}
       >
         {permissions => (
           <>
