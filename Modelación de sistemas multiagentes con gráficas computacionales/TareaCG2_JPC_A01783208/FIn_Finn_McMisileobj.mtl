@@ -1,0 +1,62 @@
+# Blender 3.6.5 MTL File: 'None'
+# www.blender.org
+
+newmtl Material__75
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+Pr 0.900000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd pc-computer-disney-infinity-finn-mc-missile/source/PC Computer - Disney Infinity - Finn McMissile/Finn McMissile/Tex_0010_3.png
+
+newmtl Material__76
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+Pr 0.900000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd pc-computer-disney-infinity-finn-mc-missile/source/PC Computer - Disney Infinity - Finn McMissile/Finn McMissile/Tex_0012_3.png
+
+newmtl Material__78
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+Pr 0.900000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd pc-computer-disney-infinity-finn-mc-missile/source/PC Computer - Disney Infinity - Finn McMissile/Finn McMissile/Tex_0020_3.png
+
+newmtl Material__79
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 1
+Pr 0.900000
+Pm 0.000000
+Ps 0.000000
+Pc 0.000000
+Pcr 0.030000
+aniso 0.000000
+anisor 0.000000
+map_Kd pc-computer-disney-infinity-finn-mc-missile/source/PC Computer - Disney Infinity - Finn McMissile/Finn McMissile/Tex_0019_7.png

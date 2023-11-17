@@ -1,8 +1,9 @@
+from itertools import product
 from mesa import Model, agent
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
 from mesa import DataCollector
-from Agents import RandomAgent, ObstacleAgent, Trash, Battery
+from Agents import RandomAgent, ObstacleAgent, Trash, Battery, Floor
 
 class RandomModel(Model):
     """ 
@@ -35,18 +36,28 @@ class RandomModel(Model):
         # Function to generate random positions
         pos_gen = lambda w, h: (self.random.randrange(w), self.random.randrange(h))
 
-        # Add the agent to a random empty grid cell
-        for i in range(self.num_agents):
+        #We add a battery
+        b = Battery(4000, self) #We set an unique id , model
+        self.schedule.add(b) #We add the battery to the schedule
+        
+        #We create a pos
+        pos = pos_gen(self.grid.width, self.grid.height)
 
-            a = RandomAgent(i+1000, self) 
-            self.schedule.add(a)
-
-            pos = pos_gen(self.grid.width, self.grid.height)
-
-            while (not self.grid.is_cell_empty(pos)):
+        #We set the position in an empty cell
+        while (not self.grid.is_cell_empty(pos)):
                 pos = pos_gen(self.grid.width, self.grid.height)
 
-            self.grid.place_agent(a, pos)
+        #We place the battery
+        self.grid.place_agent(b, pos)
+
+        #We add the roomba
+        a = RandomAgent(1000, self, pos) 
+
+        #We add the roomba in the schedule 
+        self.schedule.add(a)
+
+        #We add the roomba in the battery cell
+        self.grid.place_agent(a, pos)
 
         #Add the agent trash to a random positions
         for i in range(self.num_agents):
@@ -74,15 +85,17 @@ class RandomModel(Model):
                 pos = pos_gen(self.grid.width, self.grid.height)
 
             self.grid.place_agent(o, pos)
-        
-        #We add a battery
 
-        b = Battery(4000, self)
-        self.schedule.add(b)
-        pos = pos_gen(self.grid.width, self.grid.height)
-        while (not self.grid.is_cell_empty(pos)):
-                pos = pos_gen(self.grid.width, self.grid.height)
-        self.grid.place_agent(b, pos)
+        z = 0
+
+        for i in range(self.grid.width):
+            for j in range(self.grid.height):
+
+                if self.grid.is_cell_empty((i,j)):
+                    f = Floor(5000+z,self)
+                    self.schedule.add(f)
+                    self.grid.place_agent(f,(i,j))
+                    z+=1
 
         self.datacollector.collect(self)
 

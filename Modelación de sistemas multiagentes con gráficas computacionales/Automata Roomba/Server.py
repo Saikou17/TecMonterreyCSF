@@ -1,30 +1,47 @@
-from Model import RandomModel, ObstacleAgent, Trash, Battery
+from Model import RandomModel, ObstacleAgent, Trash, Battery, Floor
 from mesa.visualization import CanvasGrid, BarChartModule
 from mesa.visualization import ModularServer
 
 def agent_portrayal(agent):
     if agent is None: return
     
-    portrayal = {"Shape": "circle",
-                 "Filled": "true",
-                 "Layer": 0,
-                 "Color": "red",
-                 "r": 0.5}
+    portrayal = {"Shape": "roomba.png",
+                 "scale": "0.9",
+                 "Layer": 1,
+    }
 
     if (isinstance(agent, ObstacleAgent)):
-        portrayal["Color"] = "blue"
-        portrayal["r"] = 1
+        portrayal = {"Shape": "rect",
+                     "Filled": "true",
+                     "Layer":0,
+                     "Color": "grey",
+                     "w": 1,
+                     "h": 1}
 
     if (isinstance(agent,Trash)):
-        portrayal["Image"] = "bolsa-de-basura.png"
-        portrayal["Color"] = "black"
-        portrayal["r"] = 0.2
+        portrayal = {
+            "Shape": "bolsa-de-basura.png",
+            "scale": 0.9,
+            "Layer": 0,
+        }
+        
     
     if (isinstance(agent,Battery)):
-        portrayal["Color"] = "green"
-        portrayal["r"] = 0.4
-
-
+        portrayal = {
+            "Shape": "rect",
+            "Filled": "true",
+            "Layer": 0,
+            "Color": "green",
+            "w": 1,
+            "h": 1}
+        
+    if (isinstance(agent,Floor)):
+        portrayal = {
+            "Shape": "suelo.png",
+            "scale": 1,
+            "Layer": 0
+        }
+        
     return portrayal
 
 model_params = {"N":5, "width":10, "height":10}
