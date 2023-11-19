@@ -1,5 +1,5 @@
 from Model import RandomModel, ObstacleAgent, Trash, Battery, Floor
-from mesa.visualization import CanvasGrid, BarChartModule
+from mesa.visualization import CanvasGrid, BarChartModule, PieChartModule
 from mesa.visualization import ModularServer
 
 def agent_portrayal(agent):
@@ -44,13 +44,11 @@ def agent_portrayal(agent):
         
     return portrayal
 
-model_params = {"N":5, "width":10, "height":10}
+model_params = {"N":10, "width":20, "height":20}
 
-grid = CanvasGrid(agent_portrayal, 10, 10, 500, 500)
+grid = CanvasGrid(agent_portrayal, 20, 20, 500, 500)
 
-bar_chart = BarChartModule(
-    [{"Label":"Steps", "Color":"#AA0000"}], 
-    scope="agent", sorting="ascending", sort_by="Steps")
+bar_chart = BarChartModule([{"Label":"Steps", "Color":"#AA0000"}], scope="agent", sorting="ascending", sort_by="Steps")
 
 server = ModularServer(RandomModel, [grid, bar_chart], "Random Agents", model_params)
                        

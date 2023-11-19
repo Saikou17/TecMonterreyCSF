@@ -20,7 +20,6 @@ class RandomAgent(Agent):
         self.steps_taken = 0
         self.battery = 100
         self.station = battery_station
-        self.road = []
         self.inStation = False
         self.grid_graph = nx.grid_2d_graph(model.grid.width, model.grid.height, create_using=nx.DiGraph)
 
@@ -46,14 +45,11 @@ class RandomAgent(Agent):
         if min_priority_agent:
             self.battery -= 1
             min_priority_agent.prioridad += 1
-            self.road.append(min_priority_agent.pos)
+            # self.road.append(min_priority_agent.pos)
             self.model.grid.move_agent(self, min_priority_agent.pos)
             self.steps_taken += 1
     
     def return_back(self):
-        if not self.road:
-            return
-
         # Obtener la posición de la estación de carga
         station_pos = self.station
 
@@ -64,10 +60,10 @@ class RandomAgent(Agent):
         for step in shortest_path[1:]:
             self.model.grid.move_agent(self, step)
             self.battery -= 1
-            self.steps_taken += 1
+            self.steps_taken += 1 
+            return 
 
         # Reiniciar la lista de posiciones en el camino de regreso
-        self.road.clear()
         self.inStation = True
 
     def charging(self):
@@ -77,7 +73,6 @@ class RandomAgent(Agent):
         for neighbors in self.model.grid.iter_neighbors(self.pos, moore = True, include_center = True):
            if isinstance(neighbors, Trash):  # Verifica si el vecino es una instancia de la clase Trash
                 self.battery -= 1
-                self.road.append(neighbors.pos)
                 self.model.grid.move_agent(self, neighbors.pos)
                 self.model.grid.remove_agent(neighbors)
                 return
@@ -94,7 +89,6 @@ class RandomAgent(Agent):
         """
         print(self.battery)
         print(self.pos)
-        print(self.road)
         print(self.search_trash())
 
         if self.battery == 0:
@@ -115,8 +109,6 @@ class RandomAgent(Agent):
         else:
             self.move()
 
-
-
 class ObstacleAgent(Agent):
     """
     Obstacle agent. Just to add obstacles to the grid.
@@ -135,8 +127,9 @@ class Trash(Agent):
     def __init__(self, unique_id, model): #We use this constructor in order to inicialize our trash agent.
         #Each agent will have an unique id and the typr pf model it contains the agent.
         super().__init__(unique_id, model) #The super calls the contructor.
+        self.count = 0
     
-    def step(self): 
+    def step(self):
         pass
 
 class Battery(Agent):

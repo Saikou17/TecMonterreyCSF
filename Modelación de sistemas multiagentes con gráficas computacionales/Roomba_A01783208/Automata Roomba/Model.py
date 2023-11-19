@@ -12,6 +12,8 @@ class RandomModel(Model):
         N: Number of agents in the simulation
         height, width: The size of the grid to model
     """
+    
+
     def __init__(self, N, width, height):
         self.num_agents = N
         # Multigrid is a special type of grid where each cell can contain multiple agents.
@@ -23,7 +25,12 @@ class RandomModel(Model):
         self.running = True 
 
         self.datacollector = DataCollector( 
-        agent_reporters={"Steps": lambda a: a.steps_taken if isinstance(a, RandomAgent) else 0})
+        agent_reporters={"Steps": lambda a: a.steps_taken if isinstance(a, RandomAgent) else 0,
+                        #  "Trash": lambda m: m.schedule.get_agent_count(Trash),
+
+}
+        # agent_trash={"Trash": lambda m: sum(1 for agent in m.schedule.agents if isinstance(agent, Trash))}
+        )
 
         # Creates the border of the grid
         border = [(x,y) for y in range(height) for x in range(width) if y in [0, height-1] or x in [0, width - 1]]
@@ -45,6 +52,7 @@ class RandomModel(Model):
 
         #We set the position in an empty cell
         while (not self.grid.is_cell_empty(pos)):
+                
                 pos = pos_gen(self.grid.width, self.grid.height)
 
         #We place the battery
