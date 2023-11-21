@@ -8,6 +8,7 @@ def agent_portrayal(agent):
     
     portrayal = {"Shape": "rect",
                  "Filled": "true",
+                 "Color": "black", 
                  "Layer": 1,
                  "w": 1,
                  "h": 1

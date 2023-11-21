@@ -17,6 +17,7 @@ class CityModel(Model):
         dataDictionary = json.load(open("city_files/mapDictionary.json"))
 
         self.traffic_lights = []
+        self.cars = []
 
         # Load the map file. The map file is a text file where each character represents an agent.
         with open('city_files/2022_base.txt') as baseFile:
@@ -30,7 +31,7 @@ class CityModel(Model):
             # Goes through each character in the map file and creates the corresponding agent.
             for r, row in enumerate(lines):
                 for c, col in enumerate(row):
-                    if col in ["v", "^", ">", "<"]:
+                    if col in ["v", "^", ">", "<"]: 
                         agent = Road(f"r_{r*self.width+c}", self, dataDictionary[col])
                         self.grid.place_agent(agent, (c, self.height - r - 1))
 
@@ -47,9 +48,17 @@ class CityModel(Model):
                     elif col == "D":
                         agent = Destination(f"d_{r*self.width+c}", self)
                         self.grid.place_agent(agent, (c, self.height - r - 1))
+                    
+                    elif col == "C":
+                        agent = Car(f"c_{r*self.width+c}", self)
+                        self.grid.place_agent(agent, (c, self.height - r - 1))
+                        self.schedule.add(agent)
+                        self.cars.append(agent)
 
         self.num_agents = N
         self.running = True
+        
+        
 
     def step(self):
         '''Advance the model by one step.'''
