@@ -9,5 +9,5 @@ Juan Pablo Moreno A01374091
 Descripcion: 
 
 En este repositorio se encuentra una simulacion realizada con el framewrok Mesa y desplegada en unity
-conectadas por una API (Appliaction Programm Interface). La simulacion consiste en la pogramacion de agentes
-de trafico dentro de un ambiente determinado. 
+conectadas por una API (Appliaction Programm Interface). La simulacion consiste en la programacion de agentes
+de trafico dentro de un ambiente determinado.
