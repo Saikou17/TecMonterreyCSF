@@ -7,5 +7,8 @@
     "v" : "Down",
     "^" : "Up",
     "D" : "Destination",
-    "C" : "Spawn"
+    "C" : "Spawn",
+    "*" : "Intersection",
+    "x" : "Contrary"
+
 }

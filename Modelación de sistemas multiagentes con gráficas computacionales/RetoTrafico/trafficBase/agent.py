@@ -1,4 +1,6 @@
 from mesa import Agent
+import random
+import networkx as nx
 
 class Car(Agent):
     """
@@ -22,80 +24,126 @@ class Car(Agent):
             model: Model reference for the agent
         """
         super().__init__(unique_id, model)
+        #Creamos un estadp que indique en que sentido va el carro: Izquierda, Derecha, Arriba o Abajo
         self.direction = ""
+        #Creamos un estado que indique en que sentido iba el carro anteriormente
+        self.direction_anterior = ""
+        #Creamos un estado que indique como se encuentra el carro: Estatico o Movimiento
+        self.state = "Movimiento"
+        #Inicializamos una variable como None , la cual guardara el destino aleatorio del carro
+        self.destination = None
+        #Variable para iniciar la simulacion
+        self.iniciar = False
+        #Variable que guarda la vision del carro
+        self.vision = []
+        #Variable que guarda los espacios vacios
+        self.empty_spaces = []
         
+    #Funcion para iniializar la simulacion
+    def Check_Model_Initialize(self):
+        self.destination = random.choice(self.model.destinations)
+
+    #Funcion que se llama cuando las celdas o el 
     def move(self):
         """
         Determina si el agente puede moverse en la dirección elegida
         """
-        possible_roads = self.model.grid.iter_neighbors(
-            self.pos, moore=False, include_center=True)
+        self.direction_anterior = self.direction
 
-        # Filtrar agentes de tipo Road y obtener la dirección de la carretera
-        road_agents = [p for p in possible_roads if isinstance(p, Road)]
-        traffic_agents = [p for p in possible_roads if isinstance(p, Traffic_Light)]
-        
-        if road_agents:
-            traffic_agent=traffic_agents[0]
-            road = road_agents[0]  # Tomar la primera carretera (puedes ajustar esto según tus necesidades)
-            self.direction = road.direction
+        for i in self.vision:
+            if self.direction == "Left":
+                self.model.grid.move_agent(self, (self.pos[0]-1,self.pos[1]))
+            elif self.direction == "Right":
+                self.model.grid.move_agent(self, (self.pos[0]+1,self.pos[1]))
+            elif self.direction == "Up":
+                self.model.grid.move_agent(self, (self.pos[0],self.pos[1]+1))
+            elif self.direction == "Down":
+                self.model.grid.move_agent(self, (self.pos[0],self.pos[1]-1))
+            # elif self.direction == "Contrary":
+            #     self.model.grid.move_agent(self, (self.pos[0],self.pos[1]))
 
-            # Mover el agente según la dirección de la carretera
-            if self.direction == "Left" and road.pos[0] < self.pos[0]:
-                self.model.grid.move_agent(self, road.pos)
-            elif self.direction == "Left" and traffic_agent.pos[0] < self.pos[0]:
-                self.model.grid.move_agent(self, traffic_agent.pos)
-            elif self.direction == "Right" and road.pos[0] > self.pos[0]:
-                self.model.grid.move_agent(self, road.pos)
-            elif self.direction == "Right" and traffic_agent.pos[0] > self.pos[0]:
-                self.model.grid.move_agent(self, traffic_agent.pos)
-            elif self.direction == "Up" and road.pos[1] > self.pos[1]:
-                self.model.grid.move_agent(self, road.pos)
-            elif self.direction == "Up" and traffic_agent.pos[1] > self.pos[1]:
-                self.model.grid.move_agent(self, traffic_agent.pos)
-            elif self.direction == "Down" and road.pos[1] < self.pos[1]:
-                self.model.grid.move_agent(self, road.pos)
-            elif self.direction == "Down" and traffic_agent.pos[1] < self.pos[1]:
-                self.model.grid.move_agent(self, traffic_agent.pos)
+    def move_around(self):
+        """
+        Determina si el agente puede moverse en la dirección elegida
+        """
+        if self.direction == "Left":
+            empty_spaces = [empty for empty in self.vision if empty.pos[0]<self.pos[0] and self.model.grid.is_cell_empty(empty.pos) == True]
+        elif self.direction == "Right":
+            empty_spaces = [empty for empty in self.vision if empty.pos[0]>self.pos[0] and self.model.grid.is_cell_empty(empty.pos) == True]
+        elif self.direction == "Up":
+            empty_spaces = [empty for empty in self.vision if empty.pos[1]>self.pos[1] and self.model.grid.is_cell_empty(empty.pos) == True]
+        elif self.direction == "Down":
+            empty_spaces = [empty for empty in self.vision if empty.pos[1]<self.pos[1] and self.model.grid.is_cell_empty(empty.pos) == True]
 
-    def stop_at_traffic_light(self):
+
+    def stop(self):
         """ 
         Determines if the agent should stop at the traffic light
         """
         pass
     
-    def see_destination(self):
-        """ 
-        Determines if the agent can see the destination
-        """
-        pass
+    # def see_destination(self):
+    #     """ 
+    #     Determines if the agent can see the destination
+    #     """
+    #     shortest_path = nx.shortest_path(self.grid_graph, source=self.pos, target=self.destination.pos)
+    #     for step in shortest_path[1:]:
+    #         i
+    #     pass
     
-    def see_obstacle(self):
+    #Funcion que usamos para guardar informacion de nuestra vision y direccion
+    def see_enviroment(self):
         """ 
-        Determines if the agent can see the obstacle
+        Determines if the agent can see the enviroment
         """
+        self.vision = self.model.grid.get_neighbors(self.pos,moore=False,include_center=True,radius=2)
+        self.direction = [center for center in self.vision if center.pos == self.pos][0]
+
+        if self.direction == "Contrary":
+            self.vision = [vision for vision in self.vision if vision.pos[0]<self.pos[0] or vision.pos[0]>self.pos[0] or vision.pos[1]<self.pos[1] or vision.pos[1]>self.pos[1]]
+        elif self.direction == "Left":
+            self.vision = [vision for vision in self.vision if vision.pos[0]<self.pos[0]]
+        elif self.direction == "Right":
+            self.vision = [vision for vision in self.vision if vision.pos[0]>self.pos[0]]
+        elif self.direction == "Up":
+            self.vision = [vision for vision in self.vision if vision.pos[1]>self.pos[1]]
+        elif self.direction == "Down":
+            self.vision = [vision for vision in self.vision if vision.pos[1]<self.pos[1]]
+        print(self.direction)  
+
         pass
     
     def see_traffic_light(self):
         """ 
         Determines if the agent can see the traffic light
         """
-        for neighbors in self.model.grid.iter_neighbors(self.pos, moore = True, include_center = True):
-            if isinstance(neighbors, Traffic_Light):
-                return neighbors.state
-        return None
+
+        if self.direction == "Left":
+            traffic_ligths = [lights for lights in self.vision if lights.pos[0]<self.pos and isinstance(lights,Traffic_Light)]
+        elif self.direction == "Right":
+            traffic_ligths = [lights for lights in self.vision if lights.pos[0]>self.pos and isinstance(lights,Traffic_Light)]
+        elif self.direction == "Up":
+            traffic_ligths = [lights for lights in self.vision if lights.pos[1]>self.pos and isinstance(lights,Traffic_Light)]
+        elif self.direction == "Down":
+            traffic_ligths = [lights for lights in self.vision if lights.pos[1]<self.pos and isinstance(lights,Traffic_Light)]
+
+        pass
     
     def step(self):
         """ 
         Determines the new direction it will take, and then moves
         """
-        if self.see_traffic_light() != None:
-            if self.see_traffic_light() == False:
-                self.stop_at_traffic_light()
-            else:
-                self.move()        
-        else:
-            self.move()
+        if self.iniciar == False:
+            self.Check_Model_Initialize()
+            self.see_enviroment()
+            self.iniciar = True
+        
+        elif Car in self.vision:
+            
+
+        print(self.destination)
+        
+        pass
 
 class Traffic_Light(Agent):
     """
