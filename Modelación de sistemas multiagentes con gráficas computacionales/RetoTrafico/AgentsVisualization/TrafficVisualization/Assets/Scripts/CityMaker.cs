@@ -63,7 +63,7 @@ public class CityMaker : MonoBehaviour
             } else if (tiles[i] == 'D') {
                 position = new Vector3(x * tileSize, 0, y * tileSize);
                 tile = Instantiate(buildingPrefab, position, Quaternion.Euler(0, 90, 0));
-                tile.GetComponent<Renderer>().materials[0].color = Color.red;
+                tile.GetComponentInChildren<Renderer>().materials[0].color = Color.red;
                 tile.transform.parent = transform;
                 x += 1;
             } else if (tiles[i] == '#') {
