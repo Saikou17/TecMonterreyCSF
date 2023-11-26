@@ -1,14 +1,21 @@
 {
-    ">" : "Right",
-    "<" : "Left",
-    "S" : 15,
-    "s" : 7,
+    ">" : {"Direction": "Right", "Value": {"x": 1 , "y": 0}},
+    "<" : {"Direction": "Left", "Value": {"x": -1 , "y": 0}},
+    "v" : {"Direction": "Down", "Value": {"x": 0 , "y": -1}},
+    "^" : {"Direction": "Up", "Value": {"x": 0 , "y": 1}},
+    "S" : {"Direction": "Down", "Time": 15, "Value": {"x": 0 , "y": -1}},
+    "s" : {"Direction": "Down", "Time": 7, "Value": {"x": 0 , "y": -1}},
+    "N" : {"Direction": "Up", "Time": 15, "Value": {"x": 0 , "y": 1}},
+    "n" : {"Direction": "Up", "Time": 7, "Value": {"x": 0 , "y": 1}},
+    "E" : {"Direction": "Right", "Time": 15, "Value": {"x": 1 , "y": 0}},
+    "e" : {"Direction": "Right", "Time": 7, "Value": {"x": 1 , "y": 0}},
+    "W" : {"Direction": "Left", "Time": 15, "Value": {"x": -1 , "y": 0}},
+    "w" : {"Direction": "Left", "Time": 7, "Value": {"x": -1 , "y": 0}},
+    "1" : { "Direction": "Left", "Value": {"x": -1 , "y": 0}},
+    "2" : { "Direction": "Down", "Value": {"x": 0 , "y": -1}},
+    "3" : { "Direction": "Right", "Value": {"x": 1 , "y": 0}},
+    "4" : { "Direction": "Up", "Value": {"x": 0 , "y": 1}},
     "#" : "Obstacle",
-    "v" : "Down",
-    "^" : "Up",
     "D" : "Destination",
-    "C" : "Spawn",
-    "*" : "Intersection",
-    "x" : "Contrary"
-
+    "*" : "Intersection"
 }

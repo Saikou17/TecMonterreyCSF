@@ -22,6 +22,7 @@ class CityModel(Model):
         self.cars = []
         self.destinations = []
         self.city = []
+        print(dataDictionary)
 
         # Load the map file. The map file is a text file where each character represents an agent.
         with open('city_files/2022_base.txt') as baseFile:
@@ -35,14 +36,14 @@ class CityModel(Model):
             # Goes through each character in the map file and creates the corresponding agent.
             for r, row in enumerate(lines):
                 for c, col in enumerate(row):
-                    if col in ["v", "^", ">", "<","*","x"]: 
-                        agent = Road(f"r_{r*self.width+c}", self, dataDictionary[col])
+                    if col in ["v", "^", ">", "<","*"]: 
+                        agent = Road(f"r_{r*self.width+c}", self, dataDictionary[col]["Direction"],dataDictionary[col]["Value"])
                         self.grid.place_agent(agent, (c, self.height - r - 1))
                         self.city.append(agent)
 
 
-                    elif col in ["S", "s"]:
-                        agent = Traffic_Light(f"tl_{r*self.width+c}", self, False if col == "S" else True, int(dataDictionary[col]))
+                    elif col in ["N","n","S", "s","E","e","W","w"]:
+                        agent = Traffic_Light(f"tl_{r*self.width+c}", self,dataDictionary[col]["Direction"],dataDictionary[col]["Value"], False if col == "S" else True, int(dataDictionary[col]["Time"]))
                         self.grid.place_agent(agent, (c, self.height - r - 1))
                         self.schedule.add(agent)
                         self.city.append(agent)
@@ -57,7 +58,8 @@ class CityModel(Model):
                         self.destinations.append(agent)
                         self.city.append(agent)
                     
-                    elif col == "C":
+                    elif col in ["1","2","3","4"]:
+                        agent = Road(f"r_{r*self.width+c}", self, dataDictionary[col]["Direction"],dataDictionary[col]["Value"])
                         agent = Car(f"c_{r*self.width+c}", self)
                         self.grid.place_agent(agent, (c, self.height - r - 1))
                         self.schedule.add(agent)
@@ -73,39 +75,40 @@ class CityModel(Model):
         """
         graph = nx.DiGraph()
         for nodo in self.city:
-            graph.add_node(nodo) 
-            """
-            TODO: Verificar add node
-            """
+            graph.add_node(nodo)
 
         for camino in self.city:
-            destino = self.grid.get_neighbors(camino.pos, moore=True, include_center=False)
-
-            for destinos in destino:
-                if isinstance(destinos,Road) and isinstance(camino,Road):
-                    direccion_actual = camino.direction
-                    direccion_siguiente = destinos.direction
-                    if (direccion_actual == "Left" and direccion_siguiente == "Down") or (direccion_actual == "Left" and direccion_siguiente == "Up"):
-                        graph.add_edge(camino,destinos)
-                    elif (direccion_actual == "Right" and direccion_siguiente == "Down") or (direccion_actual == "Right" and direccion_siguiente == "Up"):
-                        graph.add_edge(camino,destinos)
-                    elif (direccion_actual == "Up" and direccion_siguiente == "Left") or (direccion_actual == "Up" and direccion_siguiente == "Right"):
-                        graph.add_edge(camino,destinos)
-                    elif (direccion_actual == "Down" and direccion_siguiente == "Left") or (direccion_actual == "Down" and direccion_siguiente == "Right"):
-                        graph.add_edge(camino,destinos)
-                    elif (direccion_actual == "Intersection"):
-                        graph.add_edge(camino,destinos)
-                    elif (direccion_actual == "Contrary"):
-                        graph.add_edge(camino,destinos)
-
-                
-                elif isinstance(destinos,Traffic_Light) and isinstance(camino,Road) or isinstance(destinos,Road) and isinstance(camino,Traffic_Light):
-                    graph.add_edge(camino,destinos) 
-                
-                elif isinstance(destinos,Destination) and isinstance(camino,Road) or isinstance(destinos,Road) and isinstance(camino,Destination):
-
-
-                          
+            if isinstance(camino,Road) or isinstance(camino,Traffic_Light):
+                if camino.direction == "Left":
+                    conexiones = self.grid.get_neighbors(camino.pos,moore = True,include_center=False,radius=1)
+                    direccion = [agente for agente in conexiones if agente.pos[0]<=camino.pos[0] and ((agente.pos[0]-camino.pos[0] > 0 and agente.sense.x > 0 or agente.pos[0]-camino.pos[0] < 0 and agente.sense.x < 0 ) and (agente.pos[1]-camino.pos[1] > 0 and agente.sense.y > 0 or agente.pos[1]-camino.pos[1] < 0 and agente.sense.y < 0 ))]
+                    for i in direccion:
+                        graph.add_edge(camino,i)
+                elif camino.direction == "Right":
+                    conexiones = self.grid.get_neighbors(camino.pos,moore = True,include_center=False,radius=1)
+                    direccion = [agente for agente in conexiones if agente.pos[0]>=camino.pos[0] and ((agente.pos[0]-camino.pos[0] > 0 and agente.sense.x > 0 or agente.pos[0]-camino.pos[0] < 0 and agente.sense.x < 0 ) and (agente.pos[1]-camino.pos[1] > 0 and agente.sense.y > 0 or agente.pos[1]-camino.pos[1] < 0 and agente.sense.y < 0 ))]
+                    for i in direccion:
+                        graph.add_edge(camino,i)
+                elif camino.direction == "Up":
+                    conexiones = self.grid.get_neighbors(camino.pos,moore = True,include_center=False,radius=1)
+                    direccion = [agente for agente in conexiones if agente.pos[1]>=camino.pos[1] and ((agente.pos[0]-camino.pos[0] > 0 and agente.sense.x > 0 or agente.pos[0]-camino.pos[0] < 0 and agente.sense.x < 0 ) and (agente.pos[1]-camino.pos[1] > 0 and agente.sense.y > 0 or agente.pos[1]-camino.pos[1] < 0 and agente.sense.y < 0 ))]
+                    for i in direccion:
+                        graph.add_edge(camino,i)
+                elif camino.direction == "Down":
+                    conexiones = self.grid.get_neighbors(camino.pos,moore = True,include_center=False,radius=1)
+                    direccion = [agente for agente in conexiones if agente.pos[1]<=camino.pos[1] and ((agente.pos[0]-camino.pos[0] > 0 and agente.sense.x > 0 or agente.pos[0]-camino.pos[0] < 0 and agente.sense.x < 0 ) and (agente.pos[1]-camino.pos[1] > 0 and agente.sense.y > 0 or agente.pos[1]-camino.pos[1] < 0 and agente.sense.y < 0 ))]
+                    for i in direccion:
+                        graph.add_edge(camino,i)
+                elif camino.direction == "Intersection":
+                    conexiones = self.grid.get_neighbors(camino.pos,moore = True,include_center=False,radius=1)
+                    for i in conexiones:
+                        graph.add_edge(camino,i)
+            
+            elif isinstance(camino,Destination):
+                conexiones = self.grid.get_neighbors(camino.pos,moore = False,include_center=False,radius=1)
+                for i in conexiones:
+                    graph.add_edge(camino,i)
+                        
         pos = nx.spring_layout(graph)  # Layout para la visualización
         nx.draw(graph, pos, with_labels=True, arrowsize=20)
         plt.show()
@@ -118,6 +121,6 @@ class CityModel(Model):
         if not self.initialize:
             self.initialize = True
         
-        # else:
-        #     self.create_graph()
+        else:
+            self.create_graph()
             
