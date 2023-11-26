@@ -67,45 +67,48 @@ class CityModel(Model):
         self.num_agents = N
         self.running = True
         
-    # def create_graph(self):
-    #     """
-    #     Creates a graph based on the city grid.
-    #     """
-    #     graph = nx.DiGraph()
-    #     for nodo in self.city:
-    #         graph.add_node(nodo)
+    def create_graph(self):
+        """
+        Creates a graph based on the city grid.
+        """
+        graph = nx.DiGraph()
+        for nodo in self.city:
+            graph.add_node(nodo) 
+            """
+            TODO: Verificar add node
+            """
 
-    #     for camino in self.city:
-    #         destino = self.grid.get_neighbors(camino.pos, moore=True, include_center=False)
+        for camino in self.city:
+            destino = self.grid.get_neighbors(camino.pos, moore=True, include_center=False)
 
-    #         for destinos in destino:
-    #             if isinstance(destinos,Road) and isinstance(camino,Road):
-    #                 direccion_actual = camino.direction
-    #                 direccion_siguiente = destinos.direction
-    #                 if (direccion_actual == "Left" and direccion_siguiente == "Down") or (direccion_actual == "Left" and direccion_siguiente == "Up"):
-    #                     graph.add_edge(camino,destinos)
-    #                 elif (direccion_actual == "Right" and direccion_siguiente == "Down") or (direccion_actual == "Right" and direccion_siguiente == "Up"):
-    #                     graph.add_edge(camino,destinos)
-    #                 elif (direccion_actual == "Up" and direccion_siguiente == "Left") or (direccion_actual == "Up" and direccion_siguiente == "Right"):
-    #                     graph.add_edge(camino,destinos)
-    #                 elif (direccion_actual == "Down" and direccion_siguiente == "Left") or (direccion_actual == "Down" and direccion_siguiente == "Right"):
-    #                     graph.add_edge(camino,destinos)
-    #                 elif (direccion_actual == "Intersection"):
-    #                     graph.add_edge(camino,destinos)
-    #                 elif (direccion_actual == "Contrary"):
-    #                     graph.add_edge(camino,destinos)
+            for destinos in destino:
+                if isinstance(destinos,Road) and isinstance(camino,Road):
+                    direccion_actual = camino.direction
+                    direccion_siguiente = destinos.direction
+                    if (direccion_actual == "Left" and direccion_siguiente == "Down") or (direccion_actual == "Left" and direccion_siguiente == "Up"):
+                        graph.add_edge(camino,destinos)
+                    elif (direccion_actual == "Right" and direccion_siguiente == "Down") or (direccion_actual == "Right" and direccion_siguiente == "Up"):
+                        graph.add_edge(camino,destinos)
+                    elif (direccion_actual == "Up" and direccion_siguiente == "Left") or (direccion_actual == "Up" and direccion_siguiente == "Right"):
+                        graph.add_edge(camino,destinos)
+                    elif (direccion_actual == "Down" and direccion_siguiente == "Left") or (direccion_actual == "Down" and direccion_siguiente == "Right"):
+                        graph.add_edge(camino,destinos)
+                    elif (direccion_actual == "Intersection"):
+                        graph.add_edge(camino,destinos)
+                    elif (direccion_actual == "Contrary"):
+                        graph.add_edge(camino,destinos)
 
                 
-    #             elif isinstance(destinos,Traffic_Light) and isinstance(camino,Road) or isinstance(destinos,Road) and isinstance(camino,Traffic_Light):
-    #                 graph.add_edge(camino,destinos) 
+                elif isinstance(destinos,Traffic_Light) and isinstance(camino,Road) or isinstance(destinos,Road) and isinstance(camino,Traffic_Light):
+                    graph.add_edge(camino,destinos) 
                 
-    #             elif isinstance(destinos,Destination) and isinstance(camino,Road) or isinstance(destinos,Road) and isinstance(camino,Destination):
+                elif isinstance(destinos,Destination) and isinstance(camino,Road) or isinstance(destinos,Road) and isinstance(camino,Destination):
 
 
                           
-    #     pos = nx.spring_layout(graph)  # Layout para la visualización
-    #     nx.draw(graph, pos, with_labels=True, arrowsize=20)
-    #     plt.show()
+        pos = nx.spring_layout(graph)  # Layout para la visualización
+        nx.draw(graph, pos, with_labels=True, arrowsize=20)
+        plt.show()
         
 
     def step(self):
