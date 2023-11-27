@@ -57,14 +57,14 @@ def archivo_rueda(file_obj, lados, radio, ancho):
         o.write("#Caras de la rueda:\n")
         #Creamos un ciclo para recorrer los vectores normales para una de las caras. Avanzamos en numeros pares
         for i in range(0, len(normales) * 2, 2):
-            # if i == ((len(normales) * 2) - 4):
-            #     o.write(f"f {1}//{i+1} {(i+5)%((lados*2)+2)}//{i+1} {(i+3)%((lados*2)+2)}//{i+1}\n")
-            #     o.write(f"f {(i+6)}//{i+2} {2}//{i+2} {(i+4)%((lados*2)+2)}//{i+2}\n")
-            #     continue
-            # if i == ((len(normales) * 2) - 2):
-            #     o.write(f"f {1}//{i+1} {((i+5)%((lados*2)+2))+2}//{i+1} {(i+3)%((lados*2)+2)}//{i+1}\n")
-            #     o.write(f"f {((i+6)%((lados*2)+2))+2}//{i+2} {2}//{i+2} {(i+4)%((lados*2)+2)}//{i+2}\n")
-            #     break
+            if i == ((len(normales) * 2) - 4):
+                o.write(f"f {1}//{i+1} {(i+5)%((lados*2)+2)}//{i+1} {(i+3)%((lados*2)+2)}//{i+1}\n")
+                o.write(f"f {(i+6)}//{i+2} {2}//{i+2} {(i+4)%((lados*2)+2)}//{i+2}\n")
+                continue
+            if i == ((len(normales) * 2) - 2):
+                o.write(f"f {1}//{i+1} {((i+5)%((lados*2)+2))+2}//{i+1} {(i+3)%((lados*2)+2)}//{i+1}\n")
+                o.write(f"f {((i+6)%((lados*2)+2))+2}//{i+2} {2}//{i+2} {(i+4)%((lados*2)+4)}//{i+2}\n")
+                break
             #Escribimos el formato vertices//normal para generar las caras de uno de los lados de la rueda
             o.write(f"f {1}//{i+1} {(i+5)%((lados*2)+2)}//{i+1} {(i+3)%((lados*2)+2)}//{i+1}\n")
             ##Escribimos el formato vertices//normal para generar las caras para el otro lado de la rueda
