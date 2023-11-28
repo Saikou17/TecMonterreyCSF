@@ -62,11 +62,10 @@ class CityModel(Model):
                         self.city.append(agent)
                         self.schedule.add(agent)
                         self.grid.place_agent(agent, (c, self.height - r - 1))
-                        if col == "4":
-                            agent = Car(f"c_{r*self.width+c}", self)
-                            self.schedule.add(agent)
-                            self.grid.place_agent(agent, (c, self.height - r - 1))
-                            self.cars.append(agent)
+                        agent = Car(f"c_{r*self.width+c}", self)
+                        self.schedule.add(agent)
+                        self.grid.place_agent(agent, (c, self.height - r - 1))
+                        self.cars.append(agent)
 
         self.graph = nx.DiGraph()
         self.create_graph()
