@@ -39,8 +39,6 @@ def getAgents():
     global cityModel
 
     if request.method == 'GET':
-        # for a in cityModel.grid.coord_iter():
-        #     print(a)
         agentPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
                           for agents, pos in cityModel.grid.coord_iter() 
                           for agent in agents

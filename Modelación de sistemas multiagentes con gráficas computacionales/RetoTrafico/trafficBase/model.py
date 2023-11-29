@@ -138,6 +138,10 @@ class CityModel(Model):
                     for i in direccion:
                         self.graph.add_edge(camino.pos,i.pos)
 
+        pos = nx.spring_layout(self.graph)  # Layout para la visualización
+        nx.draw(self.graph, pos, with_labels=True, arrowsize=20)
+        plt.show()
+
     def step(self):
         '''Advance the model by one step.'''
         self.schedule.step()
