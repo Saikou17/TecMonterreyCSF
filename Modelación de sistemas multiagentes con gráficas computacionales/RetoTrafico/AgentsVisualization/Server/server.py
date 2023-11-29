@@ -9,28 +9,28 @@ from randomAgents.model2 import CityModel
 from randomAgents.agent2 import Car, Road, Traffic_Light, Destination, Spawn, Obstacle
 
 # Size of the board:
-number_agents = 10
-width = 28
-height = 28
-cityModel = None
-#randomModel = None
-currentStep = 0
+# number_agents = 10
+# width = 28
+# height = 28
+# cityModel = None
+# #randomModel = None
+# currentStep = 0
 
 app = Flask("Traffic example")
 
 @app.route('/init', methods=['POST'])
 def initModel():
-    global currentStep, cityModel, number_agents, width, height
+    global currentStep, cityModel
 
     if request.method == 'POST':
-        number_agents = int(request.form.get('NAgents'))
-        width = int(request.form.get('width'))
-        height = int(request.form.get('height'))
+        # number_agents = int(request.form.get('NAgents'))
+        # width = int(request.form.get('width'))
+        # height = int(request.form.get('height'))
         currentStep = 0
 
         print(request.form)
-        print(number_agents, width, height)
-        cityModel = CityModel(number_agents, width, height)
+        # print(number_agents, width, height)
+        cityModel = CityModel()
 
         return jsonify({"message":"Parameters recieved, model initiated."})
 
@@ -39,7 +39,12 @@ def getAgents():
     global cityModel
 
     if request.method == 'GET':
-        agentPositions = [{"id": str(a.unique_id), "x": x, "y":1, "z":z} for a, (x, z) in cityModel.grid.coord_iter() if isinstance(a, Car)]
+        # for a in cityModel.grid.coord_iter():
+        #     print(a)
+        agentPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+                          for agents, pos in cityModel.grid.coord_iter() 
+                          for agent in agents
+                          if isinstance(agent, Car)]
 
         return jsonify({'positions':agentPositions})
 
@@ -48,16 +53,22 @@ def getObstacles():
     global cityModel
 
     if request.method == 'GET':
-        carPositions = [{"id": str(a.unique_id), "x": x, "y":1, "z":z} for a, (x, z) in cityModel.grid.coord_iter() if isinstance(a, Obstacle)]
-
-        return jsonify({'positions':carPositions})
+        obstaclePositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+                          for agents, pos in cityModel.grid.coord_iter() 
+                          for agent in agents
+                          if isinstance(agent, Obstacle)]
+        
+        return jsonify({'positions':obstaclePositions})
 
 @app.route('/getRoads', methods=['GET'])
 def getRoads():
     global cityModel
 
     if request.method == 'GET':
-        roadPositions = [{"id": str(a.unique_id), "x": x, "y":1, "z":z} for a, (x, z) in cityModel.grid.coord_iter() if isinstance(a, Road)]
+        roadPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+                          for agents, pos in cityModel.grid.coord_iter() 
+                          for agent in agents
+                          if isinstance(agent, Road)]
 
         return jsonify({'positions':roadPositions})
 
@@ -66,7 +77,10 @@ def getTrafficLights():
     global cityModel
 
     if request.method == 'GET':
-        trafficLightPositions = [{"id": str(a.unique_id), "x": x, "y":1, "z":z} for a, (x, z) in cityModel.grid.coord_iter() if isinstance(a, Traffic_Light)]
+        trafficLightPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+                                for agents, pos in cityModel.grid.coord_iter() 
+                                for agent in agents
+                                if isinstance(agent, Traffic_Light)]
 
         return jsonify({'positions':trafficLightPositions})
 
@@ -75,7 +89,10 @@ def getDestinations():
     global cityModel
 
     if request.method == 'GET':
-        destinationPositions = [{"id": str(a.unique_id), "x": x, "y":1, "z":z} for a, (x, z) in cityModel.grid.coord_iter() if isinstance(a, Destination)]
+        destinationPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+                                for agents, pos in cityModel.grid.coord_iter() 
+                                for agent in agents
+                                if isinstance(agent, Destination)]
 
         return jsonify({'positions':destinationPositions})
 
@@ -84,7 +101,10 @@ def getSpawns():
     global cityModel
 
     if request.method == 'GET':
-        spawnPositions = [{"id": str(a.unique_id), "x": x, "y":1, "z":z} for a, (x, z) in cityModel.grid.coord_iter() if isinstance(a, Spawn)]
+        spawnPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+                          for agents, pos in cityModel.grid.coord_iter() 
+                          for agent in agents
+                          if isinstance(agent, Spawn)]
 
         return jsonify({'positions':spawnPositions})
 

@@ -1,7 +1,7 @@
-from mesa import Model
+from mesa import Model, DataCollector
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
-from agent2 import *
+from randomAgents.agent2 import *
 import json
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -13,19 +13,23 @@ class CityModel(Model):
         Args:
             N: Number of agents in the simulation
     """
-    def __init__(self, N):
+    def __init__(self):
 
         # Load the map dictionary. The dictionary maps the characters in the map file to the corresponding agent.
-        dataDictionary = json.load(open("city_files/mapDictionary.json"))
+        dataDictionary = json.load(open("randomAgents/city_files/mapDictionary.json"))
         self.initialize = False
         self.traffic_lights = []
         self.cars = []
         self.destinations = []
         self.city = []
+        self.datacollector = DataCollector( 
+                model_reporters = {
+                        "Car collision": lambda m: 1 if m.checkCollision() else 0,
+            })
         
 
         # Load the map file. The map file is a text file where each character represents an agent.
-        with open('city_files/2022_base.txt') as baseFile:
+        with open('randomAgents/city_files/2022_base.txt') as baseFile:
             lines = baseFile.readlines()
             self.width = len(lines[0])-1
             self.height = len(lines)
@@ -62,16 +66,30 @@ class CityModel(Model):
                         self.city.append(agent)
                         self.schedule.add(agent)
                         self.grid.place_agent(agent, (c, self.height - r - 1))
-                        if col == "4":
-                            agent = Car(f"c_{r*self.width+c}", self)
-                            self.schedule.add(agent)
-                            self.grid.place_agent(agent, (c, self.height - r - 1))
-                            self.cars.append(agent)
+                        agent = Car(f"c_{r*self.width+c}_{self.schedule.steps}", self)
+                        self.schedule.add(agent)
+                        self.grid.place_agent(agent, (c, self.height - r - 1))
+                        self.cars.append(agent)
 
         self.graph = nx.DiGraph()
         self.create_graph()
-        self.num_agents = N
+        # self.num_agents = N
         self.running = True
+
+    def checkCollision(self):
+        for i in range(self.width):
+            for j in range(self.height):
+                if len(self.grid[i][j]) >= 3:
+                    for x in self.grid[i][j]:
+                        if isinstance(x, Destination):
+                            return False
+                    print("---------------------")
+                    print(f"Colition at: ({i}, {j})")
+                    for x in self.grid[i][j]:
+                        if not isinstance(x, Road):
+                            print(x.unique_id)
+                    self.running = False
+                    return True
         
     def create_graph(self):
         """
@@ -123,7 +141,7 @@ class CityModel(Model):
     def step(self):
         '''Advance the model by one step.'''
         self.schedule.step()
-
+        self.datacollector.collect(self)
         if not self.initialize:
             self.initialize = True
         

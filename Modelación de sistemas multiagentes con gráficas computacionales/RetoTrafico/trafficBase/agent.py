@@ -47,9 +47,9 @@ class Car(Agent):
         self.route = nx.shortest_path(self.model.graph, source=self.pos, target=self.destination.pos)
         self.route = self.route[1:]
 
-    def recalculate_route(self):
+    def recalculate_route(self,next):
 
-        self.route = nx.shortest_path(self.model.graph, source=self.pos, target=self.destination.pos)
+        self.route = nx.shortest_path(self.model.graph, source=next, target=self.destination.pos)
 
     #Funcion que se llama cuando las celdas 
     def move(self):
@@ -77,6 +77,11 @@ class Car(Agent):
             
             elif any(isinstance(a,Traffic_Light) for a in self.vision):
                 self.see_traffic_light()
+
+            else:
+                self.state = "Movimiento"
+                self.model.grid.move_agent(self,self.route[0])
+                self.route.pop(0)
             
 
     def move_around(self):
@@ -84,24 +89,19 @@ class Car(Agent):
         Determina si el agente puede moverse en la dirección elegida
         """
         possible_path = []
-        empty_spaces = [empty for empty in self.vision if empty.pos in list(self.model.graph.successors(self.pos))]
+        empty_spaces = [empty for empty in self.vision if empty.pos in list(self.model.graph.successors(self.pos)) ]
         for empty in empty_spaces:
             cell_contents = self.model.grid.get_cell_list_contents([empty.pos])
-            if not any(isinstance(c,Car) for c in cell_contents):
-                possible_path.append(empty)
-
-        print(possible_path)
+            if not any(isinstance(c,(Car,Destination,Obstacle)) for c in cell_contents):
+                possible_path.append(empty.pos)
 
         if possible_path == []:
             self.state = "Estatico"
         else:
             self.state = "Movimiento"
             next_move = random.choice(possible_path)
-            if next_move.direction == "Destination":
-                self.model.grid.move_agent(self,next_move.pos)
-            else:
-                self.model.grid.move_agent(self,next_move.pos)
-                self.recalculate_route()
+            self.model.grid.move_agent(self,next_move)
+            self.recalculate_route(next_move)
 
 
     def stop(self):
@@ -119,54 +119,37 @@ class Car(Agent):
         self.direction = [center.direction for center in self.vision if center.pos == self.pos and not isinstance(center,Car)][0]
 
         if self.direction == "Left":
-            self.vision = [vision for vision in self.vision if vision.pos[0]<=self.pos[0] and vision.pos != self.pos]
+            self.vision = [vision for vision in self.vision if vision.pos[0]<self.pos[0] and vision.pos != self.pos]
         elif self.direction == "Right":
-            self.vision = [vision for vision in self.vision if vision.pos[0]>=self.pos[0] and vision.pos != self.pos]
+            self.vision = [vision for vision in self.vision if vision.pos[0]>self.pos[0] and vision.pos != self.pos]
         elif self.direction == "Up":
-            self.vision = [vision for vision in self.vision if vision.pos[1]>=self.pos[1] and vision.pos != self.pos]
+            self.vision = [vision for vision in self.vision if vision.pos[1]>self.pos[1] and vision.pos != self.pos]
         elif self.direction == "Down":
-            self.vision = [vision for vision in self.vision if vision.pos[1]<=self.pos[1] and vision.pos != self.pos]
+            self.vision = [vision for vision in self.vision if vision.pos[1]<self.pos[1] and vision.pos != self.pos]
         elif self.direction == "Intersection":
-            self.vision = [vision for vision in self.vision if vision.pos[1]>=self.pos[1] and vision.pos != self.pos]
+            self.vision = [vision for vision in self.vision if vision.pos[1]>self.pos[1] and vision.pos != self.pos]
         elif self.direction == "Destination":
             self.model.grid.remove_agent(self)
             self.state = "Destino Alcanzado"
 
-        print(self.vision)
 
     
     def see_traffic_light(self):
         """ 
         Determines if the agent can see the traffic light
         """
-        ligths = [lights for lights in self.vision if isinstance(lights,Traffic_Light) ]
+        ligths = [lights for lights in self.vision if isinstance(lights,Traffic_Light) and lights.pos in list(self.model.graph.successors(self.pos)) ]
 
-        if self.direction == "Up" or self.direction == "Down":
-            ligths = [lights for lights in ligths if lights.pos[0] == self.pos[0]]
-            if ligths == []:
+        if ligths == []:
+            self.model.grid.move_agent(self,self.route[0])
+            self.route.pop(0) 
+        else:
+            if ligths[0].state == False:
+                self.state = "Estatico"
+            else:
+                self.state = "Movimiento"
                 self.model.grid.move_agent(self,self.route[0])
                 self.route.pop(0) 
-            else:
-                if ligths[0].state == False:
-                    self.state = "Estatico"
-                else:
-                    self.state = "Movimiento"
-                    self.model.grid.move_agent(self,self.route[0])
-                    self.route.pop(0) 
-
-        elif self.direction == "Left" or self.direction == "Right":
-            ligths = [lights for lights in ligths if lights.pos[1] == self.pos[1]]
-            if ligths == []:
-                self.model.grid.move_agent(self,self.route[0])
-                self.route.pop(0) 
-            else:
-                if ligths[0].state == False:
-                    self.state = "Estatico"
-                else:
-                    self.state = "Movimiento"
-                    self.model.grid.move_agent(self,self.route[0])
-                    self.route.pop(0) 
-
 
 
     def step(self):

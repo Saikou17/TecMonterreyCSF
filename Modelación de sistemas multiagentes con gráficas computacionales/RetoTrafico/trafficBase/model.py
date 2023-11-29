@@ -1,4 +1,4 @@
-from mesa import Model
+from mesa import Model, DataCollector
 from mesa.time import RandomActivation
 from mesa.space import MultiGrid
 from agent import *
@@ -22,6 +22,10 @@ class CityModel(Model):
         self.cars = []
         self.destinations = []
         self.city = []
+        self.datacollector = DataCollector( 
+                model_reporters = {
+                        "Car collision": lambda m: 1 if m.checkCollision() else 0,
+            })
         
 
         # Load the map file. The map file is a text file where each character represents an agent.
@@ -71,6 +75,21 @@ class CityModel(Model):
         self.create_graph()
         self.num_agents = N
         self.running = True
+
+    def checkCollision(self):
+        for i in range(self.width):
+            for j in range(self.height):
+                if len(self.grid[i][j]) >= 3:
+                    for x in self.grid[i][j]:
+                        if isinstance(x, Destination):
+                            return False
+                    print("---------------------")
+                    print(f"Colition at: ({i}, {j})")
+                    for x in self.grid[i][j]:
+                        if not isinstance(x, Road):
+                            print(x.unique_id)
+                    self.running = False
+                    return True
         
     def create_graph(self):
         """
@@ -122,7 +141,7 @@ class CityModel(Model):
     def step(self):
         '''Advance the model by one step.'''
         self.schedule.step()
-
+        self.datacollector.collect(self)
         if not self.initialize:
             self.initialize = True
         
