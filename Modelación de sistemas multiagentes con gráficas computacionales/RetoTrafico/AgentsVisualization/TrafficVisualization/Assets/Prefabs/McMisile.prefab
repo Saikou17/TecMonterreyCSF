@@ -9,6 +9,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.9397802
       objectReference: {fileID: 0}
@@ -55,5 +67,32 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -4761457056303097659}
   m_SourcePrefab: {fileID: 100100000, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
+--- !u!1 &5294342781378381967 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
+  m_PrefabInstance: {fileID: 5023802099444184542}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-4761457056303097659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5294342781378381967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ceb0651f77031c469f9b6eb32b4db45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  llanta: {fileID: 919132149155446097, guid: d76378cdfbf4f4f47ba4214be3365352, type: 3}
+  scale: 0.1
+  angle: 0
+  rotationAxis: 0
+  spinAngle: 0
+  startPosition: {x: 0, y: 0, z: 0}
+  endPosition: {x: 0, y: 0, z: 0}

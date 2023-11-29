@@ -8,13 +8,6 @@ from randomAgents.model2 import CityModel
 # from randomAgents.agent import RandomAgent, ObstacleAgent
 from randomAgents.agent2 import Car, Road, Traffic_Light, Destination, Spawn, Obstacle
 
-# Size of the board:
-# number_agents = 10
-# width = 28
-# height = 28
-# cityModel = None
-# #randomModel = None
-# currentStep = 0
 
 app = Flask("Traffic example")
 
@@ -41,7 +34,7 @@ def getAgents():
     if request.method == 'GET':
         # for a in cityModel.grid.coord_iter():
         #     print(a)
-        agentPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+        agentPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1]} 
                           for agents, pos in cityModel.grid.coord_iter() 
                           for agent in agents
                           if isinstance(agent, Car)]
@@ -53,7 +46,7 @@ def getObstacles():
     global cityModel
 
     if request.method == 'GET':
-        obstaclePositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+        obstaclePositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1]} 
                           for agents, pos in cityModel.grid.coord_iter() 
                           for agent in agents
                           if isinstance(agent, Obstacle)]
@@ -65,7 +58,7 @@ def getRoads():
     global cityModel
 
     if request.method == 'GET':
-        roadPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+        roadPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1]} 
                           for agents, pos in cityModel.grid.coord_iter() 
                           for agent in agents
                           if isinstance(agent, Road)]
@@ -77,7 +70,7 @@ def getTrafficLights():
     global cityModel
 
     if request.method == 'GET':
-        trafficLightPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+        trafficLightPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1]} 
                                 for agents, pos in cityModel.grid.coord_iter() 
                                 for agent in agents
                                 if isinstance(agent, Traffic_Light)]
@@ -89,7 +82,7 @@ def getDestinations():
     global cityModel
 
     if request.method == 'GET':
-        destinationPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+        destinationPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1]} 
                                 for agents, pos in cityModel.grid.coord_iter() 
                                 for agent in agents
                                 if isinstance(agent, Destination)]
@@ -101,7 +94,7 @@ def getSpawns():
     global cityModel
 
     if request.method == 'GET':
-        spawnPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":1, "z":pos[1]} 
+        spawnPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1]} 
                           for agents, pos in cityModel.grid.coord_iter() 
                           for agent in agents
                           if isinstance(agent, Spawn)]
