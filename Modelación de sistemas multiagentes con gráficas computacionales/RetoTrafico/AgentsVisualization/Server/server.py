@@ -68,7 +68,7 @@ def getTrafficLights():
     global cityModel
 
     if request.method == 'GET':
-        trafficLightPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1], "Direction":agent.direction} 
+        trafficLightPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1], "Direction":agent.direction, "state":agent.state} 
                                 for agents, pos in cityModel.grid.coord_iter() 
                                 for agent in agents
                                 if isinstance(agent, Traffic_Light)]
@@ -98,6 +98,16 @@ def getSpawns():
                           if isinstance(agent, Spawn)]
 
         return jsonify({'positions':spawnPositions})
+
+@app.route('/getDead', methods=['GET'])
+def getDead():
+    global cityModel
+
+    if request.method == 'GET':
+        deadPositions = [{"id": agent} 
+                          for agent in cityModel.arrived]
+
+        return jsonify({'positions':deadPositions})
 
 @app.route('/update', methods=['GET'])
 def updateModel():

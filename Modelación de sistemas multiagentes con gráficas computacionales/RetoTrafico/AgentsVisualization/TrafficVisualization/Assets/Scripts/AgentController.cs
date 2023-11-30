@@ -23,10 +23,12 @@ public class AgentData
         direccion: Sentido de la calle y orientacion en el unity
     */
     public string id;
-    public float x, y, z;
+    public float x;
+    public float y;
+    public float z;
     public string Direction;
+    public bool state;
 
-    //Constructor de Agentes 
     public AgentData(string id, float x, float y, float z)
     {
         this.id = id;
@@ -35,13 +37,25 @@ public class AgentData
         this.z = z;
     }
 
-    //Constructor de Agentes para semaforos y camino
-    public AgentData(string id, float x, float y, float z, string Direction){
+    // Constructor para semáforos y camino
+    public AgentData(string id, float x, float y, float z, string Direction)
+    {
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
         this.Direction = Direction;
+    }
+
+    // Otro constructor
+    public AgentData(string id, float x, float y, float z, string Direction, bool state)
+    {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.Direction = Direction;
+        this.state = state;
     }
 }
 
@@ -71,10 +85,11 @@ public class AgentController : MonoBehaviour
     string getDetinationsEndpoint = "/getDestinations";
     string getRoadsEndpoint = "/getRoads";
     string getSpawnsEndpoint = "/getSpawns";
+    string getDeadEndpoint = "/getDead";
     string sendConfigEndpoint = "/init";
     string updateEndpoint = "/update";
     //Creamos clases de listas para guardar por tipos de agente
-    AgentsData agentsData, obstacleData, trafficLightsData, destinationsData, spawnsData, roadData;
+    AgentsData agentsData, obstacleData, trafficLightsData, destinationsData, spawnsData, roadData, deadData;
     //Diccionario de nuestro agentes
     Dictionary<string, GameObject> agents;
     //Diccionario de posiciones anteriores y actuales
@@ -102,6 +117,7 @@ public class AgentController : MonoBehaviour
         destinationsData = new AgentsData();
         spawnsData = new AgentsData();
         roadData = new AgentsData();
+        deadData = new AgentsData();
         //Creamos nuestro diccionario de posiciones
         prevPositions = new Dictionary<string, Vector3>();
         currPositions = new Dictionary<string, Vector3>();
@@ -159,6 +175,7 @@ private void Update()
         else 
         {
             StartCoroutine(GetAgentsData());
+            StartCoroutine(GetTrafficLightsData());
         }
     }
 
@@ -196,6 +213,7 @@ private void Update()
             StartCoroutine(GetDestinationsData());
             StartCoroutine(GetSpawnsData());
             StartCoroutine(GetRoadsData());
+            StartCoroutine(GetDeadData());
 
         }
     }
@@ -214,18 +232,24 @@ private void Update()
             // Once the data has been received, it is stored in the agentsData variable.
             // Then, it iterates over the agentsData.positions list to update the agents positions.
             agentsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
-            Debug.Log(agentsData.positions);
+            // Debug.Log(agentsData.positions);
 
             foreach(AgentData agent in agentsData.positions)
             {
                 Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
 
                     if(agents.ContainsKey(agent.id))
-                    {
-                        Vector3 currentPosition = new Vector3();
-                        if(currPositions.TryGetValue(agent.id, out currentPosition))
-                            prevPositions[agent.id] = currentPosition;
-                        currPositions[agent.id] = newAgentPosition;
+                    {   
+                        if(agent.Direction == "Destino Alcanzado"){
+                            Destroy(agents[agent.id]);
+                            agents.Remove(agent.id);
+                        }
+                        else{
+                            Vector3 currentPosition = new Vector3();
+                            if(currPositions.TryGetValue(agent.id, out currentPosition))
+                                prevPositions[agent.id] = currentPosition;
+                                currPositions[agent.id] = newAgentPosition;
+                        }
                     }
                     else
                     {
@@ -251,7 +275,7 @@ private void Update()
         {
             obstacleData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(obstacleData.positions);
+            // Debug.Log(obstacleData.positions);
 
             foreach(AgentData obstacle in obstacleData.positions)
             {
@@ -273,27 +297,44 @@ private void Update()
         {
             trafficLightsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(trafficLightsData.positions);
+            // Debug.Log(trafficLightsData.positions);
 
             foreach(AgentData trafficLight in trafficLightsData.positions)
             {
-                if(trafficLight.Direction == "Left"){
-                    Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,360,0));
-                    Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,360,0));
+                bool state = trafficLight.state;
+                if(!agents.ContainsKey(trafficLight.id)){
+                    if(trafficLight.Direction == "Left"){
+                        agents[trafficLight.id] = Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,360,0));
+                        Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,360,0));
+                        Light lightComponent = agents[trafficLight.id].GetComponentInChildren<Light>();
+                    }
+                    else if(trafficLight.Direction == "Right"){
+                        agents[trafficLight.id] = Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,180,0));
+                        Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,180,0));
+                        Light lightComponent = agents[trafficLight.id].GetComponentInChildren<Light>();
+                    }
+                    else if(trafficLight.Direction == "Up"){
+                        agents[trafficLight.id] = Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,90,0));
+                        Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,90,0));
+                        Light lightComponent = agents[trafficLight.id].GetComponentInChildren<Light>();
+                    }
+                    else if(trafficLight.Direction == "Down"){
+                        agents[trafficLight.id] = Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,270,0));
+                        Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,270,0));
+                        Light lightComponent = agents[trafficLight.id].GetComponentInChildren<Light>();
+                    }
                 }
-                else if(trafficLight.Direction == "Right"){
-                    Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,180,0));
-                    Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,180,0));
+                else
+                {
+                    if (state == true){
+                        Light lightComponent = agents[trafficLight.id].GetComponentInChildren<Light>();
+                        lightComponent.color = Color.green;
+                    }
+                    else{
+                        Light lightComponent = agents[trafficLight.id].GetComponentInChildren<Light>();
+                        lightComponent.color = Color.red;
+                    }
                 }
-                else if(trafficLight.Direction == "Up"){
-                    Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,90,0));
-                    Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,90,0));
-                }
-                else if(trafficLight.Direction == "Down"){
-                    Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,270,0));
-                    Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,270,0));
-                }
-                
             }
         }
     }
@@ -309,12 +350,13 @@ private void Update()
         {
             destinationsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(destinationsData.positions);
+            // Debug.Log(destinationsData.positions);
 
             foreach(AgentData destination in destinationsData.positions)
             {
 
                 Instantiate(destinationPrefab, new Vector3(destination.x, destination.y, destination.z), Quaternion.identity);
+                Instantiate(roadPrefab, new Vector3(destination.x, destination.y, destination.z), Quaternion.identity);
             }
         }
     }
@@ -330,7 +372,7 @@ private void Update()
         {
             spawnsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(spawnsData.positions);
+            // Debug.Log(spawnsData.positions);
 
             foreach(AgentData spawn in spawnsData.positions)
             {
@@ -350,11 +392,31 @@ private void Update()
         {
             roadData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(roadData.positions);
-
+            // Debug.Log(roadData.positions);
             foreach(AgentData road in roadData.positions)
             {
                 Instantiate(roadPrefab, new Vector3(road.x, road.y, road.z), Quaternion.identity);
+            }
+        }
+    }
+
+    IEnumerator GetDeadData() 
+    {
+        UnityWebRequest www = UnityWebRequest.Get(serverUrl + getDeadEndpoint);
+        yield return www.SendWebRequest();
+ 
+        if (www.result != UnityWebRequest.Result.Success)
+            Debug.Log(www.error);
+        else 
+        {
+            deadData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
+
+            Debug.Log(deadData.positions);
+            
+            foreach(AgentData dead in deadData.positions)
+            {
+                Destroy(agents[dead.id]);
+
             }
         }
     }
