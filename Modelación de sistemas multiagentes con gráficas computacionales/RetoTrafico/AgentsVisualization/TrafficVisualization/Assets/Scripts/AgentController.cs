@@ -1,6 +1,6 @@
 ﻿// TC2008B. Sistemas Multiagentes y Gráficas Computacionales
 // C# client to interact with Python. Based on the code provided by Sergio Ruiz.
-// Octavio Navarro. October 2023
+// Juan Pablo Cruz Rodriguez. October 2023
 
 using System;
 using System.Collections;
@@ -20,16 +20,28 @@ public class AgentData
         x (float): The x coordinate of the agent.
         y (float): The y coordinate of the agent.
         z (float): The z coordinate of the agent.
+        direccion: Sentido de la calle y orientacion en el unity
     */
     public string id;
     public float x, y, z;
+    public string direccion;
 
+    //Constructor de Agentes 
     public AgentData(string id, float x, float y, float z)
     {
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    //Constructor de Agentes para semaforos y camino
+    public traffic_roadData(string id, float x, float y, float z, string direccion){
+        this.id = id;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.direccion = direccion;
     }
 }
 
@@ -43,14 +55,15 @@ public class AgentsData
     Attributes:
         positions (list): A list of AgentData objects.
     */
-    public List<AgentData> positions;
+    public List<AgentData> agentes;
 
-    public AgentsData() => this.positions = new List<AgentData>();
+    public AgentsData() => this.agentes= new List<AgentData>();
+
 }
 
 public class AgentController : MonoBehaviour
 {
-
+    //Endpoints de nuestro servidor
     string serverUrl = "http://localhost:8585";
     string getAgentsEndpoint = "/getAgents";
     string getObstaclesEndpoint = "/getObstacles";
@@ -60,36 +73,41 @@ public class AgentController : MonoBehaviour
     string getSpawnsEndpoint = "/getSpawns";
     string sendConfigEndpoint = "/init";
     string updateEndpoint = "/update";
+    //Creamos clases de listas para guardar por tipos de agente
     AgentsData agentsData, obstacleData, trafficLightsData, destinationsData, spawnsData, roadData;
+    //Diccionario de nuestro agentes
     Dictionary<string, GameObject> agents;
+    //Diccionario de posiciones anteriores y actuales
     Dictionary<string, Vector3> prevPositions, currPositions;
-
+    // updated (bool): A boolean to know if the simulation has been updated.
+    //started (bool): A boolean to know if the simulation has started.
     bool updated = false, started = false;
-
+    //Prefabs de cada uno de los agentes
     public GameObject agentPrefab,trafficLightPrefab, destinationPrefab, spawnPrefab, roadPrefab;
-
+    //Lista que guarda los prefabs de nuestros edificios
     [SerializeField] GameObject[] obstaclePrefab;
-    public int NAgents, width, height;
+    //Tiempo que se actualiza cada vez la simulacion 
     public float timeToUpdate = 5.0f;
+    //timer (float): The timer to update the simulation.
+    //dt (float): The delta time.
     private float timer, dt;
 
     void Start()
     {
+        //Creamos una lista nueva de agentes por tipo de agentes
         agentsData = new AgentsData();
         obstacleData = new AgentsData();
         trafficLightsData = new AgentsData();
         destinationsData = new AgentsData();
         spawnsData = new AgentsData();
         roadData = new AgentsData();
-
-
+        //Creamos nuestro diccionario de posiciones
         prevPositions = new Dictionary<string, Vector3>();
         currPositions = new Dictionary<string, Vector3>();
-
+        //Cremoas nuestro diccionario de agentes
         agents = new Dictionary<string, GameObject>();
-        
+        //Ingresamos el timepo de la simulacion
         timer = timeToUpdate;
-
         // Launches a couroutine to send the configuration to the server.
         StartCoroutine(SendConfiguration());
     }
@@ -142,13 +160,8 @@ private void Update()
 
         It uses a WWWForm to send the data to the server, and then it uses a UnityWebRequest to send the form.
         */
-        WWWForm form = new WWWForm();
 
-        form.AddField("NAgents", NAgents.ToString());
-        form.AddField("width", width.ToString());
-        form.AddField("height", height.ToString());
-
-        UnityWebRequest www = UnityWebRequest.Post(serverUrl + sendConfigEndpoint, form);
+        UnityWebRequest www = UnityWebRequest.Post(serverUrl + sendConfigEndpoint);
         www.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         yield return www.SendWebRequest();
@@ -173,7 +186,7 @@ private void Update()
         }
     }
 
-IEnumerator GetAgentsData() 
+    IEnumerator GetAgentsData() 
     {
         // The GetAgentsData method is used to get the agents data from the server.
 
@@ -187,9 +200,9 @@ IEnumerator GetAgentsData()
             // Once the data has been received, it is stored in the agentsData variable.
             // Then, it iterates over the agentsData.positions list to update the agents positions.
             agentsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
-            Debug.Log(agentsData.positions);
+            Debug.Log(agentsData.agentes);
 
-            foreach(AgentData agent in agentsData.positions)
+            foreach(AgentData agent in agentsData.agentes)
             {
                 Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
 
@@ -202,17 +215,18 @@ IEnumerator GetAgentsData()
                     }
                     else
                     {
+                        //? Aqui en el Quaternion.identity toca inicializar con respecto a su direccion
                         prevPositions[agent.id] = newAgentPosition;
                         agents[agent.id] = Instantiate(agentPrefab, new Vector3(0,0,0), Quaternion.identity);
                     }
             }
-
+            //Activamos el update y el start
             updated = true;
             if(!started) started = true;
         }
     }
 
-    IEnumerator GetObstacleData() // Cambiar a semaforos 
+    IEnumerator GetObstacleData()//Inicializa los edificios
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getObstaclesEndpoint);
         yield return www.SendWebRequest();
@@ -223,18 +237,18 @@ IEnumerator GetAgentsData()
         {
             obstacleData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(obstacleData.positions);
+            Debug.Log(obstacleData.agentes);
 
-
-            int rand = UnityEngine.Random.Range(0, obstaclePrefab.Length);
-            foreach(AgentData obstacle in obstacleData.positions)
+            foreach(AgentData obstacle in obstacleData.agentes)
             {
+                int rand = UnityEngine.Random.Range(0, obstaclePrefab.Length);
                 Instantiate(obstaclePrefab[rand], new Vector3(obstacle.x, obstacle.y, obstacle.z), Quaternion.identity);
             }
         }
     }
 
-    IEnumerator GetTrafficLightsData() // Cambiar a semaforos 
+    //? Se debe de obtener su estado para prender y apagar
+    IEnumerator GetTrafficLightsData() //Inicializa semaforos 
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getTrafficLightsEndpoint);
         yield return www.SendWebRequest();
@@ -245,17 +259,32 @@ IEnumerator GetAgentsData()
         {
             trafficLightsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(trafficLightsData.positions);
+            Debug.Log(trafficLightsData.agentes);
 
-            foreach(AgentData trafficLight in trafficLightsData.positions)
+            foreach(AgentData trafficLight in trafficLightsData.agentes)
             {
-                Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.identity);
-                Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.identity);
+                if(trafficLight.direction == "Left"){
+                    Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,360,0));
+                    Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,360,0));
+                }
+                else if(trafficLight.direction == "Right"){
+                    Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,180,0));
+                    Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,180,0));
+                }
+                else if(trafficLight.direction == "Up"){
+                    Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,90,0));
+                    Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,90,0));
+                }
+                else if(trafficLight.direction == "Down"){
+                    Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,270,0));
+                    Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,270,0));
+                }
+                
             }
         }
     }
 
-    IEnumerator GetDestinationsData() 
+    IEnumerator GetDestinationsData() //Inicializa nuestros destinos
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getDetinationsEndpoint);
         yield return www.SendWebRequest();
@@ -276,7 +305,7 @@ IEnumerator GetAgentsData()
         }
     }
 
-    IEnumerator GetSpawnsData() 
+    IEnumerator GetSpawnsData() //Inicializa nuestros spawns
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getSpawnsEndpoint);
         yield return www.SendWebRequest();

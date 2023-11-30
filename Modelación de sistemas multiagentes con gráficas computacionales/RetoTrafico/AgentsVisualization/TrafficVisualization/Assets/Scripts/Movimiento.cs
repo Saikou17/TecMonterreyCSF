@@ -57,22 +57,22 @@ public class Movimiento : MonoBehaviour
             Vector3 wheelPosition;
             if (i == 0)
             {
-                wheelPosition = new Vector3(2.0f , 0.4f, -2.0f);
+                wheelPosition = new Vector3(0.12f ,0.1f, 0.3f);
                 wheelPositions[i] = wheelPosition;
             }
             else if (i == 1)
             {
-                wheelPosition = new Vector3(-2.0f, 0.4f, -2.0f);
+                wheelPosition = new Vector3(-0.22f, 0.1f, 0.3f);
                 wheelPositions[i] = wheelPosition;
             }
             else if (i == 2)
             {
-                wheelPosition = new Vector3(2.0f, 0.4f, 3.0f);
+                wheelPosition = new Vector3(0.12f, 0.1f, -0.22f);
                 wheelPositions[i] = wheelPosition;
             }
             else
             {
-                wheelPosition = new Vector3(-2.0f, 0.4f, 3.0f);
+                wheelPosition = new Vector3(-0.22f, 0.1f, -0.22f);
                 wheelPositions[i] = wheelPosition;
             }
             //Instanciamos las llantas con su modelo, posicion y rotacion
@@ -126,11 +126,10 @@ public class Movimiento : MonoBehaviour
         //Matriz de rotacion del carro
         Matrix4x4 rotate = HW_Transforms.RotateMat(angle , rotationAxis);
         //Matriz de escala del carro
-        Matrix4x4 scaleMate = HW_Transforms.ScaleMat(scale, scale, scale);
 
 
         //Creamos una nueva matriz a partir de los valores de la matriz de traslacion y rotacion
-        Matrix4x4 composite = move * rotate * scaleMate;
+        Matrix4x4 composite = move * rotate;
 
         //Recorremos los vertices del carro
         for (int i = 0; i < carNewVertices.Length; i++)

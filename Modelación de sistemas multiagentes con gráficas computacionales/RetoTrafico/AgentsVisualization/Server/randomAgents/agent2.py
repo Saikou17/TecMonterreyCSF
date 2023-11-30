@@ -162,7 +162,7 @@ class Car(Agent):
 
         # print(self.state)
 
-        print(self.route)
+        #print(self.route)
 
         if self.iniciar == False:
             self.Check_Model_Initialize()

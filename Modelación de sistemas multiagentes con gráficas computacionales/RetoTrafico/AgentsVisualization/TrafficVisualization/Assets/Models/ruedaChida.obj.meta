@@ -1,29 +1,9 @@
 fileFormatVersion: 2
-guid: be49ab5abe75402488dafa523c4cff64
+guid: 3b4e335c5de9d264ebade53a89986f5b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Chasis
-    second: {fileID: 2100000, guid: a2a3c2f07b4d5854789e9eb24cdbc99e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Face
-    second: {fileID: 2100000, guid: 2275dd914ca9a024f8fc1aa630fb2f6e, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Face.002
-    second: {fileID: 2100000, guid: 86bdc7b14ba40f249966bce7aebe4e7b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: nose
-    second: {fileID: 2100000, guid: 956255af6c1649844a9c8b8f51783b2b, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0

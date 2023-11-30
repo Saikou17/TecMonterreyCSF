@@ -52,12 +52,30 @@ public class CityMaker : MonoBehaviour
                 tile.transform.parent = transform;
                 x += 1;
             }
+            else if (tiles[i] == 'n')
+            {
+                position = new Vector3(x * tileSize, 0, y * tileSize);
+                tile = Instantiate(roadPrefab, position, Quaternion.Euler(0, 0, 0));
+                tile.transform.parent = transform;
+                tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 0, 0));
+                tile.transform.parent = transform;
+                x += 1;
+            }
+            else if (tiles[i] == 'N')
+            {
+                position = new Vector3(x * tileSize, 0, y * tileSize);
+                tile = Instantiate(roadPrefab, position, Quaternion.Euler(0, 0, 0));
+                tile.transform.parent = transform;
+                tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 0, 0));
+                tile.transform.parent = transform;
+                x += 1;
+            }
             else if (tiles[i] == 's')
             {
                 position = new Vector3(x * tileSize, 0, y * tileSize);
-                tile = Instantiate(roadPrefab, position, Quaternion.identity);
+                tile = Instantiate(roadPrefab, position, Quaternion.Euler(0, 90, 0));
                 tile.transform.parent = transform;
-                tile = Instantiate(semaphorePrefab, position, Quaternion.identity);
+                tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 90, 0));
                 tile.transform.parent = transform;
                 x += 1;
             }
@@ -67,6 +85,42 @@ public class CityMaker : MonoBehaviour
                 tile = Instantiate(roadPrefab, position, Quaternion.Euler(0, 90, 0));
                 tile.transform.parent = transform;
                 tile = Instantiate(semaphorePrefab, position, Quaternion.Euler(0, 90, 0));
+                tile.transform.parent = transform;
+                x += 1;
+            }
+            else if (tiles[i] == 'w')
+            {
+                position = new Vector3(x * tileSize, 0, y * tileSize);
+                tile = Instantiate(roadPrefab, position, Quaternion.identity);
+                tile.transform.parent = transform;
+                tile = Instantiate(semaphorePrefab, position, Quaternion.identity);
+                tile.transform.parent = transform;
+                x += 1;
+            }
+            else if (tiles[i] == 'W')
+            {
+                position = new Vector3(x * tileSize, 0, y * tileSize);
+                tile = Instantiate(roadPrefab, position, Quaternion.identity);
+                tile.transform.parent = transform;
+                tile = Instantiate(semaphorePrefab, position, Quaternion.identity);
+                tile.transform.parent = transform;
+                x += 1;
+            }
+            else if (tiles[i] == 'e')
+            {
+                position = new Vector3(x * tileSize, 0, y * tileSize);
+                tile = Instantiate(roadPrefab, position, Quaternion.identity);
+                tile.transform.parent = transform;
+                tile = Instantiate(semaphorePrefab, position, Quaternion.identity);
+                tile.transform.parent = transform;
+                x += 1;
+            }
+            else if (tiles[i] == 'E')
+            {
+                position = new Vector3(x * tileSize, 0, y * tileSize);
+                tile = Instantiate(roadPrefab, position, Quaternion.identity);
+                tile.transform.parent = transform;
+                tile = Instantiate(semaphorePrefab, position, Quaternion.identity);
                 tile.transform.parent = transform;
                 x += 1;
             }

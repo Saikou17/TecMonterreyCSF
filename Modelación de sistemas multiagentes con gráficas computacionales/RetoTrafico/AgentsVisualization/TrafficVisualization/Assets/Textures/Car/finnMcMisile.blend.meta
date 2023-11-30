@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: be49ab5abe75402488dafa523c4cff64
+guid: 3c5d7781e9c54ff48ad004e54174c954
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -8,22 +8,22 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Chasis
-    second: {fileID: 2100000, guid: a2a3c2f07b4d5854789e9eb24cdbc99e, type: 2}
+    second: {fileID: 2100000, guid: 9a6d2194f48f3c0449b05e57abd914f4, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Face
-    second: {fileID: 2100000, guid: 2275dd914ca9a024f8fc1aa630fb2f6e, type: 2}
+    second: {fileID: 2100000, guid: 0912d92294123aa4db96e485aa211b95, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Face.002
-    second: {fileID: 2100000, guid: 86bdc7b14ba40f249966bce7aebe4e7b, type: 2}
+    second: {fileID: 2100000, guid: bbb99368d8478b248aeb6c08a2f02ab0, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: nose
-    second: {fileID: 2100000, guid: 956255af6c1649844a9c8b8f51783b2b, type: 2}
+    second: {fileID: 2100000, guid: ba1c6f72c1bfb7245ab18278e530adab, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -52,7 +52,7 @@ ModelImporter:
     extraExposedTransformPaths: []
     extraUserProperties: []
     clipAnimations: []
-    isReadable: 1
+    isReadable: 0
   meshes:
     lODScreenPercentages: []
     globalScale: 0.1

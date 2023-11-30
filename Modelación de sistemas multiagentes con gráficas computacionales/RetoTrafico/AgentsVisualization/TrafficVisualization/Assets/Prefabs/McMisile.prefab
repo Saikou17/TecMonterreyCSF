@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.9397802
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
       propertyPath: m_LocalPosition.y
@@ -30,7 +30,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 6.1802864
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: be49ab5abe75402488dafa523c4cff64, type: 3}
       propertyPath: m_LocalRotation.w
@@ -89,10 +89,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ceb0651f77031c469f9b6eb32b4db45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  llanta: {fileID: 919132149155446097, guid: d76378cdfbf4f4f47ba4214be3365352, type: 3}
+  llanta: {fileID: 919132149155446097, guid: 3b4e335c5de9d264ebade53a89986f5b, type: 3}
   scale: 0.1
   angle: 0
-  rotationAxis: 0
+  rotationAxis: 1
   spinAngle: 0
   startPosition: {x: 0, y: 0, z: 0}
   endPosition: {x: 0, y: 0, z: 0}
