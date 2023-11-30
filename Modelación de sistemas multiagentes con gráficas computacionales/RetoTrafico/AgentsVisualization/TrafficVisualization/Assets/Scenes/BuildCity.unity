@@ -456,7 +456,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agentPrefab: {fileID: 5294342781378381967, guid: c134aacab741bb54aa2777e72ca2978b, type: 3}
-  trafficLightPrefab: {fileID: 176439293026998928, guid: 16b7deb585524af489550c3b041d46ad, type: 3}
+  trafficLightPrefab: {fileID: 821392321134401969, guid: 3d86c5b5d169b714e9a1cd326ec8fc6e, type: 3}
   destinationPrefab: {fileID: 4910494536651532794, guid: 35ae782dbd7a4a647b459fb7d453b1fe, type: 3}
   spawnPrefab: {fileID: 7078980335097767166, guid: 3cb49cb620b0e2849a1e2f2c6fa4c65c, type: 3}
   roadPrefab: {fileID: 7078980335097767166, guid: 3cb49cb620b0e2849a1e2f2c6fa4c65c, type: 3}
