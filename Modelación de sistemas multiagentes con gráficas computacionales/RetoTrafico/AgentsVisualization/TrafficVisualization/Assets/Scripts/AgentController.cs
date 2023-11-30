@@ -24,7 +24,7 @@ public class AgentData
     */
     public string id;
     public float x, y, z;
-    public string direccion;
+    public string Direction;
 
     //Constructor de Agentes 
     public AgentData(string id, float x, float y, float z)
@@ -36,12 +36,12 @@ public class AgentData
     }
 
     //Constructor de Agentes para semaforos y camino
-    public traffic_roadData(string id, float x, float y, float z, string direccion){
+    public AgentData(string id, float x, float y, float z, string Direction){
         this.id = id;
         this.x = x;
         this.y = y;
         this.z = z;
-        this.direccion = direccion;
+        this.Direction = Direction;
     }
 }
 
@@ -55,9 +55,9 @@ public class AgentsData
     Attributes:
         positions (list): A list of AgentData objects.
     */
-    public List<AgentData> agentes;
+    public List<AgentData> positions;
 
-    public AgentsData() => this.agentes= new List<AgentData>();
+    public AgentsData() => this.positions= new List<AgentData>();
 
 }
 
@@ -88,6 +88,7 @@ public class AgentController : MonoBehaviour
     [SerializeField] GameObject[] obstaclePrefab;
     //Tiempo que se actualiza cada vez la simulacion 
     public float timeToUpdate = 5.0f;
+    public int NAgents, width, height;
     //timer (float): The timer to update the simulation.
     //dt (float): The delta time.
     private float timer, dt;
@@ -160,8 +161,13 @@ private void Update()
 
         It uses a WWWForm to send the data to the server, and then it uses a UnityWebRequest to send the form.
         */
+        WWWForm form = new WWWForm();
 
-        UnityWebRequest www = UnityWebRequest.Post(serverUrl + sendConfigEndpoint);
+        form.AddField("NAgents", NAgents.ToString());
+        form.AddField("width", width.ToString());
+        form.AddField("height", height.ToString());
+
+        UnityWebRequest www = UnityWebRequest.Post(serverUrl + sendConfigEndpoint,form);
         www.SetRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 
         yield return www.SendWebRequest();
@@ -200,9 +206,9 @@ private void Update()
             // Once the data has been received, it is stored in the agentsData variable.
             // Then, it iterates over the agentsData.positions list to update the agents positions.
             agentsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
-            Debug.Log(agentsData.agentes);
+            Debug.Log(agentsData.positions);
 
-            foreach(AgentData agent in agentsData.agentes)
+            foreach(AgentData agent in agentsData.positions)
             {
                 Vector3 newAgentPosition = new Vector3(agent.x, agent.y, agent.z);
 
@@ -237,9 +243,9 @@ private void Update()
         {
             obstacleData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(obstacleData.agentes);
+            Debug.Log(obstacleData.positions);
 
-            foreach(AgentData obstacle in obstacleData.agentes)
+            foreach(AgentData obstacle in obstacleData.positions)
             {
                 int rand = UnityEngine.Random.Range(0, obstaclePrefab.Length);
                 Instantiate(obstaclePrefab[rand], new Vector3(obstacle.x, obstacle.y, obstacle.z), Quaternion.identity);
@@ -259,23 +265,23 @@ private void Update()
         {
             trafficLightsData = JsonUtility.FromJson<AgentsData>(www.downloadHandler.text);
 
-            Debug.Log(trafficLightsData.agentes);
+            Debug.Log(trafficLightsData.positions);
 
-            foreach(AgentData trafficLight in trafficLightsData.agentes)
+            foreach(AgentData trafficLight in trafficLightsData.positions)
             {
-                if(trafficLight.direction == "Left"){
+                if(trafficLight.Direction == "Left"){
                     Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,360,0));
                     Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,360,0));
                 }
-                else if(trafficLight.direction == "Right"){
+                else if(trafficLight.Direction == "Right"){
                     Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,180,0));
                     Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,180,0));
                 }
-                else if(trafficLight.direction == "Up"){
+                else if(trafficLight.Direction == "Up"){
                     Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,90,0));
                     Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,90,0));
                 }
-                else if(trafficLight.direction == "Down"){
+                else if(trafficLight.Direction == "Down"){
                     Instantiate(trafficLightPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,270,0));
                     Instantiate(roadPrefab, new Vector3(trafficLight.x, trafficLight.y, trafficLight.z), Quaternion.Euler(0,270,0));
                 }
