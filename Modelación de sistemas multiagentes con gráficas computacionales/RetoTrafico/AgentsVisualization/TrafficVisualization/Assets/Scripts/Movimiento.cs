@@ -107,11 +107,14 @@ public class Movimiento : MonoBehaviour
 
     public void MovementCar(Vector3 currentPosition, Vector3 newPosition, float time)
     {
-        // //Calculamos el angulo con respecto a los ejes x y z
-        angle = Mathf.Atan2(endPosition.x - startPosition.x, endPosition.z - startPosition.z) * Mathf.Rad2Deg;
-        //Llamamos la funcion para actualizar el movimiento del carro y de las ruedas cada frame
-        DoTransform(SetNewPosition(currentPosition, newPosition, time));
-
+         if (!currentPosition.Equals(newPosition))
+        {
+            angle = Mathf.Atan2(newPosition.x - currentPosition.x, newPosition.z - currentPosition.z) * Mathf.Rad2Deg + 180;
+            DoTransform(SetNewPosition(currentPosition, newPosition, time));
+        }
+        else{
+             DoTransform(SetNewPosition(currentPosition, newPosition, time));
+        }
     }
 
 

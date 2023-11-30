@@ -463,7 +463,7 @@ MonoBehaviour:
   obstaclePrefab:
   - {fileID: 4045366412628785942, guid: 14649ce6b55d20f429ff9e339f322163, type: 3}
   - {fileID: 919132149155446097, guid: d50b6e442c45bbc4d8551ca089ec0af1, type: 3}
-  timeToUpdate: 3
+  timeToUpdate: 5
   NAgents: 0
   width: 0
   height: 0

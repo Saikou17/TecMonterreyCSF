@@ -126,6 +126,7 @@ private void Update()
         {
             timer -= Time.deltaTime;
             dt = 1.0f - (timer / timeToUpdate);
+            dt = timer * timer * ( 3f - 2f*timer);
 
             // Iterates over the agents to update their positions.
             // The positions are interpolated between the previous and current positions.
@@ -133,7 +134,14 @@ private void Update()
             {
                 Vector3 currentPosition = agent.Value;
                 Vector3 previousPosition = prevPositions[agent.Key];
-                agents[agent.Key].GetComponent<Movimiento>().MovementCar(currentPosition, previousPosition, dt);
+                Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
+                Vector3 direction = currentPosition - interpolated;
+
+                agents[agent.Key].transform.localPosition = interpolated;
+                if(direction != Vector3.zero) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
+            
+                // Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
+                // agents[agent.Key].GetComponent<Movimiento>().MovementCar(currentPosition, previousPosition, dt);
             }
 
             // float t = (timer / timeToUpdate);
