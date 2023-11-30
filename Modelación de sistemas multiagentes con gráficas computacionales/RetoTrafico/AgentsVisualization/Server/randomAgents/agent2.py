@@ -129,6 +129,7 @@ class Car(Agent):
         elif self.direction == "Intersection":
             self.vision = [vision for vision in self.vision if vision.pos[1]>self.pos[1] and vision.pos != self.pos]
         elif self.direction == "Destination":
+            self.model.arrived.append(self.unique_id)
             self.model.grid.remove_agent(self)
             self.state = "Destino Alcanzado"
 
@@ -163,6 +164,8 @@ class Car(Agent):
         # print(self.state)
 
         #print(self.route)
+        
+        print(self.model.arrived)
 
         if self.iniciar == False:
             self.Check_Model_Initialize()

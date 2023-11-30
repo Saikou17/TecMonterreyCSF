@@ -22,6 +22,7 @@ class CityModel(Model):
         self.cars = []
         self.destinations = []
         self.city = []
+        self.arrived = []
         self.datacollector = DataCollector( 
                 model_reporters = {
                         "Car collision": lambda m: 1 if m.checkCollision() else 0,
