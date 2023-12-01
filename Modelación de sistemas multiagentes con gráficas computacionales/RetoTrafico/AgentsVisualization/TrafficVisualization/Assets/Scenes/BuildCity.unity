@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -244,7 +244,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.5
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -457,13 +457,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agentPrefab: {fileID: 5294342781378381967, guid: c134aacab741bb54aa2777e72ca2978b, type: 3}
   trafficLightPrefab: {fileID: 821392321134401969, guid: 3d86c5b5d169b714e9a1cd326ec8fc6e, type: 3}
-  destinationPrefab: {fileID: 4910494536651532794, guid: 35ae782dbd7a4a647b459fb7d453b1fe, type: 3}
   spawnPrefab: {fileID: 7078980335097767166, guid: 3cb49cb620b0e2849a1e2f2c6fa4c65c, type: 3}
   roadPrefab: {fileID: 7078980335097767166, guid: 3cb49cb620b0e2849a1e2f2c6fa4c65c, type: 3}
   obstaclePrefab:
   - {fileID: 4045366412628785942, guid: 14649ce6b55d20f429ff9e339f322163, type: 3}
   - {fileID: 919132149155446097, guid: d50b6e442c45bbc4d8551ca089ec0af1, type: 3}
-  timeToUpdate: 5
+  destinationPrefab:
+  - {fileID: 919132149155446097, guid: 7299767b1b2b39e468c3d0ad68c084b5, type: 3}
+  timeToUpdate: 0.1
   NAgents: 0
   width: 0
   height: 0

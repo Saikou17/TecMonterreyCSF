@@ -56,7 +56,7 @@ def getRoads():
     global cityModel
 
     if request.method == 'GET':
-        roadPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1]} 
+        roadPositions = [{"id": str(agent.unique_id), "x": pos[0], "y":0, "z":pos[1],"Direction":agent.direction} 
                           for agents, pos in cityModel.grid.coord_iter() 
                           for agent in agents
                           if isinstance(agent, Road)]

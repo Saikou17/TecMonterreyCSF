@@ -98,9 +98,10 @@ public class AgentController : MonoBehaviour
     //started (bool): A boolean to know if the simulation has started.
     bool updated = false, started = false;
     //Prefabs de cada uno de los agentes
-    public GameObject agentPrefab,trafficLightPrefab, destinationPrefab, spawnPrefab, roadPrefab;
+    public GameObject agentPrefab,trafficLightPrefab, spawnPrefab, roadPrefab;
     //Lista que guarda los prefabs de nuestros edificios
-    [SerializeField] GameObject[] obstaclePrefab;
+    [SerializeField] GameObject[] obstaclePrefab, destinationPrefab;
+
     //Tiempo que se actualiza cada vez la simulacion 
     public float timeToUpdate = 5.0f;
     public int NAgents, width, height;
@@ -142,26 +143,22 @@ private void Update()
         {
             timer -= Time.deltaTime;
             dt = 1.0f - (timer / timeToUpdate);
-            dt = timer * timer * ( 3f - 2f*timer);
 
             // Iterates over the agents to update their positions.
             // The positions are interpolated between the previous and current positions.
             foreach(var agent in currPositions)
             {
-                Vector3 currentPosition = agent.Value;
-                Vector3 previousPosition = prevPositions[agent.Key];
-                Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
-                Vector3 direction = currentPosition - interpolated;
+                Vector3 newPosition = agent.Value;
+                Vector3 currentPosition = prevPositions[agent.Key];
+                Vector3 interpolated = Vector3.Lerp(currentPosition, newPosition, dt);
+                Vector3 direccion = currentPosition - interpolated;
 
-                agents[agent.Key].transform.localPosition = interpolated;
-                if(direction != Vector3.zero) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
+                agents[agent.Key].GetComponent<Movimiento>().MovementCar(interpolated,direccion);
+                // if(direction != Vector3.zero) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
             
                 // Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
                 // agents[agent.Key].GetComponent<Movimiento>().MovementCar(currentPosition, previousPosition, dt);
             }
-
-            // float t = (timer / timeToUpdate);
-            // dt = t * t * ( 3f - 2f*t);
         }
     }
  
@@ -355,8 +352,9 @@ private void Update()
             foreach(AgentData destination in destinationsData.positions)
             {
 
-                Instantiate(destinationPrefab, new Vector3(destination.x, destination.y, destination.z), Quaternion.identity);
-                Instantiate(roadPrefab, new Vector3(destination.x, destination.y, destination.z), Quaternion.identity);
+                int rand = UnityEngine.Random.Range(0,destinationPrefab.Length);
+                GameObject objeto = Instantiate(destinationPrefab[rand], new Vector3(destination.x, destination.y, destination.z), Quaternion.identity);
+                objeto.GetComponentInChildren<Renderer>().materials[2].color = Color.red;
             }
         }
     }
@@ -395,7 +393,24 @@ private void Update()
             // Debug.Log(roadData.positions);
             foreach(AgentData road in roadData.positions)
             {
-                Instantiate(roadPrefab, new Vector3(road.x, road.y, road.z), Quaternion.identity);
+                if(road.Direction == "Left"){
+                    Instantiate(roadPrefab, new Vector3(road.x, road.y, road.z), Quaternion.Euler(0,360,0));
+                }
+                else if(road.Direction == "Right"){
+                    Instantiate(roadPrefab, new Vector3(road.x, road.y, road.z), Quaternion.Euler(0,180,0));
+                }
+                else if(road.Direction == "Up"){
+                    Instantiate(roadPrefab, new Vector3(road.x, road.y, road.z), Quaternion.Euler(0,90,0));
+                }
+                else if(road.Direction == "Down"){
+                    Instantiate(roadPrefab, new Vector3(road.x, road.y, road.z), Quaternion.Euler(0,270,0));
+                }
+                 else if(road.Direction == "IntersectionUp"){
+                    Instantiate(roadPrefab, new Vector3(road.x, road.y, road.z), Quaternion.Euler(0,90,0));
+                }
+                else if(road.Direction == "IntersectionDown"){
+                    Instantiate(roadPrefab, new Vector3(road.x, road.y, road.z), Quaternion.Euler(0,270,0));
+                }
             }
         }
     }

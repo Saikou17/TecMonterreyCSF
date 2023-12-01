@@ -24,7 +24,7 @@ public class Movimiento : MonoBehaviour
     [SerializeField] Vector3 startPosition; // Posicion inicial
     [SerializeField] Vector3 endPosition; // Posicion final
     //float timeAngle = 0f;
-
+    private Vector3 previousInterpolation = Vector3.zero;
     //Creamos y guardamos los elementos del carro
     Mesh carMesh;// Malla del modelo del carro
     Vector3[] carBaseVertices; //Vertices originales del carro
@@ -90,36 +90,37 @@ public class Movimiento : MonoBehaviour
         }
     }
 
-    Vector3 SetNewPosition(Vector3 currentPosition, Vector3 newPosition, float time)
-    {
-        if(!this.endPosition.Equals(newPosition))
-        {
-            this.startPosition = currentPosition;
-            this.endPosition = newPosition;
-            time = Mathf.Clamp(time, 0.0f, 1.0f);
-            return Vector3.Lerp(this.startPosition, this.endPosition, time);
-        }
-        else
-        {
-            return newPosition;
-        }
-    }
+    // Vector3 SetNewPosition(Vector3 currentPosition, Vector3 newPosition)
+    // {
+    //     if(!this.endPosition.Equals(newPosition))
+    //     {
+    //         this.startPosition = currentPosition;
+    //         this.endPosition = newPosition;
+    //         // time = Mathf.Clamp(time, 0.0f, 1.0f);
+    //         return Vector3.Lerp(this.startPosition, this.endPosition);
+    //     }
+    //     else
+    //     {
+    //         return newPosition;
+    //     }
+    // }
 
-    public void MovementCar(Vector3 currentPosition, Vector3 newPosition, float time)
+    public void MovementCar(Vector3 interpolacion,Vector3 direccion)
     {
-         if (!currentPosition.Equals(newPosition))
-        {
-            angle = Mathf.Atan2(newPosition.x - currentPosition.x, newPosition.z - currentPosition.z) * Mathf.Rad2Deg + 180;
-            DoTransform(SetNewPosition(currentPosition, newPosition, time));
-        }
-        else{
-             DoTransform(SetNewPosition(currentPosition, newPosition, time));
-        }
+          if (!interpolacion.Equals(previousInterpolation))
+         {
+            angle = Mathf.Atan2(direccion.x , direccion.z ) * Mathf.Rad2Deg + 180;
+            DoTransform(interpolacion,direccion);
+            previousInterpolation = interpolacion;
+         }
+         else{
+             DoTransform(interpolacion,direccion);
+         }
     }
 
 
     //Funcion de movimiento
-    void DoTransform(Vector3 interpolation)
+    void DoTransform(Vector3 interpolation,Vector3 direccion)
     {
         //Matriz de traslacion del carro
         Matrix4x4 move = HW_Transforms.TranslationMat(interpolation.x,

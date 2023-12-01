@@ -277,7 +277,7 @@ class Spawn(Agent):
             self.steps_since_last_spawn += 1
 
             # Verifica si han pasado 10 pasos
-            if self.steps_since_last_spawn >= 5:
+            if self.steps_since_last_spawn >= 2:
                 # Crea un nuevo agente de carro
                 new_car = Car(f"c_{self.pos[1]*self.model.width+self.pos[0]}_{self.model.schedule.steps}", self.model)
                 # Coloca el nuevo agente en una posición aleatoria del grid
