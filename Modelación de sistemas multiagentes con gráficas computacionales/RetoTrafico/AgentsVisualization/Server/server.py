@@ -1,6 +1,7 @@
 # TC2008B. Sistemas Multiagentes y Gráficas Computacionales
 # Python flask server to interact with Unity. Based on the code provided by Sergio Ruiz.
-# Octavio Navarro. October 2023git 
+# Juan Pablo Cruz Rodriguez A01783208. October 2023git 
+#Juan Pablo Robles Arenas A01374091
 
 from flask import Flask, request, jsonify
 # from randomAgents.model import RandomModel
@@ -16,13 +17,11 @@ def initModel():
     global currentStep, cityModel
 
     if request.method == 'POST':
-        # number_agents = int(request.form.get('NAgents'))
-        # width = int(request.form.get('width'))
-        # height = int(request.form.get('height'))
+       
         currentStep = 0
 
         print(request.form)
-        # print(number_agents, width, height)
+    
         cityModel = CityModel()
 
         return jsonify({"message":"Parameters recieved, model initiated."})

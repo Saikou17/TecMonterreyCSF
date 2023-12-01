@@ -1,3 +1,8 @@
+"""
+Juan Pablo Cruz Rodriguez A01783208
+Juan Pablo RObles Arenas A01374091
+"""
+
 from mesa import Agent
 import random
 import networkx as nx
@@ -157,13 +162,6 @@ class Car(Agent):
         """ 
         Determines the new direction it will take, and then moves
         """
-        # print(self.direction)
-
-        # print(self.vision)
-
-        # print(self.state)
-
-        #print(self.route)
         
         print(self.model.arrived)
 

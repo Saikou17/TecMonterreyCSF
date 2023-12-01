@@ -154,10 +154,6 @@ private void Update()
                 Vector3 direccion = currentPosition - interpolated;
 
                 agents[agent.Key].GetComponent<Movimiento>().MovementCar(interpolated,direccion);
-                // if(direction != Vector3.zero) agents[agent.Key].transform.rotation = Quaternion.LookRotation(direction);
-            
-                // Vector3 interpolated = Vector3.Lerp(previousPosition, currentPosition, dt);
-                // agents[agent.Key].GetComponent<Movimiento>().MovementCar(currentPosition, previousPosition, dt);
             }
         }
     }
@@ -250,7 +246,6 @@ private void Update()
                     }
                     else
                     {
-                        //? Aqui en el Quaternion.identity toca inicializar con respecto a su direccion
                         prevPositions[agent.id] = newAgentPosition;
                         agents[agent.id] = Instantiate(agentPrefab, new Vector3(0,0,0), Quaternion.identity);
                     }
@@ -281,8 +276,7 @@ private void Update()
             }
         }
     }
-
-    //? Se debe de obtener su estado para prender y apagar
+    
     IEnumerator GetTrafficLightsData() //Inicializa semaforos 
     {
         UnityWebRequest www = UnityWebRequest.Get(serverUrl + getTrafficLightsEndpoint);

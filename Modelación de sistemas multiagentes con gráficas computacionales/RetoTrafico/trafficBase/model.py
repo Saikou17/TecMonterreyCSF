@@ -28,7 +28,7 @@ class CityModel(Model):
                 model_reporters = {
                         "Car collision": lambda m: 1 if m.checkCollision() else 0,
             })
-        self.arrived = []   
+        self.arrived = []
         
         # Load the map file. The map file is a text file where each character represents an agent.
         with open('city_files/2023_base.txt') as baseFile:
@@ -203,6 +203,8 @@ class CityModel(Model):
         #Inicializamos el modelo
         if not self.initialize:
             self.initialize = True
+
+        print(len(self.arrived))
         
         
             
